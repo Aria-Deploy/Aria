@@ -1,0 +1,12 @@
+#!/usr/bin/env node
+"use strict";
+const yargs = require("yargs/yargs");
+const hideBin = () => process.argv.slice(2);
+yargs(hideBin())
+    // Use the commands directory to scaffold.
+    .commandDir("commands")
+    // Enable strict mode.
+    .strict()
+    // Useful aliases.
+    .alias({ h: "help" }).argv;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY2xpLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiY2xpLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7O0FBRUEsTUFBTSxLQUFLLEdBQUcsT0FBTyxDQUFDLGFBQWEsQ0FBQyxDQUFDO0FBRXJDLE1BQU0sT0FBTyxHQUFHLEdBQUcsRUFBRSxDQUFDLE9BQU8sQ0FBQyxJQUFJLENBQUMsS0FBSyxDQUFDLENBQUMsQ0FBQyxDQUFBO0FBQzNDLEtBQUssQ0FBQyxPQUFPLEVBQUUsQ0FBQztJQUNkLDBDQUEwQztLQUN6QyxVQUFVLENBQUMsVUFBVSxDQUFDO0lBQ3ZCLHNCQUFzQjtLQUNyQixNQUFNLEVBQUU7SUFDVCxrQkFBa0I7S0FDakIsS0FBSyxDQUFDLEVBQUUsQ0FBQyxFQUFFLE1BQU0sRUFBRSxDQUFDLENBQUMsSUFBSSxDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiIyEvdXNyL2Jpbi9lbnYgbm9kZVxuXG5jb25zdCB5YXJncyA9IHJlcXVpcmUoXCJ5YXJncy95YXJnc1wiKTtcblxuY29uc3QgaGlkZUJpbiA9ICgpID0+IHByb2Nlc3MuYXJndi5zbGljZSgyKVxueWFyZ3MoaGlkZUJpbigpKVxuICAvLyBVc2UgdGhlIGNvbW1hbmRzIGRpcmVjdG9yeSB0byBzY2FmZm9sZC5cbiAgLmNvbW1hbmREaXIoXCJjb21tYW5kc1wiKVxuICAvLyBFbmFibGUgc3RyaWN0IG1vZGUuXG4gIC5zdHJpY3QoKVxuICAvLyBVc2VmdWwgYWxpYXNlcy5cbiAgLmFsaWFzKHsgaDogXCJoZWxwXCIgfSkuYXJndjtcbiJdfQ==

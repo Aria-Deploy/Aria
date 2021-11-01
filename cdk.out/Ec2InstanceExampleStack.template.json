@@ -1,0 +1,425 @@
+{
+  "Resources": {
+    "mycdkvpc037DA4AF": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Ec2InstanceExampleStack/my-cdk-vpc"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Ec2InstanceExampleStack/my-cdk-vpc/Resource"
+      }
+    },
+    "mycdkvpcpublicSubnet1Subnet2744EDFA": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/24",
+        "VpcId": {
+          "Ref": "mycdkvpc037DA4AF"
+        },
+        "AvailabilityZone": "us-west-2a",
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "public"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public"
+          },
+          {
+            "Key": "Name",
+            "Value": "Ec2InstanceExampleStack/my-cdk-vpc/publicSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Ec2InstanceExampleStack/my-cdk-vpc/publicSubnet1/Subnet"
+      }
+    },
+    "mycdkvpcpublicSubnet1RouteTable17452791": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "mycdkvpc037DA4AF"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Ec2InstanceExampleStack/my-cdk-vpc/publicSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Ec2InstanceExampleStack/my-cdk-vpc/publicSubnet1/RouteTable"
+      }
+    },
+    "mycdkvpcpublicSubnet1RouteTableAssociation2C76D2E0": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "mycdkvpcpublicSubnet1RouteTable17452791"
+        },
+        "SubnetId": {
+          "Ref": "mycdkvpcpublicSubnet1Subnet2744EDFA"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Ec2InstanceExampleStack/my-cdk-vpc/publicSubnet1/RouteTableAssociation"
+      }
+    },
+    "mycdkvpcpublicSubnet1DefaultRouteB7CE1177": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "mycdkvpcpublicSubnet1RouteTable17452791"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "mycdkvpcIGW4220D5A9"
+        }
+      },
+      "DependsOn": [
+        "mycdkvpcVPCGW2444B783"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "Ec2InstanceExampleStack/my-cdk-vpc/publicSubnet1/DefaultRoute"
+      }
+    },
+    "mycdkvpcpublicSubnet2Subnet04ACD525": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.1.0/24",
+        "VpcId": {
+          "Ref": "mycdkvpc037DA4AF"
+        },
+        "AvailabilityZone": "us-west-2b",
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "public"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public"
+          },
+          {
+            "Key": "Name",
+            "Value": "Ec2InstanceExampleStack/my-cdk-vpc/publicSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Ec2InstanceExampleStack/my-cdk-vpc/publicSubnet2/Subnet"
+      }
+    },
+    "mycdkvpcpublicSubnet2RouteTableA3477C62": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "mycdkvpc037DA4AF"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Ec2InstanceExampleStack/my-cdk-vpc/publicSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Ec2InstanceExampleStack/my-cdk-vpc/publicSubnet2/RouteTable"
+      }
+    },
+    "mycdkvpcpublicSubnet2RouteTableAssociationD5E00FF0": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "mycdkvpcpublicSubnet2RouteTableA3477C62"
+        },
+        "SubnetId": {
+          "Ref": "mycdkvpcpublicSubnet2Subnet04ACD525"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Ec2InstanceExampleStack/my-cdk-vpc/publicSubnet2/RouteTableAssociation"
+      }
+    },
+    "mycdkvpcpublicSubnet2DefaultRoute8DD53508": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "mycdkvpcpublicSubnet2RouteTableA3477C62"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "mycdkvpcIGW4220D5A9"
+        }
+      },
+      "DependsOn": [
+        "mycdkvpcVPCGW2444B783"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "Ec2InstanceExampleStack/my-cdk-vpc/publicSubnet2/DefaultRoute"
+      }
+    },
+    "mycdkvpcpublicSubnet3SubnetAC970640": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.2.0/24",
+        "VpcId": {
+          "Ref": "mycdkvpc037DA4AF"
+        },
+        "AvailabilityZone": "us-west-2c",
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "public"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public"
+          },
+          {
+            "Key": "Name",
+            "Value": "Ec2InstanceExampleStack/my-cdk-vpc/publicSubnet3"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Ec2InstanceExampleStack/my-cdk-vpc/publicSubnet3/Subnet"
+      }
+    },
+    "mycdkvpcpublicSubnet3RouteTable1EC4539B": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "mycdkvpc037DA4AF"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Ec2InstanceExampleStack/my-cdk-vpc/publicSubnet3"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Ec2InstanceExampleStack/my-cdk-vpc/publicSubnet3/RouteTable"
+      }
+    },
+    "mycdkvpcpublicSubnet3RouteTableAssociation958A09A5": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "mycdkvpcpublicSubnet3RouteTable1EC4539B"
+        },
+        "SubnetId": {
+          "Ref": "mycdkvpcpublicSubnet3SubnetAC970640"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Ec2InstanceExampleStack/my-cdk-vpc/publicSubnet3/RouteTableAssociation"
+      }
+    },
+    "mycdkvpcpublicSubnet3DefaultRoute0C09822D": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "mycdkvpcpublicSubnet3RouteTable1EC4539B"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "mycdkvpcIGW4220D5A9"
+        }
+      },
+      "DependsOn": [
+        "mycdkvpcVPCGW2444B783"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "Ec2InstanceExampleStack/my-cdk-vpc/publicSubnet3/DefaultRoute"
+      }
+    },
+    "mycdkvpcIGW4220D5A9": {
+      "Type": "AWS::EC2::InternetGateway",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Ec2InstanceExampleStack/my-cdk-vpc"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Ec2InstanceExampleStack/my-cdk-vpc/IGW"
+      }
+    },
+    "mycdkvpcVPCGW2444B783": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "VpcId": {
+          "Ref": "mycdkvpc037DA4AF"
+        },
+        "InternetGatewayId": {
+          "Ref": "mycdkvpcIGW4220D5A9"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Ec2InstanceExampleStack/my-cdk-vpc/VPCGW"
+      }
+    },
+    "webserversg676A088B": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Ec2InstanceExampleStack/webserver-sg",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "SecurityGroupIngress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "allow SSH access from anywhere",
+            "FromPort": 22,
+            "IpProtocol": "tcp",
+            "ToPort": 22
+          },
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "allow HTTP traffic from anywhere",
+            "FromPort": 80,
+            "IpProtocol": "tcp",
+            "ToPort": 80
+          },
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "allow HTTP traffic from anywhere",
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443
+          }
+        ],
+        "VpcId": {
+          "Ref": "mycdkvpc037DA4AF"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Ec2InstanceExampleStack/webserver-sg/Resource"
+      }
+    },
+    "webserverroleDB0308B6": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ec2.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/AmazonS3ReadOnlyAccess"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Ec2InstanceExampleStack/webserver-role/Resource"
+      }
+    },
+    "ec2instanceInstanceProfile9BCE9015": {
+      "Type": "AWS::IAM::InstanceProfile",
+      "Properties": {
+        "Roles": [
+          {
+            "Ref": "webserverroleDB0308B6"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Ec2InstanceExampleStack/ec2-instance/InstanceProfile"
+      }
+    },
+    "ec2instance42082E81": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "AvailabilityZone": "us-west-2a",
+        "IamInstanceProfile": {
+          "Ref": "ec2instanceInstanceProfile9BCE9015"
+        },
+        "ImageId": {
+          "Ref": "SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter"
+        },
+        "InstanceType": "t2.micro",
+        "KeyName": "ec2-key-pair",
+        "SecurityGroupIds": [
+          {
+            "Fn::GetAtt": [
+              "webserversg676A088B",
+              "GroupId"
+            ]
+          }
+        ],
+        "SubnetId": {
+          "Ref": "mycdkvpcpublicSubnet1Subnet2744EDFA"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Ec2InstanceExampleStack/ec2-instance"
+          }
+        ],
+        "UserData": {
+          "Fn::Base64": "#!/bin/bash\n#!/bin/bash\nyum update -y\nsudo su\n\namazon-linux-extras install -y nginx1\nsystemctl start nginx\nsystemctl enable nginx\n\nchmod 2775 /usr/share/nginx/html\nfind /usr/share/nginx/html -type d -exec chmod 2775 {} \\;\nfind /usr/share/nginx/html -type f -exec chmod 0664 {} \\;\n\necho \"<h1>It worked</h1>\" > /usr/share/nginx/html/index.html\nsystemctl reload nginx\n"
+        }
+      },
+      "DependsOn": [
+        "webserverroleDB0308B6"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "Ec2InstanceExampleStack/ec2-instance/Resource"
+      }
+    },
+    "CDKMetadata": {
+      "Type": "AWS::CDK::Metadata",
+      "Properties": {
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/1VQwW7CMAz9Fu4hLBWatttQD4hb1U7cU2O0QBujxBlCUf59KW3X7eTn52f72UpGVbzJl9WHvvs1nK4bIIcyNqzhKkqynl0AFuXZ1ugpOMAkVPH+tyMOICIUMh5vMEiPVSmq0HYGmtBafLYvqKbA+KnbDhd+4XbeExjNhuyveAAHy+iycq8Z7/oxrZmyHWe/Xz1aFg1CcIYfe0fh9lzwjzjki7SFaeSIkzC6l7Gm0dEc53Ll6Gw6TEmMv5kfMWgq7XSP2VnKZUsnlBe/+VZbqV6lWl28MWsXLJseZT3GHzOsovFyAQAA"
+      },
+      "Metadata": {
+        "aws:cdk:path": "Ec2InstanceExampleStack/CDKMetadata/Default"
+      }
+    }
+  },
+  "Parameters": {
+    "SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter": {
+      "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
+      "Default": "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
+    }
+  }
+}
