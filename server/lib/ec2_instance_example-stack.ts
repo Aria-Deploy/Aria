@@ -2,21 +2,22 @@ import * as cdk from "@aws-cdk/core";
 import * as iam from "@aws-cdk/aws-iam";
 import * as ec2 from "@aws-cdk/aws-ec2";
 import { StackApp } from "./stackApp";
+import { readFileSync } from "fs";
 
 export class Ec2InstanceExampleStack extends StackApp {
-  constructor(id: string, props?: cdk.StackProps) {
-    super(id, props);
+  constructor(source: cdk.App, id: string, props?: cdk.StackProps) {
+    super(source, id, props);
 
     // USER-INPUT Required VPC Input
-    // const vpc = new ec2.Vpc(this, "my-cdk-vpc", {
-    //   cidr: "10.0.0.0/16", //what is this?
-    //   natGateways: 0,
-    //   subnetConfiguration: [
-    //     { name: "public", cidrMask: 24, subnetType: ec2.SubnetType.PUBLIC },
-    //   ],
-    // });
+    const vpc = new ec2.Vpc(this, "my-cdk-vpc", {
+      cidr: "10.0.0.0/16", //what is this?
+      natGateways: 0,
+      subnetConfiguration: [
+        { name: "public", cidrMask: 24, subnetType: ec2.SubnetType.PUBLIC },
+      ],
+    });
 
-    // // USER-INPUT Optional Security Group Input
+    // // // USER-INPUT Optional Security Group Input
     // const webserverSG = new ec2.SecurityGroup(this, "webserver-sg", {
     //   vpc,
     //   allowAllOutbound: true,

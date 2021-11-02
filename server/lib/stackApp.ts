@@ -5,26 +5,30 @@ import { CloudFormationDeployments } from "aws-cdk/lib/api/cloudformation-deploy
 
 export class StackApp extends cdk.Stack {
   private stackArtifact: cxapi.CloudFormationStackArtifact;
-  public app: cdk.App;
+  private app: cdk.App;
 
   get availabilityZones(): string[] {
     // TODO: Map to VPC availability zone(s)
-    return ["us-east-1c"];
+    return ["us-west-2a"];
   }
 
-  public async synthesizeStack() {
+  async synthesizeStack() {
     this.stackArtifact = this.app.synth().getStackByName(this.stackName);
   }
 
-  async deploy() {
-    await this.synthesizeStack();
+  async createNewCfnDeploy(): Promise<CloudFormationDeployments> {
     // USER-INPUT: Optional Profile Name or Default
     const sdkProvider = await SdkProvider.withAwsCliCompatibleDefaults({
       // profile: 'your ~/.aws/config profile name here',
       profile: "default",
     });
 
-    const cloudFormation = new CloudFormationDeployments({ sdkProvider });
+    return new CloudFormationDeployments({ sdkProvider });
+  }
+
+  async deploy() {
+    await this.synthesizeStack();
+    const cloudFormation = await this.createNewCfnDeploy();
     const deployResultPromise = await cloudFormation.deployStack({
       // TODO: Address CloudFormationStackArtifact separate definitions
       // @ts-ignore
@@ -41,9 +45,8 @@ export class StackApp extends cdk.Stack {
     console.log(destroyPromise);
   }
 
-  constructor(id: string, props?: cdk.StackProps) {
-    const app = new cdk.App();
-    super(app, id, props);
-    this.app = app;
+  constructor(source: cdk.App, id: string, props?: cdk.StackProps) {
+    super(source, id, props);
+    this.app = source;
   }
 }

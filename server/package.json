@@ -32,6 +32,7 @@
     "@aws-cdk/cloudformation-include": "^1.130.0",
     "@aws-cdk/core": "1.128.0",
     "@aws-sdk/client-cloudformation": "^3.39.0",
+    "@aws-sdk/client-ec2": "^3.39.0",
     "aws-sdk": "^2.1018.0",
     "js-yaml": "^3.14.1",
     "oclif": "^1.18.1",

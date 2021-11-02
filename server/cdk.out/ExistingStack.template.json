@@ -800,7 +800,7 @@
           }
         ],
         "UserData": {
-          "Fn::Base64": "#!/bin/bash\nsudo su\nyum install -y httpd\nsystemctl start httpd\nsystemctl enable httpd\necho \"<h1>Hello World from $(hostname -f)</h1>\" > /var/www/html/index.html"
+          "Fn::Base64": "#!/bin/bash\nsudo su\nyum install -y httpd\nsystemctl start httpd\nsystemctl enable httpd\necho \"<h1>Hello There from $(hostname -f)</h1>\" > /var/www/html/index.html"
         }
       },
       "DependsOn": [
