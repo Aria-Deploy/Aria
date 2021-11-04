@@ -5,6 +5,8 @@
     "lib": [
       "es2020"
     ],
+    "outDir": "./dist",
+    "rootDir": "./src", 
     "declaration": true,
     "strict": true,
     "noImplicitAny": true,
@@ -19,12 +21,15 @@
     "inlineSources": true,
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
+    "esModuleInterop": true,
     "typeRoots": [
       "./node_modules/@types"
-    ]
+    ],
+    "types": ["@types/jest"],
   },
   "exclude": [
     "node_modules",
-    "cdk.out"
+    "cdk.out",
+    "./dist/**/*"
   ]
 }

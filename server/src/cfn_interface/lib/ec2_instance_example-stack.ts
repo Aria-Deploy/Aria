@@ -16,6 +16,7 @@ export class Ec2InstanceExampleStack extends StackApp {
         { name: "public", cidrMask: 24, subnetType: ec2.SubnetType.PUBLIC },
       ],
     });
+    
 
     // // // USER-INPUT Optional Security Group Input
     // const webserverSG = new ec2.SecurityGroup(this, "webserver-sg", {

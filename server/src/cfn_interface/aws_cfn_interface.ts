@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import "source-map-support/register";
 import * as cdk from "@aws-cdk/core";
-import { Ec2InstanceExampleStack } from "../lib/ec2_instance_example-stack";
-import { ExistingStack } from "../lib/importExistingStack";
+import { Ec2InstanceExampleStack } from "./lib/ec2_instance_example-stack";
+import { ExistingStack } from "./lib/importExistingStack";
 
 const evnUSA = { account: "750078097588", region: "us-west-2" };
 
@@ -17,8 +17,8 @@ const importedStack = new ExistingStack(app, "cdk-stack", {
 
 (async () => {
   // const deployResult = await cdkStack.deploy();
-  const deployResult = await importedStack.deploy();
-  console.log(deployResult);
+  // const deployResult = await importedStack.deploy();
+  // console.log(deployResult);
 })();
 
 const breakpoint = "Completed Execution\n";
