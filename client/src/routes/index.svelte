@@ -1,10 +1,11 @@
 <script>
+  import axios from 'axios'
 	import StackSelection from '../components/stack_selection.svelte';
 	import { userProfiles } from '../stores.js';
 
 	async function getAccounts() {
-		const response = await fetch('http://localhost:5000/api/profiles');
-		const responseAccs = await response.json();
+		const response = await axios('http://localhost:5000/api/profiles');
+		const responseAccs = response.data;
 		userProfiles.set(responseAccs);
     return responseAccs
 	}
@@ -17,10 +18,8 @@
 
 <h1>Aria</h1>
 
-<!-- {#if $userProfiles} -->
 {#await promise then value}
 	<StackSelection />
-<!-- {/if} -->
 {/await}
 <style>
 	h1 {
