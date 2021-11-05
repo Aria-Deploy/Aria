@@ -16,7 +16,7 @@ import {
 // TODO: Define type for _accountsCredentials
 let _accountsCredentials: any = {};
 let _cfnClient: CloudFormationClient;
-let _ec2client: EC2Client;
+let _ec2Client: EC2Client;
 // TODO: Define type for _vpcConfig
 let _vpcConfig = {
   vpcId: "",
@@ -42,8 +42,8 @@ export async function clientsInit(profileName: string) {
     const config = JSON.stringify(_accountsCredentials[profileName]);
     // @ts-ignore passing an object results in error, AWS's fault not mine
     _cfnClient = new CloudFormationClient(config);
-
-    _ec2client = new EC2Client(_accountsCredentials[profileName]);
+    // @ts-ignore
+    _ec2Client = new EC2Client(config);
   } catch (error) {
     console.log(error);
   }
@@ -80,14 +80,18 @@ export async function fetchAwsStackInfo() {
 
     return activeStacks;
   } catch (error) {
-    console.log(error);
-    return error;
+    console.log(
+      "The following error occured when trying to fetch profile stacks: ",
+      error
+    );
+    return [];
   }
 }
 
 export async function fetchStackVpcConfig(stackId: string) {
   _resetVpcConfig();
   await setConfigVpcId(stackId);
+  console.log(_vpcConfig);
   await setAzPubPrivSubnets();
   return _vpcConfig;
 }
@@ -95,7 +99,8 @@ export async function fetchStackVpcConfig(stackId: string) {
 export async function setConfigVpcId(stackId: string) {
   try {
     const vpcCmd = new DescribeVpcsCommand({});
-    const vpcResponse = await _ec2client.send(vpcCmd);
+    // @ts-ignore
+    const vpcResponse = await _ec2Client.send(vpcCmd);
     const vpcsList = vpcResponse.Vpcs || [];
     const vpcId: string = vpcsList.reduce((acc, vpc) => {
       let vpcId = acc;
@@ -116,7 +121,7 @@ export async function setConfigVpcId(stackId: string) {
 export async function setAzPubPrivSubnets() {
   try {
     const subnetsCmd = new DescribeSubnetsCommand({});
-    const subnetsResponse = await _ec2client.send(subnetsCmd);
+    const subnetsResponse = await _ec2Client.send(subnetsCmd);
 
     subnetsResponse.Subnets = subnetsResponse.Subnets || [];
     subnetsResponse.Subnets.forEach((subnet) => {

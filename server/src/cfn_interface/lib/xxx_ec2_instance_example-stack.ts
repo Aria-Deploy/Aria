@@ -1,7 +1,7 @@
 import * as cdk from "@aws-cdk/core";
 import * as iam from "@aws-cdk/aws-iam";
 import * as ec2 from "@aws-cdk/aws-ec2";
-import { StackApp } from "./stackApp";
+import { StackApp } from "./xxx__stackApp";
 import { readFileSync } from "fs";
 
 export class Ec2InstanceExampleStack extends StackApp {
@@ -16,7 +16,6 @@ export class Ec2InstanceExampleStack extends StackApp {
         { name: "public", cidrMask: 24, subnetType: ec2.SubnetType.PUBLIC },
       ],
     });
-    
 
     // // // USER-INPUT Optional Security Group Input
     // const webserverSG = new ec2.SecurityGroup(this, "webserver-sg", {

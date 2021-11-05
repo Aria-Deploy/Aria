@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import "source-map-support/register";
 import * as cdk from "@aws-cdk/core";
-import { Ec2InstanceExampleStack } from "./lib/ec2_instance_example-stack";
-import { ExistingStack } from "./lib/importExistingStack";
+import { Ec2InstanceExampleStack } from "./lib/xxx_ec2_instance_example-stack";
+import { ExistingStack } from "./lib/xxx_importExistingStack";
 
 const evnUSA = { account: "750078097588", region: "us-west-2" };
 

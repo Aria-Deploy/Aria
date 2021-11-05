@@ -2,7 +2,7 @@
 	import { userProfiles, selectedProfileStacks, selectedAccStack } from '../stores';
 	import axios from 'axios';
 
-  const apiRoute = `http://localhost:5000/api`
+	const apiRoute = `http://localhost:5000/api`;
 
 	async function getStacks(event) {
 		const selectedProfile = $userProfiles[event.target.value];
@@ -18,13 +18,14 @@
 		selectedProfileStacks.set(responseStacksInfo);
 	}
 
-  async function selectStack(event) {
-    const selectedStack = $selectedProfileStacks[event.target.value];
-    const apiURI = `${apiRoute}/deploy`;
-    const response = await axios.post(apiURI, {
-      stack: selectedStack
-    }) 
-  }
+	async function selectStack(event) {
+		const selectedStack = $selectedProfileStacks[event.target.value];
+		const apiURI = `${apiRoute}/deploy`;
+		const response = await axios.post(apiURI, {
+			stackId: selectedStack.StackId
+		});
+    console.log(response.data)
+	}
 </script>
 
 <div id="stack-selection">
