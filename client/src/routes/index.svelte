@@ -16,7 +16,7 @@
 	<title>ARIA</title>
 </svelte:head>
 
-<h1>Aria</h1>
+<h1>Aria API Test GUI</h1>
 
 {#await promise then value}
 	<StackSelection />

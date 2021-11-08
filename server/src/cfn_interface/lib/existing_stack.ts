@@ -45,23 +45,19 @@ export class ExistingStack extends cdk.Stack {
   }
 
   // TODO: define stackConfig type
-  constructor(
-    source: cdk.App,
-    id: string,
-    stackConfig: any,
-    props?: cdk.StackProps
-  ) {
-    super(source, id, props);
+  constructor(id: string, stackConfig: any, props?: cdk.StackProps) {
+    const app = new cdk.App();
+    super(app, id, props);
     this.profileName = stackConfig.profileName;
-    this.app = source;
+    this.app = app;
 
     fs.writeFileSync(
-      "./cdk.out/ExistingStack.template.json",
+      "./cdk.out/stack.template.json",
       JSON.stringify(stackConfig.template, null, 2)
     );
 
-    const template = new cfninc.CfnInclude(this, "Template", {
-      templateFile: "./cdk.out/ExistingStack.template.json",
+    new cfninc.CfnInclude(this, "Template", {
+      templateFile: "./cdk.out/stack.template.json",
     });
   }
 }

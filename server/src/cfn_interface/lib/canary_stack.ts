@@ -1,20 +1,16 @@
 import * as cdk from "@aws-cdk/core";
-import * as cfninc from "@aws-cdk/cloudformation-include";
 import * as elbv2 from "@aws-cdk/aws-elasticloadbalancingv2";
 import * as ec2 from "@aws-cdk/aws-ec2";
 import * as autoscaling from "@aws-cdk/aws-autoscaling";
-import * as fs from "fs";
-import { ExistingStack } from "./existng_stack";
-import { StackSetOperationPreferences } from "@aws-sdk/client-cloudformation";
+import { ExistingStack } from "./existing_stack";
 
 export class CanaryStack extends ExistingStack {
   constructor(
-    source: cdk.App,
     id: string,
     stackConfig: any,
     props?: cdk.StackProps
   ) {
-    super(source, id, stackConfig, props);
+    super(id, stackConfig, props);
 
     new cdk.CfnOutput(this, "aria-canary", {
       value: "true",

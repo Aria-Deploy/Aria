@@ -10,14 +10,17 @@ import {
   CloudFormationClient,
   GetTemplateCommand,
   DescribeStacksCommand,
-  DescribeStackInstanceCommand,
 } from "@aws-sdk/client-cloudformation";
+
+import { STSClient, GetCallerIdentityCommand } from "@aws-sdk/client-sts";
 // TODO: Handle request errors back to client for messages
 
 // TODO: Define type for _accountsCredentials
 let _accountsCredentials: any = {};
 let _cfnClient: CloudFormationClient;
 let _ec2Client: EC2Client;
+let _stsClient: STSClient;
+let _env: { account: string; region: string };
 // TODO: Define type for _vpcConfig
 let _vpcConfig = {
   vpcId: "",
@@ -26,7 +29,7 @@ let _vpcConfig = {
   privateSubnetIds: [] as string[],
 };
 
-export const getCfnClient = () => _cfnClient;
+export const getEnv = () => _env;
 const _resetAccCredenetials = () => (_accountsCredentials = {});
 
 const _resetVpcConfig = () => {
@@ -45,12 +48,24 @@ export async function clientsInit(profileName: string) {
     _cfnClient = new CloudFormationClient(config);
     // @ts-ignore
     _ec2Client = new EC2Client(config);
+    // @ts-ignore
+    _stsClient = new STSClient(config);
   } catch (error) {
     console.log(error);
   }
 }
 
-export async function fetchAwsProfilesInfo() {
+export async function fetchAccountInfo(profileName: string) {
+  const accountIdCmd = new GetCallerIdentityCommand({});
+  const response = await _stsClient.send(accountIdCmd);
+  _env = {
+    account: response.Account!,
+    region: _accountsCredentials[profileName].region,
+  };
+  console.log("_env: ", _env);
+}
+
+export async function fetchProfilesInfo() {
   try {
     _resetAccCredenetials();
     const awsProfilesInfo = await loadSharedConfigFiles();
@@ -62,6 +77,7 @@ export async function fetchAwsProfilesInfo() {
         },
       };
     }
+
     const profiles = Object.keys(awsProfilesInfo.configFile);
     return profiles;
   } catch (error) {
@@ -164,14 +180,4 @@ export async function fetchStackTemplate(stackId: string) {
   } catch (error) {
     console.log(error);
   }
-}
-
-export async function fetchStackMetaData(stackId: string) {
-  const stackInfoCmd = new DescribeStackInstanceCommand({
-    StackInstanceAccount: "750078097588",
-    StackInstanceRegion: "us-west-2",
-    StackSetName: 'cdk-stack',
-  });
-  const response = await _cfnClient.send(stackInfoCmd);
-  return response.StackInstance;
 }

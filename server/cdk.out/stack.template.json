@@ -1,4 +1,10 @@
 {
+  "Parameters": {
+    "SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter": {
+      "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
+      "Default": "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
+    }
+  },
   "Resources": {
     "vpcA2121C38": {
       "Type": "AWS::EC2::VPC",
@@ -77,6 +83,20 @@
         "aws:cdk:path": "cdk-stack/vpc/PublicSubnet1/RouteTableAssociation"
       }
     },
+    "vpcIGWE57CBDCA": {
+      "Type": "AWS::EC2::InternetGateway",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "cdk-stack/vpc"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "cdk-stack/vpc/IGW"
+      }
+    },
     "vpcPublicSubnet1DefaultRoute10708846": {
       "Type": "AWS::EC2::Route",
       "Properties": {
@@ -93,6 +113,20 @@
       ],
       "Metadata": {
         "aws:cdk:path": "cdk-stack/vpc/PublicSubnet1/DefaultRoute"
+      }
+    },
+    "vpcVPCGW7984C166": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "VpcId": {
+          "Ref": "vpcA2121C38"
+        },
+        "InternetGatewayId": {
+          "Ref": "vpcIGWE57CBDCA"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "cdk-stack/vpc/VPCGW"
       }
     },
     "vpcPublicSubnet1EIPDA49DCBE": {
@@ -113,14 +147,14 @@
     "vpcPublicSubnet1NATGateway9C16659E": {
       "Type": "AWS::EC2::NatGateway",
       "Properties": {
+        "SubnetId": {
+          "Ref": "vpcPublicSubnet1Subnet2E65531E"
+        },
         "AllocationId": {
           "Fn::GetAtt": [
             "vpcPublicSubnet1EIPDA49DCBE",
             "AllocationId"
           ]
-        },
-        "SubnetId": {
-          "Ref": "vpcPublicSubnet1Subnet2E65531E"
         },
         "Tags": [
           {
@@ -509,32 +543,25 @@
         "aws:cdk:path": "cdk-stack/vpc/PrivateSubnet3/DefaultRoute"
       }
     },
-    "vpcIGWE57CBDCA": {
-      "Type": "AWS::EC2::InternetGateway",
+    "albSecurityGroup49866104": {
+      "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
-        "Tags": [
+        "GroupDescription": "Automatically created Security Group for ELB cdkstackalb6DF91EA2",
+        "SecurityGroupIngress": [
           {
-            "Key": "Name",
-            "Value": "cdk-stack/vpc"
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow from anyone on port 80",
+            "FromPort": 80,
+            "IpProtocol": "tcp",
+            "ToPort": 80
           }
-        ]
-      },
-      "Metadata": {
-        "aws:cdk:path": "cdk-stack/vpc/IGW"
-      }
-    },
-    "vpcVPCGW7984C166": {
-      "Type": "AWS::EC2::VPCGatewayAttachment",
-      "Properties": {
+        ],
         "VpcId": {
           "Ref": "vpcA2121C38"
-        },
-        "InternetGatewayId": {
-          "Ref": "vpcIGWE57CBDCA"
         }
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/vpc/VPCGW"
+        "aws:cdk:path": "cdk-stack/alb/SecurityGroup/Resource"
       }
     },
     "alb8A8B13C2": {
@@ -577,17 +604,21 @@
         "aws:cdk:path": "cdk-stack/alb/Resource"
       }
     },
-    "albSecurityGroup49866104": {
+    "asgInstanceSecurityGroup5CEB2975": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
-        "GroupDescription": "Automatically created Security Group for ELB cdkstackalb6DF91EA2",
-        "SecurityGroupIngress": [
+        "GroupDescription": "cdk-stack/asg/InstanceSecurityGroup",
+        "SecurityGroupEgress": [
           {
             "CidrIp": "0.0.0.0/0",
-            "Description": "Allow from anyone on port 80",
-            "FromPort": 80,
-            "IpProtocol": "tcp",
-            "ToPort": 80
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "cdk-stack/asg"
           }
         ],
         "VpcId": {
@@ -595,7 +626,7 @@
         }
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/alb/SecurityGroup/Resource"
+        "aws:cdk:path": "cdk-stack/asg/InstanceSecurityGroup/Resource"
       }
     },
     "albSecurityGrouptocdkstackasgInstanceSecurityGroup3E3F3E71809881611E": {
@@ -622,6 +653,24 @@
         "aws:cdk:path": "cdk-stack/alb/SecurityGroup/to cdkstackasgInstanceSecurityGroup3E3F3E71:80"
       }
     },
+    "albListenerdefaulttargetGroup79BAE92B": {
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+      "Properties": {
+        "HealthCheckIntervalSeconds": 30,
+        "HealthCheckPath": "/",
+        "HealthyThresholdCount": 5,
+        "Port": 80,
+        "Protocol": "HTTP",
+        "TargetType": "instance",
+        "UnhealthyThresholdCount": 2,
+        "VpcId": {
+          "Ref": "vpcA2121C38"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "cdk-stack/alb/Listener/default-targetGroup/Resource"
+      }
+    },
     "albListener3EA0B2EF": {
       "Type": "AWS::ElasticLoadBalancingV2::Listener",
       "Properties": {
@@ -641,24 +690,6 @@
       },
       "Metadata": {
         "aws:cdk:path": "cdk-stack/alb/Listener/Resource"
-      }
-    },
-    "albListenerdefaulttargetGroup79BAE92B": {
-      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
-      "Properties": {
-        "HealthCheckIntervalSeconds": 30,
-        "HealthCheckPath": "/",
-        "HealthyThresholdCount": 5,
-        "Port": 80,
-        "Protocol": "HTTP",
-        "TargetType": "instance",
-        "UnhealthyThresholdCount": 2,
-        "VpcId": {
-          "Ref": "vpcA2121C38"
-        }
-      },
-      "Metadata": {
-        "aws:cdk:path": "cdk-stack/alb/Listener/default-targetGroup/Resource"
       }
     },
     "albListenerstaticRule4F017351": {
@@ -691,31 +722,6 @@
       },
       "Metadata": {
         "aws:cdk:path": "cdk-stack/alb/Listener/--staticRule/Resource"
-      }
-    },
-    "asgInstanceSecurityGroup5CEB2975": {
-      "Type": "AWS::EC2::SecurityGroup",
-      "Properties": {
-        "GroupDescription": "cdk-stack/asg/InstanceSecurityGroup",
-        "SecurityGroupEgress": [
-          {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1"
-          }
-        ],
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "cdk-stack/asg"
-          }
-        ],
-        "VpcId": {
-          "Ref": "vpcA2121C38"
-        }
-      },
-      "Metadata": {
-        "aws:cdk:path": "cdk-stack/asg/InstanceSecurityGroup/Resource"
       }
     },
     "asgInstanceSecurityGroupfromcdkstackalbSecurityGroup20A8C03080818D6412": {
@@ -921,9 +927,9 @@
         }
       },
       "DependsOn": [
-        "albListenerstaticRule4F017351",
+        "albListener3EA0B2EF",
         "albListenerdefaulttargetGroup79BAE92B",
-        "albListener3EA0B2EF"
+        "albListenerstaticRule4F017351"
       ],
       "Metadata": {
         "aws:cdk:path": "cdk-stack/asg/ScalingPolicyrequests-per-minute/Resource"
@@ -955,12 +961,6 @@
       "Metadata": {
         "aws:cdk:path": "cdk-stack/CDKMetadata/Default"
       }
-    }
-  },
-  "Parameters": {
-    "SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter": {
-      "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
-      "Default": "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
     }
   },
   "Outputs": {
