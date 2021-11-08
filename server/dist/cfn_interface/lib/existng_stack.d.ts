@@ -8,7 +8,7 @@ export declare class ExistingStack extends cdk.Stack {
     private profileName;
     vpc: ec2.IVpc;
     get availabilityZones(): string[];
-    synthesizeStack(): Promise<void>;
+    synthesizeStack(): void;
     createNewCfnDeploy(): Promise<CloudFormationDeployments>;
     deploy(): Promise<import("aws-cdk/lib/api/deploy-stack").DeployStackResult>;
     constructor(source: cdk.App, id: string, stackConfig: any, props?: cdk.StackProps);

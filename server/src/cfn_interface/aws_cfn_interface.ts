@@ -17,8 +17,8 @@ const importedStack = new ExistingStack(app, "cdk-stack", {
 
 (async () => {
   // const deployResult = await cdkStack.deploy();
-  // const deployResult = await importedStack.deploy();
-  // console.log(deployResult);
+  const deployResult = await importedStack.deploy();
+  console.log(deployResult);
 })();
 
 const breakpoint = "Completed Execution\n";

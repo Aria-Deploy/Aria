@@ -1,18 +1,24 @@
 import * as cdk from "@aws-cdk/core";
 import * as cxapi from "@aws-cdk/cx-api";
+import * as ec2 from "@aws-cdk/aws-ec2";
+import * as cfninc from "@aws-cdk/cloudformation-include";
+import * as fs from "fs";
 import { SdkProvider } from "aws-cdk/lib/api/aws-auth";
 import { CloudFormationDeployments } from "aws-cdk/lib/api/cloudformation-deployments";
+import { VpcAttributes } from "@aws-cdk/aws-ec2";
 
 export class ExistingStack extends cdk.Stack {
   private stackArtifact: cxapi.CloudFormationStackArtifact;
   private app: cdk.App;
+  private vpcConfig: VpcAttributes;
+  private profileName: string;
+  public vpc: ec2.IVpc;
 
   get availabilityZones(): string[] {
-    // TODO: Map to VPC availability zone(s)
-    return ["us-west-2a"];
+    return this.vpcConfig.availabilityZones;
   }
 
-  async synthesizeStack() {
+  synthesizeStack() {
     this.stackArtifact = this.app.synth().getStackByName(this.stackName);
   }
 
@@ -20,14 +26,14 @@ export class ExistingStack extends cdk.Stack {
     // USER-INPUT: Optional Profile Name or Default
     const sdkProvider = await SdkProvider.withAwsCliCompatibleDefaults({
       // profile: 'your ~/.aws/config profile name here',
-      profile: "default",
+      profile: this.profileName,
     });
 
     return new CloudFormationDeployments({ sdkProvider });
   }
 
   async deploy() {
-    await this.synthesizeStack();
+    this.synthesizeStack();
     const cloudFormation = await this.createNewCfnDeploy();
     const deployResultPromise = await cloudFormation.deployStack({
       // TODO: Address CloudFormationStackArtifact separate definitions
@@ -35,18 +41,27 @@ export class ExistingStack extends cdk.Stack {
       stack: this.stackArtifact,
     });
 
-    console.log(deployResultPromise);
-
-    const destroyPromise = await cloudFormation.destroyStack({
-      // TODO: Address CloudFormationStackArtifact separate defintions
-      // @ts-ignore
-      stack: this.stackArtifact,
-    });
-    console.log(destroyPromise);
+    return deployResultPromise;
   }
 
-  constructor(source: cdk.App, id: string, props?: cdk.StackProps) {
+  // TODO: define stackConfig type
+  constructor(
+    source: cdk.App,
+    id: string,
+    stackConfig: any,
+    props?: cdk.StackProps
+  ) {
     super(source, id, props);
+    this.profileName = stackConfig.profileName;
     this.app = source;
+
+    fs.writeFileSync(
+      "./cdk.out/ExistingStack.template.json",
+      JSON.stringify(stackConfig.template, null, 2)
+    );
+
+    const template = new cfninc.CfnInclude(this, "Template", {
+      templateFile: "./cdk.out/ExistingStack.template.json",
+    });
   }
 }

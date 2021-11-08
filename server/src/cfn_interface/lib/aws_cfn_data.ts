@@ -8,8 +8,9 @@ import {
 
 import {
   CloudFormationClient,
-  ListStacksCommand,
   GetTemplateCommand,
+  DescribeStacksCommand,
+  DescribeStackInstanceCommand,
 } from "@aws-sdk/client-cloudformation";
 // TODO: Handle request errors back to client for messages
 
@@ -53,7 +54,6 @@ export async function fetchAwsProfilesInfo() {
   try {
     _resetAccCredenetials();
     const awsProfilesInfo = await loadSharedConfigFiles();
-
     for (const profile in awsProfilesInfo.configFile) {
       _accountsCredentials[profile] = {
         ...awsProfilesInfo.configFile[profile],
@@ -70,15 +70,25 @@ export async function fetchAwsProfilesInfo() {
   }
 }
 
-export async function fetchAwsStackInfo() {
+export async function fetchStacksInfo() {
   try {
-    const fetchActiveListsCmd = new ListStacksCommand({});
-    const allUserStacks = await _cfnClient.send(fetchActiveListsCmd);
-    const activeStacks = allUserStacks.StackSummaries?.filter(
-      (stack) => !stack.DeletionTime
-    );
+    const stacksInfoCmd = new DescribeStacksCommand({});
+    const stacksInfo = await _cfnClient.send(stacksInfoCmd);
 
-    return activeStacks;
+    stacksInfo.Stacks = stacksInfo.Stacks || [];
+    const formattedStacks = stacksInfo.Stacks.map((stack) => {
+      stack.Outputs = stack.Outputs || [];
+      const isCanary = stack.Outputs.some(
+        ({ OutputKey }) => OutputKey === "ariacanary"
+      );
+      return {
+        stackName: stack.StackName,
+        stackId: stack.StackId,
+        isCanary,
+      };
+    });
+
+    return formattedStacks;
   } catch (error) {
     console.log(
       "The following error occured when trying to fetch profile stacks: ",
@@ -91,7 +101,6 @@ export async function fetchAwsStackInfo() {
 export async function fetchStackVpcConfig(stackId: string) {
   _resetVpcConfig();
   await setConfigVpcId(stackId);
-  console.log(_vpcConfig);
   await setAzPubPrivSubnets();
   return _vpcConfig;
 }
@@ -155,4 +164,14 @@ export async function fetchStackTemplate(stackId: string) {
   } catch (error) {
     console.log(error);
   }
+}
+
+export async function fetchStackMetaData(stackId: string) {
+  const stackInfoCmd = new DescribeStackInstanceCommand({
+    StackInstanceAccount: "750078097588",
+    StackInstanceRegion: "us-west-2",
+    StackSetName: 'cdk-stack',
+  });
+  const response = await _cfnClient.send(stackInfoCmd);
+  return response.StackInstance;
 }

@@ -76,17 +76,17 @@ export class ExistingStack extends StackApp {
     });
 
     const vpc = ec2.Vpc.fromVpcAttributes(this, "external-vpc", {
-      vpcId: "vpc-0425f34b53b32a0e1",
+      vpcId: "vpc-0b442d80b65646eef", 
       availabilityZones: ["us-west-1a", "us-west-1b", "us-west-1c"],
       publicSubnetIds: [
-        "subnet-054f34a975af84d51",
-        "subnet-01b4e723d7a7a548a",
-        "subnet-087842a4528a88af1",
+        "subnet-00875646ca5702e88",
+        "subnet-06a53ab7668acac0c",
+        "subnet-0d3061cff4ecf4edd",
       ],
       privateSubnetIds: [
-        "subnet-04fc17ef1f9e54a6c",
-        "subnet-0c65005be835b3849",
-        "subnet-05acd890e71026a3d",
+        "subnet-02292e9bca8f221a1",
+        "subnet-0c02c5f0a15a1574a",
+        "subnet-0f09a919564e3a828",
       ],
     });
 
