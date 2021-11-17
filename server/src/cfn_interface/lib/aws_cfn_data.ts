@@ -24,6 +24,9 @@ import {
   DescribeListenersCommand,
   DescribeTargetGroupsCommand,
   DescribeTargetHealthCommand,
+  DescribeRulesCommand,
+  DescribeTagsCommand,
+  DeleteRuleCommand,
 } from "@aws-sdk/client-elastic-load-balancing-v2";
 import { Vpc } from "@aws-cdk/aws-ec2";
 // TODO: Handle request errors back to client for messages
@@ -35,25 +38,9 @@ let _ec2Client: EC2Client;
 let _stsClient: STSClient;
 let _elvb2Client: ElasticLoadBalancingV2Client;
 let _env: { account: string; region: string };
-// TODO: Define type for _vpcConfig
-let _vpcConfig = {
-  vpcId: "",
-  availabilityZones: [] as string[],
-  publicSubnetIds: [] as string[],
-  privateSubnetIds: [] as string[],
-};
 
 export const getEnv = () => _env;
 const _resetAccCredenetials = () => (_accountsCredentials = {});
-
-const _resetVpcConfig = () => {
-  _vpcConfig = {
-    vpcId: "",
-    availabilityZones: [],
-    publicSubnetIds: [],
-    privateSubnetIds: [],
-  };
-};
 
 export async function clientsInit(profileName: string) {
   try {
@@ -201,17 +188,49 @@ export async function fetchStacksInfo() {
     const stacksInfo = await _cfnClient.send(stacksInfoCmd);
 
     stacksInfo.Stacks = stacksInfo.Stacks || [];
-    const formattedStacks = stacksInfo.Stacks.map((stack) => {
-      stack.Outputs = stack.Outputs || [];
-      const isCanary = stack.Outputs.some(
-        ({ OutputKey }) => OutputKey === "ariacanary"
-      );
-      return {
-        stackName: stack.StackName,
-        stackId: stack.StackId,
-        isCanary,
-      };
-    });
+    const formattedStacks = Promise.all(
+      stacksInfo.Stacks.map(async (stack) => {
+        stack.Outputs = stack.Outputs || [];
+        const isCanary = stack.Outputs.some(
+          ({ OutputKey }) => OutputKey === "ariacanary"
+        );
+
+        let listenerArn, canaryRule;
+        if (isCanary) {
+          const listenerArnObj = stack.Outputs.find(
+            ({ OutputKey }) => OutputKey === "listenerArn"
+          );
+          listenerArn = listenerArnObj?.OutputValue;
+
+          const allRulesCmd = new DescribeRulesCommand({
+            ListenerArn: listenerArnObj?.OutputValue,
+          });
+          const rulesInfo = await _elvb2Client.send(allRulesCmd);
+
+          for (const rule of rulesInfo.Rules!) {
+            const getTagsCmd = new DescribeTagsCommand({
+              // @ts-ignore
+              ResourceArns: [rule.RuleArn],
+            });
+            const ruleTags = await _elvb2Client.send(getTagsCmd);
+            ruleTags.TagDescriptions!.forEach((tagDesc) => {
+              tagDesc.Tags?.forEach((tag) => {
+                if (tag.Key === "isAriaCanaryRule") canaryRule = rule;
+              });
+            });
+          }
+        }
+
+        return {
+          stackName: stack.StackName,
+          stackArn: stack.StackId,
+          stackOutputs: stack.Outputs,
+          isCanary,
+          listenerArn,
+          canaryRule,
+        };
+      })
+    );
 
     return formattedStacks;
   } catch (error) {
@@ -222,35 +241,6 @@ export async function fetchStacksInfo() {
     return [];
   }
 }
-
-// export async function fetchStackVpcConfig(stackId: string) {
-//   _resetVpcConfig();
-//   await setConfigVpcId(stackId);
-//   await setAzPubPrivSubnets();
-//   return _vpcConfig;
-// }
-
-// export async function setConfigVpcId(stackId: string) {
-//   try {
-//     const vpcCmd = new DescribeVpcsCommand({});
-//     // @ts-ignore
-//     const vpcResponse = await _ec2Client.send(vpcCmd);
-//     const vpcsList = vpcResponse.Vpcs || [];
-//     const vpcId: string = vpcsList.reduce((acc, vpc) => {
-//       let vpcId = acc;
-//       if (vpc.Tags) {
-//         vpc.Tags.forEach((tag) => {
-//           if (tag.Value === stackId) vpcId = vpc.VpcId!;
-//         });
-//       }
-//       return vpcId;
-//     }, "");
-
-//     _vpcConfig.vpcId = vpcId;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
 
 export async function setAzPubPrivSubnets(vpcId: string) {
   const vpcConfig = {
@@ -306,4 +296,10 @@ export async function createListenerRule(newRuleConfig: any) {
   const createRuleCmd = new CreateRuleCommand(newRuleConfig);
   const createRuleResponse = await _elvb2Client.send(createRuleCmd);
   return createRuleResponse;
+}
+
+export async function deleteListenerRule(RuleArn: any) {
+  const deleteRuleCmd = new DeleteRuleCommand({ RuleArn });
+  const deleteRuleResult = await _elvb2Client.send(deleteRuleCmd);
+  return deleteRuleResult;
 }

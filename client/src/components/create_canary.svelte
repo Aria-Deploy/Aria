@@ -1,5 +1,5 @@
 <script>
-	import { userProfiles, selectedAccStack, profileResourceData } from '../stores';
+	import { userProfiles, selectedProfile, profileResourceData, profileStacks } from '../stores';
 	import { Button } from 'sveltestrap';
 	import axios from 'axios';
 
@@ -10,13 +10,14 @@
 		resourcesDisabled = true;
 
 	async function getResourcesData(event) {
-		const selectedProfile = $userProfiles[event.target.value];
+		selectedProfile.set($userProfiles[event.target.value]);
 
-		const apiURI = `${apiRoute}/resources-data/${selectedProfile}`;
+		const apiURI = `${apiRoute}/resources-data/${$selectedProfile}`;
 		const response = await axios(apiURI);
 		const profileResourceDataRes = response.data;
 
-		profileResourceData.set(profileResourceDataRes);
+		profileResourceData.set(response.data.profileResources);
+		profileStacks.set(response.data.existingStackInfo);
 		console.log(profileResourceDataRes);
 	}
 
@@ -36,23 +37,6 @@
 		selectedInstance = { ...selectedTarget.Instances[event.target.value] };
 		deployDisabled = false;
 	}
-
-	// function setDeployRollback() {
-	// 	if (selectedVpc && selectedAlb) {
-	// 		deployDisabled = selectedStack.isCanary;
-	// 		rollbackDisabled = !deployDisabled;
-	// 	}
-	// }
-
-	// function setVpc(event) {
-	// 	selectedVpc = event.target.value;
-	// 	setDeployRollback();
-	// }
-
-	// function setAlb(event) {
-	// 	selectedAlb = event.target.value;
-	// 	setDeployRollback();
-	// }
 
 	async function deployCanary() {
 		const apiURI = `${apiRoute}/deploy-canary`;
@@ -75,7 +59,7 @@
 								Weight: 50
 							},
 							{
-								TargetGroupArn: "Insert Canary Target ARN",
+								TargetGroupArn: 'Insert Canary Target ARN',
 								Weight: 50
 							}
 						]
@@ -92,25 +76,16 @@
 			],
 			ListenerArn: selectedListener.ListenerArn,
 			Priority: 1,
-			Tags: [{ Key: 'isAriaCanaryRule' }]
+			Tags: [{ Key: 'isAriaCanaryRule', Value: selectedAlb.LoadBalancerName }]
 		};
 
 		const response = await axios.put(apiURI, {
 			profileName,
 			vpcId: selectedInstance.VpcId,
 			selectedAlbName: selectedAlb.LoadBalancerName,
+			selectedListenerArn: selectedListener.ListenerArn,
 			securityGroupIds,
-      newRuleConfig
-		});
-		console.log(response.data);
-	}
-
-	async function rollbackCanary() {
-		const apiURI = `${apiRoute}/rollback-canary`;
-		const response = await axios.put(apiURI, {
-			profileName: $selectedAccStack.profile,
-			stackName: selectedStack.stackName,
-			stackId: selectedStack.stackId
+			newRuleConfig
 		});
 		console.log(response.data);
 	}
@@ -160,7 +135,6 @@
 </div>
 <div class="selectionA">
 	<Button color="primary" disabled={deployDisabled} on:click={deployCanary}>Deploy</Button>
-	<Button class="bg-primary" disabled={rollbackDisabled} on:click={rollbackCanary}>Rollback</Button>
 </div>
 
 <style>

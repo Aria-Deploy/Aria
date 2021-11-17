@@ -1,13 +1,14 @@
 <script>
-  import axios from 'axios'
-	import StackSelection from '../components/stack_selection.svelte';
+	import axios from 'axios';
+	import CreateCanary from '../components/create_canary.svelte';
+	import DestroyCanary from '../components/destroy_canary.svelte';
 	import { userProfiles } from '../stores.js';
 
 	async function getAccounts() {
 		const response = await axios('http://localhost:5000/api/profiles');
 		const responseAccs = response.data;
 		userProfiles.set(responseAccs);
-    return responseAccs
+		return responseAccs;
 	}
 	const promise = getAccounts();
 </script>
@@ -19,8 +20,11 @@
 <h1>Aria API Test GUI</h1>
 
 {#await promise then value}
-	<StackSelection />
+	<CreateCanary />
+  <br /><br />
+	<DestroyCanary />
 {/await}
+
 <style>
 	h1 {
 		padding: 4px;

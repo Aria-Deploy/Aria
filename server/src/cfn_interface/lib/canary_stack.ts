@@ -139,6 +139,14 @@ export class CanaryStack extends ExistingStack {
       value: "true",
     });
 
+    new cdk.CfnOutput(this, "loadBalancerName", {
+      value: stackConfig.selectedAlbName,
+    });
+
+    new cdk.CfnOutput(this, "listenerArn", {
+      value: stackConfig.selectedListenerArn,
+    });
+
     // new cdk.CfnOutput(this, "Baseline-Target-Group-Arn", {
     //   value: targetBaseline.targetGroupArn,
     // });

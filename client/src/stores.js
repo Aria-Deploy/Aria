@@ -1,10 +1,6 @@
 import { writable } from "svelte/store";
 
-export const userProfiles = writable()
-export const selectedProfileStacks = writable([])
-export const selectedAccStack = writable({
-  profile: "",
-  "stack": {},
-})
-
-export const profileResourceData = writable([])
+export const userProfiles = writable();
+export const selectedProfile = writable();
+export const profileStacks = writable([]);
+export const profileResourceData = writable([]);

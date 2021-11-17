@@ -14,10 +14,10 @@ router.get("/resources-data/:profileName", async (req, res) => {
   try {
     const profileName = req.params.profileName;
     await awsCfn.clientsInit(profileName);
-    const profileVpcs = await awsCfn.getVpcsInfo();
-    const vpcEinResources = await awsCfn.getLoadBalancerInfo();
+    const profileResources = await awsCfn.getLoadBalancerInfo();
+    const existingStackInfo = await awsCfn.fetchStacksInfo();
 
-    res.json(vpcEinResources);
+    res.json({ profileResources, existingStackInfo });
   } catch (error) {
     console.log(error);
   }
@@ -31,11 +31,11 @@ router.put("/deploy-canary", async (req, res) => {
     const stackConfig = {
       profileName: params.profileName,
       vpcConfig,
-      selectedAlbArn: params.selectedAlbArn,
+      selectedAlbName: params.selectedAlbName,
+      selectedListenerArn: params.selectedListenerArn,
       securityGroupIds: params.securityGroupIds,
     };
 
-    //   // TODO: fetch account & regions from somewhere
     const app = new cdk.App();
     const canaryStack = new CanaryStack(
       app,
@@ -76,12 +76,19 @@ router.put("/deploy-canary", async (req, res) => {
 });
 
 router.put("/destroy-canary", async (req, res) => {
-  const { stackId, stackName, profileName } = req.body;
+  const { stackArn, stackName, profileName, canaryRuleArn } = req.body;
+  await awsCfn.clientsInit(profileName);
   try {
-    const existingCanaryStack = await awsCfn.fetchStackTemplate(stackId);
+    const deleteRuleRes = await awsCfn.deleteListenerRule(canaryRuleArn);
+  } catch (error) {
+    console.log(error);
+    res.send(error);
+  }
+  try {
+    const existingCanaryStack = await awsCfn.fetchStackTemplate(stackArn);
     const stackConfig = {
       profileName,
-      stackId,
+      stackArn,
       template: existingCanaryStack,
     };
 
