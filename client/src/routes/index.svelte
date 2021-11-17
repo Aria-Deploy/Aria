@@ -7,6 +7,7 @@
 	async function getAccounts() {
 		const response = await axios('http://localhost:5000/api/profiles');
 		const responseAccs = response.data;
+    console.log(responseAccs);
 		userProfiles.set(responseAccs);
 		return responseAccs;
 	}

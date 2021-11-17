@@ -56,7 +56,9 @@ export class ExistingStack extends cdk.Stack {
       usePreviousParameters: true,
     });
 
-    return "Stack Destroyed Successfully";
+    return {
+      destroyResult: "Stack Destroyed Successfully",
+    };
   }
 
   // TODO: define stackConfig type

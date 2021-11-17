@@ -96,52 +96,23 @@ router.put("/destroy-canary", async (req, res) => {
     const existingCanaryInfra = new ExistingStack(app, stackName, stackConfig, {
       env: awsCfn.getEnv(),
     });
-    const deployResult = await existingCanaryInfra.destroy();
-    res.json(deployResult);
+    const destroyResult = await existingCanaryInfra.destroy();
+    res.json(destroyResult);
   } catch (error) {
     console.log(error);
   }
 });
 
-router.get("/stacks/:profile", async (req, res) => {
-  try {
-    const profileName = req.params.profile;
-    await awsCfn.clientsInit(profileName);
-    const existingStacks = await awsCfn.fetchStacksInfo();
-    awsCfn.fetchAccountInfo(profileName);
-    res.json(existingStacks);
-  } catch (error) {
-    console.log("Unable to process existing stacks request: ", error);
-  }
-});
-
-// router.post("/resources/", async (req, res) => {
-// const { stackId } = req.body;
-// try {
-//   const selectedStackTemplate = await awsCfn.fetchStackTemplate(stackId);
-//   // TODO define type for stack template JSON form
-//   // @ts-ignore
-//   const stackResources = selectedStackTemplate.Resources;
-//   const stackVpcAlbResources = {
-//     vpcs: [] as string[],
-//     albs: [] as string[],
-//   };
-
-//   Object.entries(stackResources).forEach(([resourceName, value]) => {
-//     const vpcType = "AWS::EC2::VPC";
-//     // @ts-ignore
-//     if (value.Type === vpcType) stackVpcAlbResources.vpcs.push(resourceName);
-
-//     const albType = "AWS::ElasticLoadBalancingV2::LoadBalancer";
-//     // @ts-ignore
-//     if (value.Type === albType && resourceName.includes("alb"))
-//       stackVpcAlbResources.albs.push(resourceName);
-//   });
-
-//   res.json(stackVpcAlbResources);
-// } catch (error) {
-//   console.log(error);
-// }
+// router.get("/stacks/:profile", async (req, res) => {
+//   try {
+//     const profileName = req.params.profile;
+//     await awsCfn.clientsInit(profileName);
+//     const existingStacks = await awsCfn.fetchStacksInfo();
+//     awsCfn.fetchAccountInfo(profileName);
+//     res.json(existingStacks);
+//   } catch (error) {
+//     console.log("Unable to process existing stacks request: ", error);
+//   }
 // });
 
 module.exports = router;
