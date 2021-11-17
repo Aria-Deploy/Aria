@@ -1,10 +1,4 @@
 {
-  "Parameters": {
-    "SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter": {
-      "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
-      "Default": "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
-    }
-  },
   "Resources": {
     "vpcA2121C38": {
       "Type": "AWS::EC2::VPC",
@@ -16,12 +10,12 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "cdk-stack/vpc"
+            "Value": "cdk-stack3/vpc"
           }
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/vpc/Resource"
+        "aws:cdk:path": "cdk-stack3/vpc/Resource"
       }
     },
     "vpcPublicSubnet1Subnet2E65531E": {
@@ -44,12 +38,12 @@
           },
           {
             "Key": "Name",
-            "Value": "cdk-stack/vpc/PublicSubnet1"
+            "Value": "cdk-stack3/vpc/PublicSubnet1"
           }
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/vpc/PublicSubnet1/Subnet"
+        "aws:cdk:path": "cdk-stack3/vpc/PublicSubnet1/Subnet"
       }
     },
     "vpcPublicSubnet1RouteTable48A2DF9B": {
@@ -61,12 +55,12 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "cdk-stack/vpc/PublicSubnet1"
+            "Value": "cdk-stack3/vpc/PublicSubnet1"
           }
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/vpc/PublicSubnet1/RouteTable"
+        "aws:cdk:path": "cdk-stack3/vpc/PublicSubnet1/RouteTable"
       }
     },
     "vpcPublicSubnet1RouteTableAssociation5D3F4579": {
@@ -80,21 +74,7 @@
         }
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/vpc/PublicSubnet1/RouteTableAssociation"
-      }
-    },
-    "vpcIGWE57CBDCA": {
-      "Type": "AWS::EC2::InternetGateway",
-      "Properties": {
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "cdk-stack/vpc"
-          }
-        ]
-      },
-      "Metadata": {
-        "aws:cdk:path": "cdk-stack/vpc/IGW"
+        "aws:cdk:path": "cdk-stack3/vpc/PublicSubnet1/RouteTableAssociation"
       }
     },
     "vpcPublicSubnet1DefaultRoute10708846": {
@@ -112,21 +92,7 @@
         "vpcVPCGW7984C166"
       ],
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/vpc/PublicSubnet1/DefaultRoute"
-      }
-    },
-    "vpcVPCGW7984C166": {
-      "Type": "AWS::EC2::VPCGatewayAttachment",
-      "Properties": {
-        "VpcId": {
-          "Ref": "vpcA2121C38"
-        },
-        "InternetGatewayId": {
-          "Ref": "vpcIGWE57CBDCA"
-        }
-      },
-      "Metadata": {
-        "aws:cdk:path": "cdk-stack/vpc/VPCGW"
+        "aws:cdk:path": "cdk-stack3/vpc/PublicSubnet1/DefaultRoute"
       }
     },
     "vpcPublicSubnet1EIPDA49DCBE": {
@@ -136,35 +102,35 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "cdk-stack/vpc/PublicSubnet1"
+            "Value": "cdk-stack3/vpc/PublicSubnet1"
           }
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/vpc/PublicSubnet1/EIP"
+        "aws:cdk:path": "cdk-stack3/vpc/PublicSubnet1/EIP"
       }
     },
     "vpcPublicSubnet1NATGateway9C16659E": {
       "Type": "AWS::EC2::NatGateway",
       "Properties": {
-        "SubnetId": {
-          "Ref": "vpcPublicSubnet1Subnet2E65531E"
-        },
         "AllocationId": {
           "Fn::GetAtt": [
             "vpcPublicSubnet1EIPDA49DCBE",
             "AllocationId"
           ]
         },
+        "SubnetId": {
+          "Ref": "vpcPublicSubnet1Subnet2E65531E"
+        },
         "Tags": [
           {
             "Key": "Name",
-            "Value": "cdk-stack/vpc/PublicSubnet1"
+            "Value": "cdk-stack3/vpc/PublicSubnet1"
           }
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/vpc/PublicSubnet1/NATGateway"
+        "aws:cdk:path": "cdk-stack3/vpc/PublicSubnet1/NATGateway"
       }
     },
     "vpcPublicSubnet2Subnet009B674F": {
@@ -187,12 +153,12 @@
           },
           {
             "Key": "Name",
-            "Value": "cdk-stack/vpc/PublicSubnet2"
+            "Value": "cdk-stack3/vpc/PublicSubnet2"
           }
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/vpc/PublicSubnet2/Subnet"
+        "aws:cdk:path": "cdk-stack3/vpc/PublicSubnet2/Subnet"
       }
     },
     "vpcPublicSubnet2RouteTableEB40D4CB": {
@@ -204,12 +170,12 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "cdk-stack/vpc/PublicSubnet2"
+            "Value": "cdk-stack3/vpc/PublicSubnet2"
           }
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/vpc/PublicSubnet2/RouteTable"
+        "aws:cdk:path": "cdk-stack3/vpc/PublicSubnet2/RouteTable"
       }
     },
     "vpcPublicSubnet2RouteTableAssociation21F81B59": {
@@ -223,7 +189,7 @@
         }
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/vpc/PublicSubnet2/RouteTableAssociation"
+        "aws:cdk:path": "cdk-stack3/vpc/PublicSubnet2/RouteTableAssociation"
       }
     },
     "vpcPublicSubnet2DefaultRouteA1EC0F60": {
@@ -241,7 +207,7 @@
         "vpcVPCGW7984C166"
       ],
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/vpc/PublicSubnet2/DefaultRoute"
+        "aws:cdk:path": "cdk-stack3/vpc/PublicSubnet2/DefaultRoute"
       }
     },
     "vpcPublicSubnet3Subnet11B92D7C": {
@@ -264,12 +230,12 @@
           },
           {
             "Key": "Name",
-            "Value": "cdk-stack/vpc/PublicSubnet3"
+            "Value": "cdk-stack3/vpc/PublicSubnet3"
           }
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/vpc/PublicSubnet3/Subnet"
+        "aws:cdk:path": "cdk-stack3/vpc/PublicSubnet3/Subnet"
       }
     },
     "vpcPublicSubnet3RouteTableA3C00665": {
@@ -281,12 +247,12 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "cdk-stack/vpc/PublicSubnet3"
+            "Value": "cdk-stack3/vpc/PublicSubnet3"
           }
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/vpc/PublicSubnet3/RouteTable"
+        "aws:cdk:path": "cdk-stack3/vpc/PublicSubnet3/RouteTable"
       }
     },
     "vpcPublicSubnet3RouteTableAssociationD102D1C4": {
@@ -300,7 +266,7 @@
         }
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/vpc/PublicSubnet3/RouteTableAssociation"
+        "aws:cdk:path": "cdk-stack3/vpc/PublicSubnet3/RouteTableAssociation"
       }
     },
     "vpcPublicSubnet3DefaultRoute3F356A11": {
@@ -318,7 +284,7 @@
         "vpcVPCGW7984C166"
       ],
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/vpc/PublicSubnet3/DefaultRoute"
+        "aws:cdk:path": "cdk-stack3/vpc/PublicSubnet3/DefaultRoute"
       }
     },
     "vpcPrivateSubnet1Subnet934893E8": {
@@ -341,12 +307,12 @@
           },
           {
             "Key": "Name",
-            "Value": "cdk-stack/vpc/PrivateSubnet1"
+            "Value": "cdk-stack3/vpc/PrivateSubnet1"
           }
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/vpc/PrivateSubnet1/Subnet"
+        "aws:cdk:path": "cdk-stack3/vpc/PrivateSubnet1/Subnet"
       }
     },
     "vpcPrivateSubnet1RouteTableB41A48CC": {
@@ -358,12 +324,12 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "cdk-stack/vpc/PrivateSubnet1"
+            "Value": "cdk-stack3/vpc/PrivateSubnet1"
           }
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/vpc/PrivateSubnet1/RouteTable"
+        "aws:cdk:path": "cdk-stack3/vpc/PrivateSubnet1/RouteTable"
       }
     },
     "vpcPrivateSubnet1RouteTableAssociation67945127": {
@@ -377,7 +343,7 @@
         }
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/vpc/PrivateSubnet1/RouteTableAssociation"
+        "aws:cdk:path": "cdk-stack3/vpc/PrivateSubnet1/RouteTableAssociation"
       }
     },
     "vpcPrivateSubnet1DefaultRoute1AA8E2E5": {
@@ -392,7 +358,7 @@
         }
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/vpc/PrivateSubnet1/DefaultRoute"
+        "aws:cdk:path": "cdk-stack3/vpc/PrivateSubnet1/DefaultRoute"
       }
     },
     "vpcPrivateSubnet2Subnet7031C2BA": {
@@ -415,12 +381,12 @@
           },
           {
             "Key": "Name",
-            "Value": "cdk-stack/vpc/PrivateSubnet2"
+            "Value": "cdk-stack3/vpc/PrivateSubnet2"
           }
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/vpc/PrivateSubnet2/Subnet"
+        "aws:cdk:path": "cdk-stack3/vpc/PrivateSubnet2/Subnet"
       }
     },
     "vpcPrivateSubnet2RouteTable7280F23E": {
@@ -432,12 +398,12 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "cdk-stack/vpc/PrivateSubnet2"
+            "Value": "cdk-stack3/vpc/PrivateSubnet2"
           }
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/vpc/PrivateSubnet2/RouteTable"
+        "aws:cdk:path": "cdk-stack3/vpc/PrivateSubnet2/RouteTable"
       }
     },
     "vpcPrivateSubnet2RouteTableAssociation007E94D3": {
@@ -451,7 +417,7 @@
         }
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/vpc/PrivateSubnet2/RouteTableAssociation"
+        "aws:cdk:path": "cdk-stack3/vpc/PrivateSubnet2/RouteTableAssociation"
       }
     },
     "vpcPrivateSubnet2DefaultRouteB0E07F99": {
@@ -466,7 +432,7 @@
         }
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/vpc/PrivateSubnet2/DefaultRoute"
+        "aws:cdk:path": "cdk-stack3/vpc/PrivateSubnet2/DefaultRoute"
       }
     },
     "vpcPrivateSubnet3Subnet985AC459": {
@@ -489,12 +455,12 @@
           },
           {
             "Key": "Name",
-            "Value": "cdk-stack/vpc/PrivateSubnet3"
+            "Value": "cdk-stack3/vpc/PrivateSubnet3"
           }
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/vpc/PrivateSubnet3/Subnet"
+        "aws:cdk:path": "cdk-stack3/vpc/PrivateSubnet3/Subnet"
       }
     },
     "vpcPrivateSubnet3RouteTable24DA79A0": {
@@ -506,12 +472,12 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "cdk-stack/vpc/PrivateSubnet3"
+            "Value": "cdk-stack3/vpc/PrivateSubnet3"
           }
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/vpc/PrivateSubnet3/RouteTable"
+        "aws:cdk:path": "cdk-stack3/vpc/PrivateSubnet3/RouteTable"
       }
     },
     "vpcPrivateSubnet3RouteTableAssociationC58B3C2C": {
@@ -525,7 +491,7 @@
         }
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/vpc/PrivateSubnet3/RouteTableAssociation"
+        "aws:cdk:path": "cdk-stack3/vpc/PrivateSubnet3/RouteTableAssociation"
       }
     },
     "vpcPrivateSubnet3DefaultRoute30C45F47": {
@@ -540,28 +506,35 @@
         }
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/vpc/PrivateSubnet3/DefaultRoute"
+        "aws:cdk:path": "cdk-stack3/vpc/PrivateSubnet3/DefaultRoute"
       }
     },
-    "albSecurityGroup49866104": {
-      "Type": "AWS::EC2::SecurityGroup",
+    "vpcIGWE57CBDCA": {
+      "Type": "AWS::EC2::InternetGateway",
       "Properties": {
-        "GroupDescription": "Automatically created Security Group for ELB cdkstackalb6DF91EA2",
-        "SecurityGroupIngress": [
+        "Tags": [
           {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow from anyone on port 80",
-            "FromPort": 80,
-            "IpProtocol": "tcp",
-            "ToPort": 80
+            "Key": "Name",
+            "Value": "cdk-stack3/vpc"
           }
-        ],
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "cdk-stack3/vpc/IGW"
+      }
+    },
+    "vpcVPCGW7984C166": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
         "VpcId": {
           "Ref": "vpcA2121C38"
+        },
+        "InternetGatewayId": {
+          "Ref": "vpcIGWE57CBDCA"
         }
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/alb/SecurityGroup/Resource"
+        "aws:cdk:path": "cdk-stack3/vpc/VPCGW"
       }
     },
     "alb8A8B13C2": {
@@ -601,24 +574,20 @@
         "vpcPublicSubnet3DefaultRoute3F356A11"
       ],
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/alb/Resource"
+        "aws:cdk:path": "cdk-stack3/alb/Resource"
       }
     },
-    "asgInstanceSecurityGroup5CEB2975": {
+    "albSecurityGroup49866104": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
-        "GroupDescription": "cdk-stack/asg/InstanceSecurityGroup",
-        "SecurityGroupEgress": [
+        "GroupDescription": "Automatically created Security Group for ELB cdkstack3alb9433EA26",
+        "SecurityGroupIngress": [
           {
             "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1"
-          }
-        ],
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "cdk-stack/asg"
+            "Description": "Allow from anyone on port 80",
+            "FromPort": 80,
+            "IpProtocol": "tcp",
+            "ToPort": 80
           }
         ],
         "VpcId": {
@@ -626,10 +595,10 @@
         }
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/asg/InstanceSecurityGroup/Resource"
+        "aws:cdk:path": "cdk-stack3/alb/SecurityGroup/Resource"
       }
     },
-    "albSecurityGrouptocdkstackasgInstanceSecurityGroup3E3F3E71809881611E": {
+    "albSecurityGrouptocdkstack3asgInstanceSecurityGroupB8BCCF52809428826A": {
       "Type": "AWS::EC2::SecurityGroupEgress",
       "Properties": {
         "GroupId": {
@@ -650,10 +619,31 @@
         "ToPort": 80
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/alb/SecurityGroup/to cdkstackasgInstanceSecurityGroup3E3F3E71:80"
+        "aws:cdk:path": "cdk-stack3/alb/SecurityGroup/to cdkstack3asgInstanceSecurityGroupB8BCCF52:80"
       }
     },
-    "albListenerdefaulttargetGroup79BAE92B": {
+    "albListener3EA0B2EF": {
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+      "Properties": {
+        "DefaultActions": [
+          {
+            "TargetGroupArn": {
+              "Ref": "albListenerTeStNaMeGroupBA643D56"
+            },
+            "Type": "forward"
+          }
+        ],
+        "LoadBalancerArn": {
+          "Ref": "alb8A8B13C2"
+        },
+        "Port": 80,
+        "Protocol": "HTTP"
+      },
+      "Metadata": {
+        "aws:cdk:path": "cdk-stack3/alb/Listener/Resource"
+      }
+    },
+    "albListenerTeStNaMeGroupBA643D56": {
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
       "Properties": {
         "HealthCheckIntervalSeconds": 30,
@@ -668,28 +658,7 @@
         }
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/alb/Listener/default-targetGroup/Resource"
-      }
-    },
-    "albListener3EA0B2EF": {
-      "Type": "AWS::ElasticLoadBalancingV2::Listener",
-      "Properties": {
-        "DefaultActions": [
-          {
-            "TargetGroupArn": {
-              "Ref": "albListenerdefaulttargetGroup79BAE92B"
-            },
-            "Type": "forward"
-          }
-        ],
-        "LoadBalancerArn": {
-          "Ref": "alb8A8B13C2"
-        },
-        "Port": 80,
-        "Protocol": "HTTP"
-      },
-      "Metadata": {
-        "aws:cdk:path": "cdk-stack/alb/Listener/Resource"
+        "aws:cdk:path": "cdk-stack3/alb/Listener/TeSt-NaMeGroup/Resource"
       }
     },
     "albListenerstaticRule4F017351": {
@@ -718,13 +687,38 @@
         "ListenerArn": {
           "Ref": "albListener3EA0B2EF"
         },
-        "Priority": 5
+        "Priority": 10
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/alb/Listener/--staticRule/Resource"
+        "aws:cdk:path": "cdk-stack3/alb/Listener/--staticRule/Resource"
       }
     },
-    "asgInstanceSecurityGroupfromcdkstackalbSecurityGroup20A8C03080818D6412": {
+    "asgInstanceSecurityGroup5CEB2975": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "cdk-stack3/asg/InstanceSecurityGroup",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "cdk-stack3/asg"
+          }
+        ],
+        "VpcId": {
+          "Ref": "vpcA2121C38"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "cdk-stack3/asg/InstanceSecurityGroup/Resource"
+      }
+    },
+    "asgInstanceSecurityGroupfromcdkstack3albSecurityGroupE2004DF4800A8162C9": {
       "Type": "AWS::EC2::SecurityGroupIngress",
       "Properties": {
         "IpProtocol": "tcp",
@@ -745,7 +739,7 @@
         "ToPort": 80
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/asg/InstanceSecurityGroup/from cdkstackalbSecurityGroup20A8C030:80"
+        "aws:cdk:path": "cdk-stack3/asg/InstanceSecurityGroup/from cdkstack3albSecurityGroupE2004DF4:80"
       }
     },
     "asgInstanceRole8AC4201C": {
@@ -766,12 +760,12 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "cdk-stack/asg"
+            "Value": "cdk-stack3/asg"
           }
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/asg/InstanceRole/Resource"
+        "aws:cdk:path": "cdk-stack3/asg/InstanceRole/Resource"
       }
     },
     "asgInstanceProfile4E44E320": {
@@ -784,7 +778,7 @@
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/asg/InstanceProfile"
+        "aws:cdk:path": "cdk-stack3/asg/InstanceProfile"
       }
     },
     "asgLaunchConfig37FDE42B": {
@@ -813,14 +807,14 @@
         "asgInstanceRole8AC4201C"
       ],
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/asg/LaunchConfig"
+        "aws:cdk:path": "cdk-stack3/asg/LaunchConfig"
       }
     },
     "asgASG4D014670": {
       "Type": "AWS::AutoScaling::AutoScalingGroup",
       "Properties": {
-        "MaxSize": "3",
-        "MinSize": "2",
+        "MaxSize": "1",
+        "MinSize": "1",
         "LaunchConfigurationName": {
           "Ref": "asgLaunchConfig37FDE42B"
         },
@@ -828,12 +822,12 @@
           {
             "Key": "Name",
             "PropagateAtLaunch": true,
-            "Value": "cdk-stack/asg"
+            "Value": "cdk-stack3/asg"
           }
         ],
         "TargetGroupARNs": [
           {
-            "Ref": "albListenerdefaulttargetGroup79BAE92B"
+            "Ref": "albListenerTeStNaMeGroupBA643D56"
           }
         ],
         "VPCZoneIdentifier": [
@@ -854,7 +848,7 @@
         }
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/asg/ASG"
+        "aws:cdk:path": "cdk-stack3/asg/ASG"
       }
     },
     "asgScalingPolicyrequestsperminute5D73703F": {
@@ -915,7 +909,7 @@
                   "/",
                   {
                     "Fn::GetAtt": [
-                      "albListenerdefaulttargetGroup79BAE92B",
+                      "albListenerTeStNaMeGroupBA643D56",
                       "TargetGroupFullName"
                     ]
                   }
@@ -927,12 +921,12 @@
         }
       },
       "DependsOn": [
+        "albListenerstaticRule4F017351",
         "albListener3EA0B2EF",
-        "albListenerdefaulttargetGroup79BAE92B",
-        "albListenerstaticRule4F017351"
+        "albListenerTeStNaMeGroupBA643D56"
       ],
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/asg/ScalingPolicyrequests-per-minute/Resource"
+        "aws:cdk:path": "cdk-stack3/asg/ScalingPolicyrequests-per-minute/Resource"
       }
     },
     "asgScalingPolicycpuutilscaling06365506": {
@@ -950,7 +944,7 @@
         }
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/asg/ScalingPolicycpu-util-scaling/Resource"
+        "aws:cdk:path": "cdk-stack3/asg/ScalingPolicycpu-util-scaling/Resource"
       }
     },
     "CDKMetadata": {
@@ -959,8 +953,14 @@
         "Analytics": "v2:deflate64:H4sIAAAAAAAAE31SwW7CMAz9Fu5ZoNu08xhCqBLaqoK4m2BKoCRV4oBQ1X+f21IoYtrJfs9PzrOdSEajNzkafMLZv6jNYVgq61CWCwJ1ECl6G5xCMdmaBBwckdDV4CdQEUhMrPHkgqKa68SVqHuVqF5luSpUXVolE5GEda7VIqwNNvJ7ltpAuIR1jnf+zo29t0oDaWtu4jqZxkkdvoFmQHiGi0icPnF6bxwbtst5J2idXNGYeMTdEQ2JBargNF1mzoai8fAvMc0cev9Ex6bhK4E5eNIqt7BZQw5GaZOdeBnjouANNJPMufbV1Np9PuC+TntCc9V0ea++BJfxfJ3NPvyjSxraFfcxXyuQ9QpydskeGSxacOs6h2DUjm+91Vlwt0s8SdvXl45/DnPXUmLZRbP6B6ISGo6yTG3rqIsx/6d6CYmzW83mqkoYu0G598NT9C6jDxkN9l7rFxcM6SPKtI2/l68se8cCAAA="
       },
       "Metadata": {
-        "aws:cdk:path": "cdk-stack/CDKMetadata/Default"
+        "aws:cdk:path": "cdk-stack3/CDKMetadata/Default"
       }
+    }
+  },
+  "Parameters": {
+    "SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter": {
+      "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
+      "Default": "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
     }
   },
   "Outputs": {
@@ -970,6 +970,33 @@
           "alb8A8B13C2",
           "DNSName"
         ]
+      }
+    },
+    "asgName": {
+      "Value": {
+        "Ref": "asgASG4D014670"
+      }
+    },
+    "asgARN": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "arn:",
+            {
+              "Ref": "AWS::Partition"
+            },
+            ":autoscaling:us-west-2:750078097588:autoScalingGroup:*:autoScalingGroupName/",
+            {
+              "Ref": "asgASG4D014670"
+            }
+          ]
+        ]
+      }
+    },
+    "albARN": {
+      "Value": {
+        "Ref": "alb8A8B13C2"
       }
     }
   }

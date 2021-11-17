@@ -33,6 +33,7 @@
     "@aws-cdk/core": "1.128.0",
     "@aws-sdk/client-cloudformation": "^3.39.0",
     "@aws-sdk/client-ec2": "^3.39.0",
+    "@aws-sdk/client-elastic-load-balancing-v2": "3.36.0",
     "aws-sdk": "^2.1018.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",

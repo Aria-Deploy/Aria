@@ -1,24 +1,19 @@
-import * as cdk from "@aws-cdk/core";
-import * as elbv2 from "@aws-cdk/aws-elasticloadbalancingv2";
-import * as ec2 from "@aws-cdk/aws-ec2";
 import * as autoscaling from "@aws-cdk/aws-autoscaling";
+import * as ec2 from "@aws-cdk/aws-ec2";
+import * as elbv2 from "@aws-cdk/aws-elasticloadbalancingv2";
+import * as cdk from "@aws-cdk/core";
+import { readFileSync } from "fs";
 import { ExistingStack } from "./existing_stack";
 
 export class CanaryStack extends ExistingStack {
   constructor(
+    scope: cdk.App,
     id: string,
     stackConfig: any,
     props?: cdk.StackProps
   ) {
-    super(id, stackConfig, props);
-
-    new cdk.CfnOutput(this, "aria-canary", {
-      value: "true",
-    });
-
-    this.templateOptions.metadata = {
-      "pre-canary-cfn": JSON.stringify(stackConfig.template),
-    };
+    super(scope, id, stackConfig, props);
+    const stackContext = this;
 
     const vpc = ec2.Vpc.fromVpcAttributes(
       this,
@@ -26,94 +21,136 @@ export class CanaryStack extends ExistingStack {
       stackConfig.vpcConfig
     );
 
-    // TODO import existing alb
-    // const alb = new elbv2.ApplicationLoadBalancer(this, "alb", {
-    //   vpc,
-    //   internetFacing: true,
-    // });
+    const prodInstanceSGs = stackConfig.securityGroupIds.map(
+      (sgId: any, idx: number) => {
+        return ec2.SecurityGroup.fromSecurityGroupId(
+          stackContext,
+          `prodInstanceSG-${idx}`,
+          sgId.groupId
+        );
+      }
+    );
 
-    // // TODO import existing listener
-    // const listener = alb.addListener("Listener", {
-    //   port: 80,
-    //   open: true,
-    // });
+    // 👇 create security group for application ec2 instances
+    const appSG = new ec2.SecurityGroup(this, "app-sg", {
+      vpc,
+      allowAllOutbound: true,
+    });
 
-    // const userData1 = ec2.UserData.forLinux();
-    // const userData2 = ec2.UserData.forLinux();
+    appSG.addIngressRule(
+      ec2.Peer.anyIpv4(),
+      ec2.Port.tcp(22),
+      "allow SSH access from anywhere"
+    );
 
-    // userData1.addCommands(
-    //   "sudo su",
-    //   "yum install -y httpd",
-    //   "systemctl start httpd",
-    //   "systemctl enable httpd",
-    //   'echo "<h1>Hello World from $(hostname -f) and instance 1</h1>" > /var/www/html/index.html'
+    appSG.addIngressRule(
+      ec2.Peer.anyIpv4(),
+      ec2.Port.tcp(9100),
+      "allow node_exporter access from anywhere"
+    );
+
+    appSG.addIngressRule(
+      ec2.Peer.anyIpv4(),
+      ec2.Port.tcp(80),
+      "allow all http acess"
+    );
+
+    // custom image
+    // const machineImage = ec2.MachineImage.lookup({
+    //   name: "prometheus-monitoring-itself"
+    // })
+
+    // define configuration for app-base-and-canary asg ec2 instances,
+    const appInstance = {
+      vpc,
+      instanceType: ec2.InstanceType.of(
+        ec2.InstanceClass.T2,
+        ec2.InstanceSize.MICRO
+      ),
+      machineImage: new ec2.AmazonLinuxImage({
+        generation: ec2.AmazonLinuxGeneration.AMAZON_LINUX_2,
+      }),
+      minCapacity: 1,
+      maxCapacity: 1,
+      keyName: "ec2-key-pair", // replace this with your security key
+      securityGroup: appSG,
+      vpcSubnets: {
+        subnetType: ec2.SubnetType.PUBLIC,
+      },
+    };
+
+    // const baselineAppSetup = readFileSync(
+    //   "./src/scripts/baselineSetup.sh",
+    //   "utf8"
     // );
+    const canaryAppSetup = readFileSync("./src/scripts/canarySetup.sh", "utf8");
 
-    // userData2.addCommands(
-    //   "sudo su",
-    //   "yum install -y httpd",
-    //   "systemctl start httpd",
-    //   "systemctl enable httpd",
-    //   'echo "<h1>Hello World from $(hostname -f) and instance 2</h1>" > /var/www/html/index.html'
-    // );
-
-    // const asg1 = new autoscaling.AutoScalingGroup(this, "asg1", {
-    //   vpc,
-    //   instanceType: ec2.InstanceType.of(
-    //     ec2.InstanceClass.T2,
-    //     ec2.InstanceSize.MICRO
-    //   ),
-    //   machineImage: new ec2.AmazonLinuxImage({
-    //     generation: ec2.AmazonLinuxGeneration.AMAZON_LINUX_2,
-    //   }),
-    //   userData: userData1,
-    //   minCapacity: 1,
-    //   maxCapacity: 1,
-    // });
-
-    // const asg2 = new autoscaling.AutoScalingGroup(this, "asg2", {
-    //   vpc,
-    //   instanceType: ec2.InstanceType.of(
-    //     ec2.InstanceClass.T2,
-    //     ec2.InstanceSize.MICRO
-    //   ),
-    //   machineImage: new ec2.AmazonLinuxImage({
-    //     generation: ec2.AmazonLinuxGeneration.AMAZON_LINUX_2,
-    //   }),
-    //   userData: userData2,
-    //   minCapacity: 1,
-    //   maxCapacity: 1,
-    // });
-
-    // const tg1 = new elbv2.ApplicationTargetGroup(
+    // create new autoscaling groups
+    // const asgBaseline = new autoscaling.AutoScalingGroup(
     //   this,
-    //   "application-target-group-1",
+    //   "asgBaseline",
+    //   appInstance
+    // );
+    // asgBaseline.addUserData(baselineAppSetup);
+    // asgBaseline.addSecurityGroup(prodInstanceSG);
+
+    const asgCanary = new autoscaling.AutoScalingGroup(
+      this,
+      "asgCanary",
+      appInstance
+    );
+    asgCanary.addUserData(canaryAppSetup);
+    prodInstanceSGs.forEach((sg: any) => asgCanary.addSecurityGroup(sg));
+    // asgCanary.addSecurityGroup(prodInstanceSG);
+
+    // define target groups for ALB
+    // const targetBaseline = new elbv2.ApplicationTargetGroup(
+    //   this,
+    //   "BASELINE_TARGET",
     //   {
-    //     port: 80,
-    //     targets: [asg1],
     //     vpc,
+    //     // TODO user defined port value
+    //     port: 80,
+    //     targets: [asgBaseline],
     //   }
     // );
 
-    // const tg2 = new elbv2.ApplicationTargetGroup(
+    const targetCanary = new elbv2.ApplicationTargetGroup(
+      this,
+      "CANARY_TARGET",
+      {
+        vpc,
+        // TODO user defined port value
+        port: 80,
+        targets: [asgCanary],
+      }
+    );
+
+    // const listener = elbv2.ApplicationListener.fromLookup(
     //   this,
-    //   "application-target-group-2",
+    //   "existingListener",
     //   {
-    //     port: 80,
-    //     targets: [asg2],
-    //     vpc,
+    //     listenerArn:
+    //       "arn:aws:elasticloadbalancing:us-west-2:750078097588:listener/app/cdk-s-alb8A-1AA9PUZ3YMG8L/2c17b1191f4de0af/e647e3a808a97a5e",
     //   }
     // );
 
-    // listener.addAction("action-1", {
-    //   action: elbv2.ListenerAction.weightedForward([
-    //     { targetGroup: tg1, weight: 4 },
-    //     { targetGroup: tg2, weight: 1 },
-    //   ]),
+    new cdk.CfnOutput(this, "ariacanary", {
+      value: "true",
+    });
+
+    // new cdk.CfnOutput(this, "Baseline-Target-Group-Arn", {
+    //   value: targetBaseline.targetGroupArn,
     // });
 
+    new cdk.CfnOutput(this, "Canary-Target-Group-Arn", {
+      value: targetCanary.targetGroupArn,
+    });
+
+    // output ip addresses/dns address for
+    // prometheus, baseline, canary, grafana
     // new cdk.CfnOutput(this, "albDNS", {
-    //   value: alb.loadBalancerDnsName,
+    //   value: `http://${alb.loadBalancerDnsName}`,
     // });
   }
 }

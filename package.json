@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@aws-cdk/aws-elasticloadbalancingv2-targets": "^1.132.0",
+    "@aws-sdk/client-elastic-load-balancing-v2": "^3.41.0"
+  }
+}
