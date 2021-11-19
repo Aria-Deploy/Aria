@@ -3,7 +3,7 @@
     "appsg42805CE6": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
-        "GroupDescription": "aria-canary-test-alb8A8-XUIRPEMP2WNW/app-sg",
+        "GroupDescription": "aria-canary-Ingre-alb8A-1CSEOURDQPV00/app-sg",
         "SecurityGroupEgress": [
           {
             "CidrIp": "0.0.0.0/0",
@@ -34,7 +34,7 @@
             "ToPort": 80
           }
         ],
-        "VpcId": "vpc-05e36fc980efc35ab"
+        "VpcId": "vpc-0a94824440a024b99"
       }
     },
     "asgCanaryInstanceRoleA9725CA5": {
@@ -65,7 +65,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "aria-canary-test-alb8A8-XUIRPEMP2WNW/asgCanary"
+            "Value": "aria-canary-Ingre-alb8A-1CSEOURDQPV00/asgCanary"
           }
         ]
       }
@@ -98,7 +98,7 @@
               "GroupId"
             ]
           },
-          "sg-078ac51d67ea5c71b"
+          "sg-03e7d4084783c07dd"
         ],
         "UserData": {
           "Fn::Base64": "#!/bin/bash\n#!/bin/bash\nyum update -y\nsudo su\n\namazon-linux-extras install -y nginx1\nsystemctl start nginx\nsystemctl enable nginx\n\nchmod 2775 /usr/share/nginx/html\nfind /usr/share/nginx/html -type d -exec chmod 2775 {} \\;\nfind /usr/share/nginx/html -type f -exec chmod 0664 {} \\;\n\necho \"<h1>Canary</h1>\" > /usr/share/nginx/html/index.html"
@@ -120,7 +120,7 @@
           {
             "Key": "Name",
             "PropagateAtLaunch": true,
-            "Value": "aria-canary-test-alb8A8-XUIRPEMP2WNW/asgCanary"
+            "Value": "aria-canary-Ingre-alb8A-1CSEOURDQPV00/asgCanary"
           }
         ],
         "TargetGroupARNs": [
@@ -129,9 +129,9 @@
           }
         ],
         "VPCZoneIdentifier": [
-          "subnet-0328049ee7715e3fb",
-          "subnet-0389342a32ef57c3f",
-          "subnet-029c7f01f93f84108"
+          "subnet-027a6dddbdbfc85cf",
+          "subnet-07da976d9dd49915c",
+          "subnet-0abd62938ee4d7970"
         ]
       },
       "UpdatePolicy": {
@@ -152,7 +152,7 @@
           }
         ],
         "TargetType": "instance",
-        "VpcId": "vpc-05e36fc980efc35ab"
+        "VpcId": "vpc-0a94824440a024b99"
       }
     }
   },
@@ -167,10 +167,10 @@
       "Value": "true"
     },
     "loadBalancerName": {
-      "Value": "test-alb8A8-XUIRPEMP2WNW"
+      "Value": "Ingre-alb8A-1CSEOURDQPV00"
     },
     "listenerArn": {
-      "Value": "arn:aws:elasticloadbalancing:us-west-2:750078097588:listener/app/test-alb8A8-XUIRPEMP2WNW/951c5cad0f45c9b5/dc6f01bb26f68bda"
+      "Value": "arn:aws:elasticloadbalancing:us-west-2:750078097588:listener/app/Ingre-alb8A-1CSEOURDQPV00/a399243c6f93c4d4/68534d65637e309e"
     },
     "CanaryTargetGroupArn": {
       "Value": {

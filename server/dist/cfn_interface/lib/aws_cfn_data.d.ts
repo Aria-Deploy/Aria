@@ -1,4 +1,5 @@
 import * as clientEc2 from "@aws-sdk/client-ec2";
+import { Rule } from "@aws-sdk/client-elastic-load-balancing-v2";
 export declare const getEnv: () => {
     account: string;
     region: string;
@@ -11,10 +12,9 @@ export declare function fetchProfilesInfo(): Promise<any>;
 export declare function fetchStacksInfo(): Promise<{
     stackName: string | undefined;
     stackArn: string | undefined;
-    stackOutputs: import("@aws-sdk/client-cloudformation/dist-types/").Output[];
-    isCanary: boolean;
-    listenerArn: string | undefined;
-    canaryRule: undefined;
+    stackOutputs: import("@aws-sdk/client-cloudformation/dist-types/").Output[] | undefined;
+    canaryRule: Rule;
+    config: any;
 }[]>;
 export declare function setAzPubPrivSubnets(vpcId: string): Promise<any>;
 export declare function fetchStackTemplate(stackId: string): Promise<unknown>;
