@@ -74,7 +74,7 @@
 	}
 </script>
 
-<div class="bg-blue-100 flex flex-row px-9 py-12 shadow">
+<div class="bg-blue-50 flex flex-row px-9 py-12 shadow">
   <div class="flex-grow">
     <div class="text-left text-2xl">
       <div class="text-regal-blue text-4xl font-bold">Canary Deployment</div>

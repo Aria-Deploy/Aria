@@ -13,6 +13,8 @@ export declare class ExistingStack extends cdk.Stack {
     synthesizeStack(): void;
     createNewCfnDeploy(): Promise<CloudFormationDeployments>;
     deploy(): Promise<import("aws-cdk/lib/api/deploy-stack").DeployStackResult>;
-    destroy(): Promise<string>;
+    destroy(): Promise<{
+        destroyResult: string;
+    }>;
     constructor(source: cdk.App, id: string, stackConfig: any, props?: cdk.StackProps);
 }
