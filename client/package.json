@@ -1,0 +1,31 @@
+{
+	"name": "aria-frontend",
+	"version": "0.0.1",
+	"scripts": {
+		"dev:only": "svelte-kit dev",
+		"build:only": "svelte-kit build",
+		"preview": "svelte-kit preview",
+		"tailwind:watch": "cross-env TAILWIND_MODE=watch cross-env NODE_ENV=development postcss src/styles/tailwind.css -o src/styles/tailwind-output.css -w",
+		"tailwind:build": "cross-env TAILWIND_MODE=build cross-env NODE_ENV=production postcss src/styles/tailwind.css -o src/styles/tailwind-output.css",
+		"dev": "concurrently \"npm run dev:only\" \"npm run tailwind:watch\"",
+		"build": "npm run tailwind:build && npm run build:only"
+	},
+	"devDependencies": {
+		"@sveltejs/kit": "next",
+		"autoprefixer": "^10.4.0",
+		"concurrently": "^6.4.0",
+		"cross-env": "^7.0.3",
+		"eslint": "^7.32.0",
+		"eslint-config-prettier": "^8.3.0",
+		"eslint-plugin-svelte3": "^3.2.1",
+		"postcss-cli": "^9.0.2",
+		"prettier": "^2.4.1",
+		"prettier-plugin-svelte": "^2.4.0",
+		"svelte": "^3.42.6",
+		"tailwindcss": "^2.2.19"
+	},
+	"type": "module",
+	"dependencies": {
+		"axios": "^0.24.0"
+	}
+}
