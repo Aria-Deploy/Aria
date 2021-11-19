@@ -71,7 +71,7 @@ router.put("/deploy-canary", async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(400);
-    res.json("deployment failed");
+    res.json("deployment fail");
   }
 });
 
