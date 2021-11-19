@@ -4,7 +4,6 @@
   import Banner from "$lib/banner.svelte";
   import { getResourceData } from "$lib/api_interface";
   import { existingStackInfo } from "../stores";
-  let descrption = "This is a descrption of the canary";
 
   onMount(async () => {
     const data = await getResourceData("default");
@@ -16,8 +15,6 @@
 <Banner />
 <div class="pr-5">
   {#each $existingStackInfo as stack, idx}
-    {#if stack.isCanary}
-      <Card stackInfo={stack} />
-    {/if}
+    <Card stackInfo={stack} />
   {/each}
 </div>
