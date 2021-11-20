@@ -67,7 +67,7 @@ export class CanaryStack extends ExistingStack {
       }),
       minCapacity: 1,
       maxCapacity: 1,
-      keyName: "ec2-key-pair", // replace this with your security key
+      keyName: stackConfig.keyPair, // replace this with your security key
       securityGroup: appSG,
       vpcSubnets: {
         subnetType: ec2.SubnetType.PUBLIC,
@@ -111,7 +111,7 @@ export class CanaryStack extends ExistingStack {
       {
         vpc,
         // TODO user defined port value
-        port: 80,
+        port: stackConfig.selectedPort,
         targets: [asgBaseline],
       }
     );
@@ -122,19 +122,10 @@ export class CanaryStack extends ExistingStack {
       {
         vpc,
         // TODO user defined port value
-        port: 80,
+        port: stackConfig.selectedPort,
         targets: [asgCanary],
       }
     );
-
-    // const listener = elbv2.ApplicationListener.fromLookup(
-    //   this,
-    //   "existingListener",
-    //   {
-    //     listenerArn:
-    //       "arn:aws:elasticloadbalancing:us-west-2:750078097588:listener/app/cdk-s-alb8A-1AA9PUZ3YMG8L/2c17b1191f4de0af/e647e3a808a97a5e",
-    //   }
-    // );
 
     // 👇 create security group for monitor ec2 instances
     const monitorSG = new ec2.SecurityGroup(this, 'monitor-sg', {
@@ -217,12 +208,8 @@ export class CanaryStack extends ExistingStack {
       value: "true",
     });
 
-    new cdk.CfnOutput(this, "loadBalancerName", {
-      value: stackConfig.selectedAlbName,
-    });
-
-    new cdk.CfnOutput(this, "listenerArn", {
-      value: stackConfig.selectedListenerArn,
+    new cdk.CfnOutput(this, "ariaconfig", {
+      value: JSON.stringify(stackConfig),
     });
 
     new cdk.CfnOutput(this, "Baseline-Target-Group-Arn", {
