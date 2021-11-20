@@ -39,11 +39,17 @@ router.put("/deploy-canary", async (req, res) => {
 
     const deployResult = await canaryStack.deploy();
     const targetGroups =
-      stackConfig.newRuleConfig.Actions[0].ForwardConfig.TargetGroups;
+
+    stackConfig.newRuleConfig.Actions[0].ForwardConfig.TargetGroups;
+
     targetGroups.forEach((targetGroup: any, idx: number) => {
       if (targetGroup.TargetGroupArn === "Insert Canary Target ARN") {
         targetGroups[idx].TargetGroupArn =
           deployResult.outputs.CanaryTargetGroupArn;
+      }
+      if (targetGroup.TargetGroupArn === "Insert Baseline Target ARN") {
+        targetGroups[idx].TargetGroupArn =
+        deployResult.outputs.BaselineTargetGroupArn;
       }
     });
 
