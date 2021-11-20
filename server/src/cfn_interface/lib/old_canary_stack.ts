@@ -99,13 +99,13 @@ export class CanaryStack extends ExistingStack {
     //   targets: [asgStable],
     // });
 
-    // const alb = elbv2.ApplicationLoadBalancer.fromLookup(this, "existing-alb", {
-    //   loadBalancerArn:
-    //     "arn:aws:elasticloadbalancing:us-west-2:750078097588:loadbalancer/app/cdk-s-alb8A-1EDT7B3SC5FF4/a92cd2596cd7f92e",
-    //   // securityGroupId: "sg-031d81f769d4b9d84",
-    //   // loadBalancerDnsName:
-    //   //   "cdk-s-alb8A-1EDT7B3SC5FF4-685005633.us-west-2.elb.amazonaws.com",
-    // });
+    const alb = elbv2.ApplicationLoadBalancer.fromLookup(this, "existing-alb", {
+      loadBalancerArn:
+        "arn:aws:elasticloadbalancing:us-west-2:750078097588:loadbalancer/app/cdk-s-alb8A-1EDT7B3SC5FF4/a92cd2596cd7f92e",
+      // securityGroupId: "sg-031d81f769d4b9d84",
+      // loadBalancerDnsName:
+      //   "cdk-s-alb8A-1EDT7B3SC5FF4-685005633.us-west-2.elb.amazonaws.com",
+    });
 
     // const canaryResources = new CanaryNestedStack(this, "canary-resources", {
     //   vpc,
