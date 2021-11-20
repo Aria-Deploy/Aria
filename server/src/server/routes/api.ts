@@ -24,32 +24,24 @@ router.get("/resources-data/:profileName", async (req, res) => {
 });
 
 router.put("/deploy-canary", async (req, res) => {
-  const params = req.body;
-  console.log(params);
+  const stackConfig = req.body;
   try {
-    const vpcConfig = await awsCfn.setAzPubPrivSubnets(params.vpcId);
-    const stackConfig = {
-      profileName: params.profileName,
-      vpcConfig,
-      selectedAlbName: params.selectedAlbName,
-      selectedListenerArn: params.selectedListenerArn,
-      securityGroupIds: params.securityGroupIds,
-    };
+    stackConfig.vpcConfig = await awsCfn.setAzPubPrivSubnets(stackConfig.vpcId);
+    stackConfig.env = awsCfn.getEnv();
 
     const app = new cdk.App();
     const canaryStack = new CanaryStack(
       app,
-      `aria-canary-${params.selectedAlbName}`,
+      `aria-canary-${stackConfig.selectedAlbName}`,
       stackConfig,
-      {
-        env: awsCfn.getEnv(),
-      }
+      stackConfig.env  
     );
 
     const deployResult = await canaryStack.deploy();
     const targetGroups =
-      params.newRuleConfig.Actions[0].ForwardConfig.TargetGroups;
-    
+
+    stackConfig.newRuleConfig.Actions[0].ForwardConfig.TargetGroups;
+
     targetGroups.forEach((targetGroup: any, idx: number) => {
       if (targetGroup.TargetGroupArn === "Insert Canary Target ARN") {
         targetGroups[idx].TargetGroupArn =
@@ -62,7 +54,7 @@ router.put("/deploy-canary", async (req, res) => {
     });
 
     const createRuleResponse = await awsCfn.createListenerRule(
-      params.newRuleConfig
+      stackConfig.newRuleConfig
     );
 
     console.log(deployResult);
@@ -76,7 +68,7 @@ router.put("/deploy-canary", async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(400);
-    res.json("deployment failed");
+    res.json("deployment fail");
   }
 });
 

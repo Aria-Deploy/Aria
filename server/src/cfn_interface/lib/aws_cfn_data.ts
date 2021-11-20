@@ -6,7 +6,6 @@ import {
   DescribeVpcsCommand,
   DescribeSubnetsCommand,
   DescribeInstancesCommand,
-  DescribeSecurityGroupRulesRequest,
   DescribeSecurityGroupRulesCommand,
 } from "@aws-sdk/client-ec2";
 
@@ -27,8 +26,10 @@ import {
   DescribeRulesCommand,
   DescribeTagsCommand,
   DeleteRuleCommand,
+  Rule,
 } from "@aws-sdk/client-elastic-load-balancing-v2";
 import { Vpc } from "@aws-cdk/aws-ec2";
+import { ConfigurationServicePlaceholders } from "aws-sdk/lib/config_service_placeholders";
 // TODO: Handle request errors back to client for messages
 
 // TODO: Define type for _accountsCredentials
@@ -185,50 +186,46 @@ export async function fetchProfilesInfo() {
 export async function fetchStacksInfo() {
   try {
     const stacksInfoCmd = new DescribeStacksCommand({});
-    const stacksInfo = await _cfnClient.send(stacksInfoCmd);
+    const stacksInfoRes = await _cfnClient.send(stacksInfoCmd);
+    const stacksInfo = stacksInfoRes.Stacks!.filter((stack) => {
+      return stack.Outputs!.some(({ OutputKey }) => OutputKey === "ariacanary");
+    });
 
-    stacksInfo.Stacks = stacksInfo.Stacks || [];
-    const formattedStacks = Promise.all(
-      stacksInfo.Stacks.map(async (stack) => {
-        stack.Outputs = stack.Outputs || [];
-        const isCanary = stack.Outputs.some(
-          ({ OutputKey }) => OutputKey === "ariacanary"
-        );
-
-        let listenerArn, canaryRule;
-        if (isCanary) {
-          const listenerArnObj = stack.Outputs.find(
-            ({ OutputKey }) => OutputKey === "listenerArn"
-          );
-          listenerArn = listenerArnObj?.OutputValue;
-
-          const allRulesCmd = new DescribeRulesCommand({
-            ListenerArn: listenerArnObj?.OutputValue,
-          });
-          const rulesInfo = await _elvb2Client.send(allRulesCmd);
-
-          for (const rule of rulesInfo.Rules!) {
-            const getTagsCmd = new DescribeTagsCommand({
-              // @ts-ignore
-              ResourceArns: [rule.RuleArn],
-            });
-            const ruleTags = await _elvb2Client.send(getTagsCmd);
-            ruleTags.TagDescriptions!.forEach((tagDesc) => {
-              tagDesc.Tags?.forEach((tag) => {
-                if (tag.Key === "isAriaCanaryRule") canaryRule = rule;
-              });
-            });
-          }
-        }
-
-        return {
+    const formattedStacks = await Promise.all(
+      stacksInfo.map(async (stack) => {
+        const stackInfo = {
           stackName: stack.StackName,
           stackArn: stack.StackId,
           stackOutputs: stack.Outputs,
-          isCanary,
-          listenerArn,
-          canaryRule,
+          canaryRule: {} as Rule,
+          config: {} as any,
         };
+
+        const stackConfigObj = stack.Outputs!.find(
+          ({ OutputKey }) => OutputKey === "ariaconfig"
+        );
+        const stackConfig = JSON.parse(stackConfigObj!.OutputValue!);
+        stackInfo.config = stackConfig;
+
+        const allRulesCmd = new DescribeRulesCommand({
+          ListenerArn: stackConfig.selectedListenerArn,
+        });
+        const rulesInfo = await _elvb2Client.send(allRulesCmd);
+
+        for (const rule of rulesInfo.Rules!) {
+          const getTagsCmd = new DescribeTagsCommand({
+            // @ts-ignore
+            ResourceArns: [rule.RuleArn],
+          });
+          const ruleTags = await _elvb2Client.send(getTagsCmd);
+          ruleTags.TagDescriptions!.forEach((tagDesc) => {
+            tagDesc.Tags?.forEach((tag) => {
+              if (tag.Key === "isAriaCanaryRule") stackInfo.canaryRule = rule;
+            });
+          });
+        }
+
+        return stackInfo;
       })
     );
 
