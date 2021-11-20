@@ -6,6 +6,7 @@
     "watch": "tsc -w",
     "test": "jest",
     "dev": "nodemon dist/server/app.ts",
+    "aria:dev": "concurrently --kill-others \"npm run dev\" \"npm run watch\"",
     "start": "node dist/server/app.js"
   },
   "devDependencies": {
@@ -17,6 +18,7 @@
     "@types/node": "^10.17.27",
     "@types/yargs": "^15.0.14",
     "aws-cdk": "^1.130.0",
+    "concurrently": "^6.4.0",
     "jest": "^26.4.2",
     "nodemon": "^2.0.14",
     "pkg": "^5.4.0",
