@@ -1,7 +1,7 @@
 <script>
   import StackInfoDisplay from "$lib/stack_info_display.svelte";
   export let stackInfo;
-  let { config, canaryRule } = stackInfo;
+  let { config } = stackInfo;
 
   let scale = "scale-y-0 h-0 p-0";
   let arrowsRotation = "-rotate-180";

@@ -614,9 +614,6 @@ video {
 .m-4 {
 	margin: 1rem;
 }
-.m-2 {
-	margin: 0.5rem;
-}
 .mx-auto {
 	margin-left: auto;
 	margin-right: auto;
@@ -635,11 +632,14 @@ video {
 .ml-4 {
 	margin-left: 1rem;
 }
+.mt-3 {
+	margin-top: 0.75rem;
+}
 .mb-2 {
 	margin-bottom: 0.5rem;
 }
-.mt-8 {
-	margin-top: 2rem;
+.mt-4 {
+	margin-top: 1rem;
 }
 .mr-1 {
 	margin-right: 0.25rem;
@@ -647,17 +647,8 @@ video {
 .mb-1 {
 	margin-bottom: 0.25rem;
 }
-.mt-6 {
-	margin-top: 1.5rem;
-}
-.mt-4 {
-	margin-top: 1rem;
-}
-.mt-2 {
-	margin-top: 0.5rem;
-}
-.mt-3 {
-	margin-top: 0.75rem;
+.mt-8 {
+	margin-top: 2rem;
 }
 .block {
 	display: block;
@@ -680,8 +671,8 @@ video {
 .h-0 {
 	height: 0px;
 }
-.h-96 {
-	height: 24rem;
+.h-80 {
+	height: 20rem;
 }
 .h-6 {
 	height: 1.5rem;
@@ -691,9 +682,6 @@ video {
 }
 .h-auto {
 	height: auto;
-}
-.h-80 {
-	height: 20rem;
 }
 .w-full {
 	width: 100%;
@@ -716,24 +704,12 @@ video {
 .flex-grow {
 	flex-grow: 1;
 }
-.rotate-0 {
-	--tw-rotate: 0deg;
+.-rotate-180 {
+	--tw-rotate: -180deg;
 	transform: var(--tw-transform);
 }
 .-rotate-90 {
 	--tw-rotate: -90deg;
-	transform: var(--tw-transform);
-}
-.rotate-90 {
-	--tw-rotate: 90deg;
-	transform: var(--tw-transform);
-}
-.rotate-180 {
-	--tw-rotate: 180deg;
-	transform: var(--tw-transform);
-}
-.-rotate-180 {
-	--tw-rotate: -180deg;
 	transform: var(--tw-transform);
 }
 .scale-y-0 {
@@ -919,6 +895,14 @@ video {
 	padding-top: 1.25rem;
 	padding-bottom: 1.25rem;
 }
+.px-10 {
+	padding-left: 2.5rem;
+	padding-right: 2.5rem;
+}
+.py-4 {
+	padding-top: 1rem;
+	padding-bottom: 1rem;
+}
 .px-8 {
 	padding-left: 2rem;
 	padding-right: 2rem;
@@ -939,17 +923,9 @@ video {
 	padding-left: 1.5rem;
 	padding-right: 1.5rem;
 }
-.py-4 {
-	padding-top: 1rem;
-	padding-bottom: 1rem;
-}
 .px-2 {
 	padding-left: 0.5rem;
 	padding-right: 0.5rem;
-}
-.px-10 {
-	padding-left: 2.5rem;
-	padding-right: 2.5rem;
 }
 .pb-10 {
 	padding-bottom: 2.5rem;
@@ -1117,11 +1093,6 @@ video {
 }
 .ease-linear {
 	transition-timing-function: linear;
-}
-.hover\:scale-102:hover {
-	--tw-scale-x: 1.02;
-	--tw-scale-y: 1.02;
-	transform: var(--tw-transform);
 }
 .hover\:scale-101:hover {
 	--tw-scale-x: 1.01;
