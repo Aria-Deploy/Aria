@@ -1,15 +1,15 @@
 <script>
-  import { onMount } from "svelte";
   import Card from "$lib/card.svelte";
   import Banner from "$lib/banner.svelte";
   import { getResourceData } from "$lib/api_interface";
   import { existingStackInfo } from "../stores";
 
-  onMount(async () => {
+  async function updateState() {
     const data = await getResourceData("default");
     existingStackInfo.set(data.existingStackInfo);
     console.log($existingStackInfo);
-  });
+  }
+  updateState();
 </script>
 
 <Banner />
