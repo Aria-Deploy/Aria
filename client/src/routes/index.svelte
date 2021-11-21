@@ -14,7 +14,7 @@
 
 <Banner />
 <div class="pr-5">
-  {#each $existingStackInfo as stack, idx}
+  {#each $existingStackInfo as stack}
     <Card stackInfo={stack} />
   {/each}
 </div>

@@ -236,8 +236,6 @@ export class CanaryStack extends ExistingStack {
       value: `http://${monitorInstance.instancePublicDnsName}:3001`,
     });
     
-    // output ip addresses/dns address for
-    // prometheus, baseline, canary, grafana
     // new cdk.CfnOutput(this, "albDNS", {
     //   value: `http://${alb.loadBalancerDnsName}`,
     // });
