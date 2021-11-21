@@ -7,3 +7,13 @@ export async function getResourceData(selectedProfile) {
   const response = await axios(apiURI);
   return response.data;
 }
+
+export async function destroyCanaryStack(stackInfo) {
+  const response = await axios.put(`${apiRoute}/destroy-canary`, {
+    profileName: stackInfo.selectedProfile,
+    stackName: stackInfo.stackName,
+    stackArn: stackInfo.stackArn,
+    canaryRuleArn: stackInfo.canaryRuleArn
+  });
+  return response.data;
+}

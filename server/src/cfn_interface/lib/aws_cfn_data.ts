@@ -13,6 +13,7 @@ import {
   CloudFormationClient,
   GetTemplateCommand,
   DescribeStacksCommand,
+  Output,
 } from "@aws-sdk/client-cloudformation";
 
 import { STSClient, GetCallerIdentityCommand } from "@aws-sdk/client-sts";
@@ -193,22 +194,26 @@ export async function fetchStacksInfo() {
 
     const formattedStacks = await Promise.all(
       stacksInfo.map(async (stack) => {
-        const stackInfo = {
-          stackName: stack.StackName,
+        let stackInfo: any = {};
+        stackInfo.outputs = stack.Outputs!.reduce(
+          (acc: any, { OutputKey, OutputValue }) => {
+            acc[`${OutputKey}`] = OutputValue;
+            return acc;
+          },
+          {}
+        );
+
+        stackInfo.config = JSON.parse(stackInfo.outputs.ariaconfig);
+        stackInfo.config = {
+          ...stackInfo.config, 
+          awsStackName: stack.StackName,
           stackArn: stack.StackId,
-          stackOutputs: stack.Outputs,
-          canaryRule: {} as Rule,
-          config: {} as any,
+          stackStatus: stack.StackStatus,
+          statckStatusReason: stack.StackStatusReason,
         };
 
-        const stackConfigObj = stack.Outputs!.find(
-          ({ OutputKey }) => OutputKey === "ariaconfig"
-        );
-        const stackConfig = JSON.parse(stackConfigObj!.OutputValue!);
-        stackInfo.config = stackConfig;
-
         const allRulesCmd = new DescribeRulesCommand({
-          ListenerArn: stackConfig.selectedListenerArn,
+          ListenerArn: stackInfo.config.selectedListenerArn,
         });
         const rulesInfo = await _elvb2Client.send(allRulesCmd);
 
@@ -251,22 +256,27 @@ export async function setAzPubPrivSubnets(vpcId: string) {
     const subnetsCmd = new DescribeSubnetsCommand({});
     const subnetsResponse = await _ec2Client.send(subnetsCmd);
 
-    subnetsResponse.Subnets = subnetsResponse.Subnets || [];
-    subnetsResponse.Subnets.forEach((subnet) => {
+    const subnetsObj: any = {};
+    subnetsResponse.Subnets!.forEach(subnet => {
+      const zone = subnet.AvailabilityZone!;
       if (subnet.VpcId !== vpcConfig.vpcId) return;
-      const subnetAz = subnet.AvailabilityZone;
-      if (!vpcConfig.availabilityZones.includes(subnetAz!))
-        vpcConfig.availabilityZones.push(subnetAz!);
+      subnetsObj[zone] = subnetsObj[zone] || {}; 
 
       subnet.Tags?.some((tag) => {
         if (!["Private", "Public"].includes(tag.Value!)) return false;
         if (tag.Value === "Public")
-          vpcConfig.publicSubnetIds.push(subnet.SubnetId!);
+          subnetsObj[zone].Public = subnet.SubnetId!;
         if (tag.Value === "Private")
-          vpcConfig.privateSubnetIds.push(subnet.SubnetId!);
+          subnetsObj[zone].Private = subnet.SubnetId!;
         return true;
-      });
+      }); 
     });
+
+    for (const az in subnetsObj) {
+      vpcConfig.availabilityZones.push(az);
+      vpcConfig.publicSubnetIds.push(subnetsObj[az].Public);
+      vpcConfig.privateSubnetIds.push(subnetsObj[az].Private);
+    }
 
     return vpcConfig;
   } catch (error) {
