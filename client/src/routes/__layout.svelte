@@ -1,8 +1,8 @@
 <script>
   import "../styles/tailwind-output.css";
-  import Sidebar from "$lib/sidebar.svelte"
+  import Sidebar from "$lib/sidebar/sidebar.svelte"
 </script>
-<!-- Try some classes here -->
+
 <div class="absolute flex w-full h-full antialiased">
   <Sidebar />
   <div class="pl-48 flex-grow w-full h-full bg-gray-50">
