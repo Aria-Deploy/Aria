@@ -7,7 +7,7 @@
     showModal = !showModal
   }
 
-  function selectAlb(event) {
+  function selectAlb(event) { 
 		// selectedAlb = { ...$profileResourceData[event.target.value] };
 	}
 
@@ -70,26 +70,25 @@
 			securityGroupIds,
 			newRuleConfig
 		});
-		console.log(response.data);
 	}
 </script>
 
-<div class="bg-blue-50 flex flex-row px-9 py-12 shadow">
+<div class="bg-blue-50 flex flex-row px-9 py-10 shadow">
   <div class="flex-grow">
-    <div class="text-left text-2xl">
-      <div class="text-regal-blue text-4xl font-bold">Canary Deployment</div>
-      <div class="text-blue-500">Blahblahblah.</div>
+    <div class="text-left">
+      <div class="text-regal-blue text-4xl font-bold">Canary Deployments</div>
+      <div class="text-gray-500 text-lg py-1">Create, destroy, and manage existing Aria canary deployments</div>
     </div>
   </div>
 
   <div class="flex-shrink">
-    <button on:click={() => handleToggleModal()} class="py-2 px-4 bg-blue-600 text-white rounded-md shadow-xl hover:shadow-2xl hover:bg-blue-700 transition duration-500">
+    <button on:click={() => handleToggleModal()} class="p-2 mr-6 bg-blue-700 opacity-80 border-2 border-blue-700 border-opacity-80 font-semibold text-white rounded-md shadow-xl hover:shadow-2xl hover:bg-blue-800 hover:text-blue-50 hover:border-blue-900 hover:scale-101 transition duration-500">
       Create New
     </button>
   </div>
 </div>
 
-<Modal title="Edit your details" open={showModal} on:close={() => handleToggleModal()}>
+<Modal title="Edit your details" open={showModal} on:close={() => showModal = false}>
   <svelte:fragment slot="body">
     This is content inside my modal! 👋
   </svelte:fragment>
