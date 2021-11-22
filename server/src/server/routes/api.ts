@@ -23,6 +23,11 @@ router.get("/resources-data/:profileName", async (req, res) => {
   }
 });
 
+router.get("/test/:vpcid", async (req, res) => {
+  const response = await awsCfn.setAzPubPrivSubnets(req.params.vpcid);
+  res.json(response);
+});
+
 router.put("/deploy-canary", async (req, res) => {
   const stackConfig = req.body;
   try {
@@ -34,13 +39,12 @@ router.put("/deploy-canary", async (req, res) => {
       app,
       `aria-canary-${stackConfig.selectedAlbName}`,
       stackConfig,
-      stackConfig.env  
+      stackConfig.env
     );
 
     const deployResult = await canaryStack.deploy();
     const targetGroups =
-
-    stackConfig.newRuleConfig.Actions[0].ForwardConfig.TargetGroups;
+      stackConfig.newRuleConfig.Actions[0].ForwardConfig.TargetGroups;
 
     targetGroups.forEach((targetGroup: any, idx: number) => {
       if (targetGroup.TargetGroupArn === "Insert Canary Target ARN") {
@@ -49,7 +53,7 @@ router.put("/deploy-canary", async (req, res) => {
       }
       if (targetGroup.TargetGroupArn === "Insert Baseline Target ARN") {
         targetGroups[idx].TargetGroupArn =
-        deployResult.outputs.BaselineTargetGroupArn;
+          deployResult.outputs.BaselineTargetGroupArn;
       }
     });
 
@@ -75,6 +79,7 @@ router.put("/deploy-canary", async (req, res) => {
 router.put("/destroy-canary", async (req, res) => {
   const { stackArn, stackName, profileName, canaryRuleArn } = req.body;
   await awsCfn.clientsInit(profileName);
+  console.log(canaryRuleArn);
   try {
     const deleteRuleRes = await awsCfn.deleteListenerRule(canaryRuleArn);
   } catch (error) {
