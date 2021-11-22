@@ -1,11 +1,12 @@
 <script>
-  import Modal from "$lib/modal.svelte"
+  import Modal from "$lib/modal.svelte";
+  import CanaryForm from "$lib/create_canary_form.svelte";
 
-  let showModal = false
+  let showModal = false;
 
   const handleToggleModal = () => {
-    showModal = !showModal
-  }
+    showModal = !showModal;
+  };
 
   function selectAlb(event) { 
 		// selectedAlb = { ...$profileResourceData[event.target.value] };
@@ -71,6 +72,7 @@
 			newRuleConfig
 		});
 	}
+
 </script>
 
 <div class="bg-blue-50 flex flex-row px-9 py-10 shadow">
@@ -82,14 +84,18 @@
   </div>
 
   <div class="flex-shrink">
-    <button on:click={() => handleToggleModal()} class="p-2 mr-6 bg-blue-700 opacity-80 border-2 border-blue-700 border-opacity-80 font-semibold text-white rounded-md shadow-xl hover:shadow-2xl hover:bg-blue-800 hover:text-blue-50 hover:border-blue-900 hover:scale-101 transition duration-500">
+
+    <button
+      on:click={() => handleToggleModal()}
+      class="py-2 px-4 bg-blue-600 text-white rounded-md shadow-xl hover:shadow-2xl hover:bg-blue-700 transition duration-500"
+    >
       Create New
     </button>
   </div>
 </div>
 
-<Modal title="Edit your details" open={showModal} on:close={() => showModal = false}>
+<Modal open={showModal} on:close={() => handleToggleModal()}>
   <svelte:fragment slot="body">
-    This is content inside my modal! 👋
+    <CanaryForm />
   </svelte:fragment>
 </Modal>
