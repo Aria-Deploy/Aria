@@ -26,6 +26,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"axios": "^0.24.0"
+		"axios": "^0.24.0",
+		"svelte-simple-modal": "^1.1.1"
 	}
 }
