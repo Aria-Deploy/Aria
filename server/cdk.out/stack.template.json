@@ -3,7 +3,7 @@
     "appsg42805CE6": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
-        "GroupDescription": "aria-canary-cdk-s-alb8A-14YIHVU7A7VTF/app-sg",
+        "GroupDescription": "aria-canary-Ingre-alb8A-1CSEOURDQPV00/app-sg",
         "SecurityGroupEgress": [
           {
             "CidrIp": "0.0.0.0/0",
@@ -34,7 +34,7 @@
             "ToPort": 80
           }
         ],
-        "VpcId": "vpc-0fdc3d56c547f9157"
+        "VpcId": "vpc-0a94824440a024b99"
       }
     },
     "asgBaselineInstanceRoleBAFF0850": {
@@ -65,7 +65,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "aria-canary-cdk-s-alb8A-14YIHVU7A7VTF/asgBaseline"
+            "Value": "aria-canary-Ingre-alb8A-1CSEOURDQPV00/asgBaseline"
           }
         ]
       }
@@ -98,7 +98,7 @@
               "GroupId"
             ]
           },
-          "sg-08d2ea1546cb881ca"
+          "sg-03e7d4084783c07dd"
         ],
         "UserData": {
           "Fn::Base64": "#!/bin/bash\n#!/bin/bash\n\n# system update\nyum update -y\n\n# install git\nyum install git\n\n# docker installation\namazon-linux-extras install docker\nservice docker start\nsystemctl enable docker\nusermod -a -G docker $USER\n\n# docker-compose installation\ncurl -L \"https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose\nchmod +x /usr/local/bin/docker-compose\nln -s /usr/local/bin/docker-compose /usr/bin/docker-compose\n\n# download node_exporter\nuseradd -m -s /bin/bash prometheus\n\ncurl -L -O https://github.com/prometheus/node_exporter/releases/download/v1.2.2/node_exporter-1.2.2.linux-amd64.tar.gz\n\ntar -xzvf node_exporter-1.2.2.linux-amd64.tar.gz\nmv node_exporter-1.2.2.linux-amd64 /home/prometheus/node_exporter\nrm node_exporter-1.2.2.linux-amd64.tar.gz\nchown -R prometheus:prometheus /home/prometheus/node_exporter\n\n# Add node_exporter as systemd service\ntee -a /etc/systemd/system/node_exporter.service << END\n[Unit]\nDescription=Node Exporter\nWants=network-online.target\nAfter=network-online.target\n[Service]\nUser=prometheus\nExecStart=/home/prometheus/node_exporter/node_exporter\n[Install]\nWantedBy=default.target\nEND\n\nsystemctl daemon-reload\nsystemctl start node_exporter\nsystemctl enable node_exporter\n\n# setup demo app\nyum install -y httpd\nsystemctl start httpd\nsystemctl enable httpd\necho \"<style> body {background-color: lightblue;} </style>\" > /var/www/html/index.html\necho \"<h1>Hello World from $(hostname -f) and STABLE instance 1</h1>\" >> /var/www/html/index.html\n\n\n\n# yum update -y\n# sudo su\n# \n# amazon-linux-extras install -y nginx1\n# systemctl start nginx\n# systemctl enable nginx\n# \n# chmod 2775 /usr/share/nginx/html\n# find /usr/share/nginx/html -type d -exec chmod 2775 {} \\;\n# find /usr/share/nginx/html -type f -exec chmod 0664 {} \\;\n# \n# echo \"<h1>Baseline</h1>\" > /usr/share/nginx/html/index.html\n"
@@ -120,7 +120,7 @@
           {
             "Key": "Name",
             "PropagateAtLaunch": true,
-            "Value": "aria-canary-cdk-s-alb8A-14YIHVU7A7VTF/asgBaseline"
+            "Value": "aria-canary-Ingre-alb8A-1CSEOURDQPV00/asgBaseline"
           }
         ],
         "TargetGroupARNs": [
@@ -129,9 +129,9 @@
           }
         ],
         "VPCZoneIdentifier": [
-          "subnet-00734001741c2e875",
-          "subnet-0160ec38b558616e9",
-          "subnet-0ad01cf97a5dd6e2c"
+          "subnet-0abd62938ee4d7970",
+          "subnet-07da976d9dd49915c",
+          "subnet-027a6dddbdbfc85cf"
         ]
       },
       "UpdatePolicy": {
@@ -168,7 +168,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "aria-canary-cdk-s-alb8A-14YIHVU7A7VTF/asgCanary"
+            "Value": "aria-canary-Ingre-alb8A-1CSEOURDQPV00/asgCanary"
           }
         ]
       }
@@ -201,7 +201,7 @@
               "GroupId"
             ]
           },
-          "sg-08d2ea1546cb881ca"
+          "sg-03e7d4084783c07dd"
         ],
         "UserData": {
           "Fn::Base64": "#!/bin/bash\n#!/bin/bash\n\n# system update\nyum update -y\n\n# install git\nyum install git\n\n# docker installation\namazon-linux-extras install docker\nservice docker start\nsystemctl enable docker\nusermod -a -G docker $USER\n\n# docker-compose installation\ncurl -L \"https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose\nchmod +x /usr/local/bin/docker-compose\nln -s /usr/local/bin/docker-compose /usr/bin/docker-compose\n\n# download node_exporter\nuseradd -m -s /bin/bash prometheus\n\ncurl -L -O https://github.com/prometheus/node_exporter/releases/download/v1.2.2/node_exporter-1.2.2.linux-amd64.tar.gz\n\ntar -xzvf node_exporter-1.2.2.linux-amd64.tar.gz\nmv node_exporter-1.2.2.linux-amd64 /home/prometheus/node_exporter\nrm node_exporter-1.2.2.linux-amd64.tar.gz\nchown -R prometheus:prometheus /home/prometheus/node_exporter\n\n# Add node_exporter as systemd service\ntee -a /etc/systemd/system/node_exporter.service << END\n[Unit]\nDescription=Node Exporter\nWants=network-online.target\nAfter=network-online.target\n[Service]\nUser=prometheus\nExecStart=/home/prometheus/node_exporter/node_exporter\n[Install]\nWantedBy=default.target\nEND\n\nsystemctl daemon-reload\nsystemctl start node_exporter\nsystemctl enable node_exporter\n\n# setup demo app\nyum install -y httpd\nsystemctl start httpd\nsystemctl enable httpd\necho \"<style> body {background-color: lightblue;} </style>\" > /var/www/html/index.html\necho \"<h1>Hello World from $(hostname -f) and STABLE instance 1</h1>\" >> /var/www/html/index.html\n\n\n\n# yum update -y\n# sudo su\n# \n# amazon-linux-extras install -y nginx1\n# systemctl start nginx\n# systemctl enable nginx\n# \n# chmod 2775 /usr/share/nginx/html\n# find /usr/share/nginx/html -type d -exec chmod 2775 {} \\;\n# find /usr/share/nginx/html -type f -exec chmod 0664 {} \\;\n# \n# echo \"<h1>Canary</h1>\" > /usr/share/nginx/html/index.html\n"
@@ -223,7 +223,7 @@
           {
             "Key": "Name",
             "PropagateAtLaunch": true,
-            "Value": "aria-canary-cdk-s-alb8A-14YIHVU7A7VTF/asgCanary"
+            "Value": "aria-canary-Ingre-alb8A-1CSEOURDQPV00/asgCanary"
           }
         ],
         "TargetGroupARNs": [
@@ -232,9 +232,9 @@
           }
         ],
         "VPCZoneIdentifier": [
-          "subnet-00734001741c2e875",
-          "subnet-0160ec38b558616e9",
-          "subnet-0ad01cf97a5dd6e2c"
+          "subnet-0abd62938ee4d7970",
+          "subnet-07da976d9dd49915c",
+          "subnet-027a6dddbdbfc85cf"
         ]
       },
       "UpdatePolicy": {
@@ -255,7 +255,7 @@
           }
         ],
         "TargetType": "instance",
-        "VpcId": "vpc-0fdc3d56c547f9157"
+        "VpcId": "vpc-0a94824440a024b99"
       }
     },
     "CANARYTARGET8CC1BC3F": {
@@ -270,13 +270,13 @@
           }
         ],
         "TargetType": "instance",
-        "VpcId": "vpc-0fdc3d56c547f9157"
+        "VpcId": "vpc-0a94824440a024b99"
       }
     },
     "monitorsg419B1E56": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
-        "GroupDescription": "aria-canary-cdk-s-alb8A-14YIHVU7A7VTF/monitor-sg",
+        "GroupDescription": "aria-canary-Ingre-alb8A-1CSEOURDQPV00/monitor-sg",
         "SecurityGroupEgress": [
           {
             "CidrIp": "0.0.0.0/0",
@@ -321,7 +321,7 @@
             "ToPort": 22
           }
         ],
-        "VpcId": "vpc-0fdc3d56c547f9157"
+        "VpcId": "vpc-0a94824440a024b99"
       }
     },
     "monitorInstanceRole4CE258F3": {
@@ -352,7 +352,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "aria-canary-cdk-s-alb8A-14YIHVU7A7VTF/monitor"
+            "Value": "aria-canary-Ingre-alb8A-1CSEOURDQPV00/monitor"
           }
         ]
       }
@@ -370,7 +370,7 @@
     "monitor360B0AD7": {
       "Type": "AWS::EC2::Instance",
       "Properties": {
-        "AvailabilityZone": "us-east-1c",
+        "AvailabilityZone": "us-west-2c",
         "IamInstanceProfile": {
           "Ref": "monitorInstanceProfile6E9B6855"
         },
@@ -387,15 +387,15 @@
             ]
           }
         ],
-        "SubnetId": "subnet-00734001741c2e875",
+        "SubnetId": "subnet-0abd62938ee4d7970",
         "Tags": [
           {
             "Key": "Name",
-            "Value": "aria-canary-cdk-s-alb8A-14YIHVU7A7VTF/monitor"
+            "Value": "aria-canary-Ingre-alb8A-1CSEOURDQPV00/monitor"
           }
         ],
         "UserData": {
-          "Fn::Base64": "#!/bin/bash\n#!/bin/bash\n\n# update\nyum update -y\n\n# install git\nyum install git\n\n# docker installation\namazon-linux-extras install docker\nservice docker start\nsystemctl enable docker\nusermod -a -G docker ec2-user\n\n# docker-compose installation\ncurl -L \"https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose\nchmod +x /usr/local/bin/docker-compose\nln -s /usr/local/bin/docker-compose /usr/bin/docker-compose\n\n# create/download prometheus config file\n\n# YOU NEED TO CREATE A AWS USER AND PUT ITS ACCESS_KEY AND SECRET_KEY HERE\n# GIVE THIS USER THE FOLLOWING PERMISSION: AmazonEC2ReadOnlyAccess\ntee -a /home/ec2-user/prometheus.yml << END\nglobal:\n  scrape_interval: 1s\n  evaluation_interval: 1s\n\nscrape_configs:\n  - job_name: 'node'\n    relabel_configs:\n    - source_labels: [__meta_ec2_tag_Name]\n      target_label: instance\n    ec2_sd_configs:\n      - access_key: MY_ACCESS_KEY \n        secret_key: MY_SECRET_KEY\n        port: 9100\nEND\n\n# labelling examples\n# scrape_configs:\n#   - job_name: 'node'\n#     relabel_configs:\n#     - source_labels: [__meta_ec2_tag_Name]\n#       target_label: instance\n#     ec2_sd_configs:\n#       - region: us-east-1\n#         access_key: \n#         secret_key: \n#         port: 9100\n#         filters:\n#           - name: tag:Name\n#             values:\n#               - canary-instance\n#               - baseline-instance\n\n\n# link that describes different filters\n# https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html\n\n# move to home directory so config files land there\ncd /home/ec2-user\n\n# THESE FILES NEED TO BE PLACED ELSEWHERE\n# download docker-compose.yml for all traffic monitor/analysis apps\nwget 'https://raw.githubusercontent.com/caleblayneheath/my-aria/main/configs/docker-compose.yml' -O docker-compose.yml\n\n# download kayenta.yml for kayenta configuration\nwget 'https://raw.githubusercontent.com/caleblayneheath/my-aria/main/configs/kayenta.yml' -O kayenta.yml\n\n# change ownership of all files in home directory to ec2-user\nchown -R ec2-user:ec2-user .\n\n# bring up containers for monitoring/analysis\ndocker-compose up\n"
+          "Fn::Base64": "#!/bin/bash\n#!/bin/bash\n\n# update\nyum update -y\n\n# install git\nyum install git\n\n# docker installation\namazon-linux-extras install docker\nservice docker start\nsystemctl enable docker\nusermod -a -G docker ec2-user\n\n# docker-compose installation\ncurl -L \"https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose\nchmod +x /usr/local/bin/docker-compose\nln -s /usr/local/bin/docker-compose /usr/bin/docker-compose\n\n# create/download prometheus config file\n# this placeholder file needs its access and secret keys replaced\n# it looks currently only for node_exporter\n\n# YOU NEED TO CREATE A AWS USER AND PUT ITS ACCESS_KEY AND SECRET_KEY HERE\n# GIVE THIS USER THE FOLLOWING PERMISSION: AmazonEC2ReadOnlyAccess\ntee -a /home/ec2-user/prometheus.yml << END\nglobal:\n  scrape_interval: 1s\n  evaluation_interval: 1s\n\nscrape_configs:\n  - job_name: 'node'\n    relabel_configs:\n    - source_labels: [__meta_ec2_tag_Name]\n      target_label: instance\n    ec2_sd_configs:\n      - access_key: MY_ACCESS_KEY \n        secret_key: MY_SECRET_KEY\n        port: 9100\nEND\n\n# labelling examples\n# scrape_configs:\n#   - job_name: 'node'\n#     relabel_configs:\n#     - source_labels: [__meta_ec2_tag_Name]\n#       target_label: instance\n#     ec2_sd_configs:\n#       - region: us-east-1\n#         access_key: \n#         secret_key: \n#         port: 9100\n#         filters:\n#           - name: tag:Name\n#             values:\n#               - canary-instance\n#               - baseline-instance\n\n\n# link that describes different filters\n# https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html\n\n# move to home directory so config files land there\ncd /home/ec2-user\n\n# THESE FILES NEED TO BE PLACED ELSEWHERE\n# download docker-compose.yml for all traffic monitor/analysis apps\nwget 'https://raw.githubusercontent.com/caleblayneheath/my-aria/main/configs/docker-compose.yml' -O docker-compose.yml\n\n# download kayenta.yml for kayenta configuration\nwget 'https://raw.githubusercontent.com/caleblayneheath/my-aria/main/configs/kayenta.yml' -O kayenta.yml\n\n# change ownership of all files in home directory to ec2-user\nchown -R ec2-user:ec2-user .\n\n# bring up containers for monitoring/analysis\ndocker-compose up\n"
         }
       },
       "DependsOn": [
@@ -413,11 +413,8 @@
     "ariacanary": {
       "Value": "true"
     },
-    "loadBalancerName": {
-      "Value": "cdk-s-alb8A-14YIHVU7A7VTF"
-    },
-    "listenerArn": {
-      "Value": "arn:aws:elasticloadbalancing:us-east-1:965475232942:listener/app/cdk-s-alb8A-14YIHVU7A7VTF/9635c885353d02bf/c8e2b2e4440f2a9a"
+    "ariaconfig": {
+      "Value": "{\"profileName\":\"default\",\"stackName\":\"Ingress Service 404 Error Fix\",\"stackDescription\":\"Test Stack Canary Deployment Description\",\"vpcId\":\"vpc-0a94824440a024b99\",\"selectedAlbName\":\"Ingre-alb8A-1CSEOURDQPV00\",\"selectedAlbArn\":\"arn:aws:elasticloadbalancing:us-west-2:750078097588:loadbalancer/app/Ingre-alb8A-1CSEOURDQPV00/a399243c6f93c4d4\",\"selectedListenerArn\":\"arn:aws:elasticloadbalancing:us-west-2:750078097588:listener/app/Ingre-alb8A-1CSEOURDQPV00/a399243c6f93c4d4/68534d65637e309e\",\"selectedPort\":80,\"keyPair\":\"ec2-key-pair\",\"securityGroupIds\":[{\"groupId\":\"sg-03e7d4084783c07dd\"}],\"newRuleConfig\":{\"Actions\":[{\"Type\":\"forward\",\"ForwardConfig\":{\"TargetGroupStickinessConfig\":{\"Enabled\":false},\"TargetGroups\":[{\"TargetGroupArn\":\"arn:aws:elasticloadbalancing:us-west-2:750078097588:targetgroup/Ingre-albLi-1J6WOXZFA66MX/26e25e5029b0fd87\",\"Weight\":50},{\"TargetGroupArn\":\"Insert Canary Target ARN\",\"Weight\":50}]}}],\"Conditions\":[{\"Field\":\"http-request-method\",\"HttpRequestMethodConfig\":{\"Values\":[\"GET\"]}}],\"ListenerArn\":\"arn:aws:elasticloadbalancing:us-west-2:750078097588:listener/app/Ingre-alb8A-1CSEOURDQPV00/a399243c6f93c4d4/68534d65637e309e\",\"Priority\":1,\"Tags\":[{\"Key\":\"isAriaCanaryRule\",\"Value\":\"Ingre-alb8A-1CSEOURDQPV00\"}]},\"vpcConfig\":{\"vpcId\":\"vpc-0a94824440a024b99\",\"availabilityZones\":[\"us-west-2c\",\"us-west-2b\",\"us-west-2a\"],\"publicSubnetIds\":[\"subnet-0abd62938ee4d7970\",\"subnet-07da976d9dd49915c\",\"subnet-027a6dddbdbfc85cf\"],\"privateSubnetIds\":[\"subnet-0f459b8cc64c84b40\",\"subnet-0d1cacaff25be1d37\",\"subnet-0bd6127391aced506\"]}}"
     },
     "BaselineTargetGroupArn": {
       "Value": {
