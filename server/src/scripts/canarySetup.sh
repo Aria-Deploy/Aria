@@ -48,8 +48,8 @@ systemctl enable node_exporter
 yum install -y httpd
 systemctl start httpd
 systemctl enable httpd
-echo "<style> body {background-color: lightblue;} </style>" > /var/www/html/index.html
-echo "<h1>Hello World from $(hostname -f) and STABLE instance 1</h1>" >> /var/www/html/index.html
+echo "<style> body {background-color: gold;} </style>" > /var/www/html/index.html
+echo "<h1>Hello World from $(hostname -f) CANARY instance 1</h1>" >> /var/www/html/index.html
 
 
 
