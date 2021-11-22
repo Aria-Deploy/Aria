@@ -1,20 +1,14 @@
 <script>
-  import Card from "$lib/card.svelte";
+  import CanaryStackCard from "$lib/canary_stack_card.svelte";
   import Banner from "$lib/banner.svelte";
+  import { existingStackInfo, selectedAwsProfile } from "../stores";
   import { getResourceData } from "$lib/api_interface";
-  import { existingStackInfo } from "../stores";
-
-  async function updateState() {
-    const data = await getResourceData("default");
-    existingStackInfo.set(data.existingStackInfo);
-    console.log($existingStackInfo);
-  }
-  updateState();
+  import { onMount } from "svelte";
 </script>
 
 <Banner />
 <div class="pr-5">
   {#each $existingStackInfo as stack}
-    <Card stackInfo={stack} />
+    <CanaryStackCard stackInfo={stack} />
   {/each}
 </div>

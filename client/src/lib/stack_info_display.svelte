@@ -77,7 +77,7 @@
 <div class="flex flex-row-reverse mt-8">
   <div class="flex-shrink">
     <button
-      class="py-2 px-4 bg-red-400 font-bold text-white rounded-md shadow-xl hover:shadow-2xl hover:bg-red-600 hover:scale-101 transition duration-500"
+      class="p-2 bg-red-400 border-2 border-red-400 font-semibold text-white rounded-md shadow-xl hover:shadow-2xl hover:bg-red-600 hover:text-red-50 hover:border-red-700 hover:scale-101 transition duration-500"
       on:click={destroyStack}
     >
       DESTROY

@@ -2,6 +2,11 @@ import axios from 'axios'
 
 const apiRoute = `http://localhost:5000/api`;
 
+export async function getUserProfiles() {
+  const response = await axios.get(`${apiRoute}/profiles`);
+  return response.data;
+}
+
 export async function getResourceData(selectedProfile) {
   const apiURI = `${apiRoute}/resources-data/${selectedProfile}`;
   const response = await axios(apiURI);
