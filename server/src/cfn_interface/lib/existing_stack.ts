@@ -69,6 +69,7 @@ export class ExistingStack extends cdk.Stack {
     props?: cdk.StackProps
   ) {
     super(source, id, props);
+    console.log('stackConfig in existing stack: ', stackConfig);
     this.app = source;
     this.profileName = stackConfig.profileName;
 

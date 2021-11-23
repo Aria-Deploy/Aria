@@ -3,6 +3,7 @@ const router = express.Router();
 import * as awsCfn from "../../cfn_interface/lib/aws_cfn_data";
 import { CanaryStack } from "../../cfn_interface/lib/canary_stack";
 import { ExistingStack } from "../../cfn_interface/lib/existing_stack";
+import { CdkDemoProductionStack } from "../../cfn_interface/lib/demo_production_stack";
 import * as cdk from "@aws-cdk/core";
 
 router.get("/profiles", async (req, res) => {
@@ -73,6 +74,73 @@ router.put("/deploy-canary", async (req, res) => {
     console.log(error);
     res.status(400);
     res.json("deployment fail");
+  }
+});
+
+router.post("/deploy-demo-production", async (req, res) => {
+  const stackConfig = req.body;
+  try { 
+    const app = new cdk.App();
+    stackConfig.env = awsCfn.getEnv();
+    // use profile name to set region/account?
+    console.log('stackConfig in api route: ', stackConfig);
+    const demoProductionStack = new CdkDemoProductionStack(
+      app, 
+      'aria-demo-production-stack',
+      stackConfig,
+      stackConfig.env,
+//       stackName: 'aria-demo-production-stack',
+//       env: {
+//         region: process.env.CDK_DEFAULT_REGION,
+//         account: process.env.CDK_DEFAULT_ACCOUNT,
+//       },
+    );
+    const deployResult = await demoProductionStack.deploy();
+    console.log(deployResult);
+    res.json(deployResult);
+    
+//     stackConfig.vpcConfig = await awsCfn.setAzPubPrivSubnets(stackConfig.vpcId);
+//     stackConfig.env = awsCfn.getEnv();
+// 
+//     const app = new cdk.App();
+//     const canaryStack = new CanaryStack(
+//       app,
+//       `aria-canary-${stackConfig.selectedAlbName}`,
+//       stackConfig,
+//       stackConfig.env
+//     );
+// 
+//     const deployResult = await canaryStack.deploy();
+//     const targetGroups =
+//       stackConfig.newRuleConfig.Actions[0].ForwardConfig.TargetGroups;
+// 
+//     targetGroups.forEach((targetGroup: any, idx: number) => {
+//       if (targetGroup.TargetGroupArn === "Insert Canary Target ARN") {
+//         targetGroups[idx].TargetGroupArn =
+//           deployResult.outputs.CanaryTargetGroupArn;
+//       }
+//       if (targetGroup.TargetGroupArn === "Insert Baseline Target ARN") {
+//         targetGroups[idx].TargetGroupArn =
+//           deployResult.outputs.BaselineTargetGroupArn;
+//       }
+//     });
+// 
+//     const createRuleResponse = await awsCfn.createListenerRule(
+//       stackConfig.newRuleConfig
+//     );
+// 
+//     console.log(deployResult);
+//     const deployResponse = {
+//       ...deployResult,
+//       stackArtifact: [],
+//       createRuleResponse,
+//     };
+//     res.json(deployResponse);
+//     TODO: Add proper error handling
+  } catch (error) {
+    console.log(error);
+    res.status(400);
+    res.json("demo production deployment fail");
   }
 });
 
