@@ -82,8 +82,16 @@ export class CanaryStack extends ExistingStack {
       path: '../' + stackConfig.canaryImgPath,
     });
 
+    const canaryComposeAsset = new Asset(this, 'CanaryComposeAsset', {
+      path: '../' + stackConfig.canaryComposePath,
+    });
+
     const baselineImageAsset = new Asset(this, 'BaselineImageAsset', {
       path: '../' + stackConfig.baselineImgPath,
+    });
+
+     const baselineComposeAsset = new Asset(this, 'BaselineComposeAsset', {
+      path: '../' + stackConfig.baselineComposePath,
     });
 
     const baselineAppSetup = readFileSync(
@@ -105,6 +113,12 @@ export class CanaryStack extends ExistingStack {
       bucketKey: baselineImageAsset.s3ObjectKey,
       localFile: '/home/ec2-user/baseline.tar'
     });
+    baselineComposeAsset.grantRead(asgBaseline.grantPrincipal);
+    asgBaseline.userData.addS3DownloadCommand({
+      bucket: baselineComposeAsset.bucket,
+      bucketKey: baselineComposeAsset.s3ObjectKey,
+      localFile: '/home/ec2-user/docker-compose.yml'
+    });
 
     asgBaseline.addUserData(baselineAppSetup);
     // asgBaseline.addSecurityGroup(prodInstanceSG);
@@ -116,10 +130,16 @@ export class CanaryStack extends ExistingStack {
     );
 
     canaryImageAsset.grantRead(asgCanary.grantPrincipal);
+    canaryComposeAsset.grantRead(asgCanary.grantPrincipal);
     asgCanary.userData.addS3DownloadCommand({
       bucket: canaryImageAsset.bucket,
       bucketKey: canaryImageAsset.s3ObjectKey,
       localFile: '/home/ec2-user/canary.tar'
+    });
+    asgCanary.userData.addS3DownloadCommand({
+      bucket: canaryComposeAsset.bucket,
+      bucketKey: canaryComposeAsset.s3ObjectKey,
+      localFile: '/home/ec2-user/docker-compose.yml'
     });
     asgCanary.addUserData(canaryAppSetup);
     

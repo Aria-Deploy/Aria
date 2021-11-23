@@ -70,4 +70,7 @@ systemctl enable node_exporter
 docker load -i /home/ec2-user/canary.tar
 
 # run the docker image
-docker run -d -p 80:80 canary
+# docker run -d -p 80:80 canary
+
+# run docker-compose
+docker-compose -f /home/ec2-user/docker-compose.yml up -d

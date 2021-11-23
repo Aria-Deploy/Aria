@@ -71,4 +71,7 @@ systemctl enable node_exporter
 docker load -i /home/ec2-user/baseline.tar
 
 # run the docker image
-docker run -d -p 80:80 baseline
+# docker run -d -p 80:80 baseline
+
+# run docker-compose
+docker-compose -f /home/ec2-user/docker-compose.yml up -d
