@@ -67,7 +67,7 @@ systemctl enable node_exporter
 # echo "<h1>Canary</h1>" > /usr/share/nginx/html/index.html
 
 # create a docker image from the tarball
-docker load -i /home/ec2-user/webserver.tar
+docker load -i /home/ec2-user/canary.tar
 
 # run the docker image
-docker run -d -p 80:80 webserver
+docker run -d -p 80:80 canary

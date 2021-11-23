@@ -77,12 +77,13 @@ export class CanaryStack extends ExistingStack {
     };
 
     // assets are stored in a temporary s3 bucket then transferred to instance
+    // expects tarball to be in root Aria directory
     const canaryImageAsset = new Asset(this, 'CanaryImageAsset', {
-      path: stackConfig.canaryImgPath,
+      path: '../' + stackConfig.canaryImgPath,
     });
 
     const baselineImageAsset = new Asset(this, 'BaselineImageAsset', {
-      path: stackConfig.baselineImgPath,
+      path: '../' + stackConfig.baselineImgPath,
     });
 
     const baselineAppSetup = readFileSync(
@@ -102,7 +103,7 @@ export class CanaryStack extends ExistingStack {
     asgBaseline.userData.addS3DownloadCommand({
       bucket: baselineImageAsset.bucket,
       bucketKey: baselineImageAsset.s3ObjectKey,
-      localFile: '/home/ec2-user/webserver.tar'
+      localFile: '/home/ec2-user/baseline.tar'
     });
 
     asgBaseline.addUserData(baselineAppSetup);
@@ -118,7 +119,7 @@ export class CanaryStack extends ExistingStack {
     asgCanary.userData.addS3DownloadCommand({
       bucket: canaryImageAsset.bucket,
       bucketKey: canaryImageAsset.s3ObjectKey,
-      localFile: '/home/ec2-user/webserver.tar'
+      localFile: '/home/ec2-user/canary.tar'
     });
     asgCanary.addUserData(canaryAppSetup);
     

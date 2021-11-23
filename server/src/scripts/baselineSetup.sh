@@ -68,7 +68,7 @@ systemctl enable node_exporter
 
 
 # create a docker image from the tarball
-docker load -i /home/ec2-user/webserver.tar
+docker load -i /home/ec2-user/baseline.tar
 
 # run the docker image
-docker run -d -p 80:80 webserver
+docker run -d -p 80:80 baseline
