@@ -1,9 +1,7 @@
 <script>
   import CanaryStackCard from "$lib/canary_stack_card.svelte";
   import Banner from "$lib/banner.svelte";
-  import { existingStackInfo, selectedAwsProfile } from "../stores";
-  import { getResourceData } from "$lib/api_interface";
-  import { onMount } from "svelte";
+  import { existingStackInfo } from "../stores";
 </script>
 
 <Banner />
