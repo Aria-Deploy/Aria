@@ -71,6 +71,7 @@ export async function deployCanary() {
   });
   console.log(response.data)
   return response.data
+}
 
 export async function destroyCanaryStack(stackInfo) {
   const response = await axios.put(`${apiRoute}/destroy-canary`, {
