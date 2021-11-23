@@ -2,6 +2,8 @@ import * as autoscaling from "@aws-cdk/aws-autoscaling";
 import * as ec2 from "@aws-cdk/aws-ec2";
 import * as elbv2 from "@aws-cdk/aws-elasticloadbalancingv2";
 import * as cdk from "@aws-cdk/core";
+import * as s3 from '@aws-cdk/aws-s3';
+import {Asset} from '@aws-cdk/aws-s3-assets';
 import { readFileSync } from "fs";
 import { ExistingStack } from "./existing_stack";
 
@@ -74,6 +76,15 @@ export class CanaryStack extends ExistingStack {
       },
     };
 
+    // assets are stored in a temporary s3 bucket then transferred to instance
+    const canaryImageAsset = new Asset(this, 'CanaryImageAsset', {
+      path: stackConfig.canaryImgPath,
+    });
+
+    const baselineImageAsset = new Asset(this, 'BaselineImageAsset', {
+      path: stackConfig.baselineImgPath,
+    });
+
     const baselineAppSetup = readFileSync(
       "./src/scripts/baselineSetup.sh",
       "utf8"
@@ -86,6 +97,14 @@ export class CanaryStack extends ExistingStack {
       "asgBaseline",
       appInstance
     );
+
+    baselineImageAsset.grantRead(asgBaseline.grantPrincipal);
+    asgBaseline.userData.addS3DownloadCommand({
+      bucket: baselineImageAsset.bucket,
+      bucketKey: baselineImageAsset.s3ObjectKey,
+      localFile: '/home/ec2-user/webserver.tar'
+    });
+
     asgBaseline.addUserData(baselineAppSetup);
     // asgBaseline.addSecurityGroup(prodInstanceSG);
 
@@ -94,6 +113,13 @@ export class CanaryStack extends ExistingStack {
       "asgCanary",
       appInstance
     );
+
+    canaryImageAsset.grantRead(asgCanary.grantPrincipal);
+    asgCanary.userData.addS3DownloadCommand({
+      bucket: canaryImageAsset.bucket,
+      bucketKey: canaryImageAsset.s3ObjectKey,
+      localFile: '/home/ec2-user/webserver.tar'
+    });
     asgCanary.addUserData(canaryAppSetup);
     
     // add security groups from production to baseline and canary
