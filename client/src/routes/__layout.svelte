@@ -3,10 +3,13 @@
   import Sidebar from "$lib/sidebar/sidebar.svelte";
   import SelectProfileForm from "$lib/modals/select_profile.svelte";
   import NewStackForm from "$lib/new_stack_form.svelte";
+  import { showCreateCanaryForm } from "../stores";
 </script>
 
 <SelectProfileForm />
-<NewStackForm />
+{#if $showCreateCanaryForm === true}
+  <NewStackForm />
+{/if}
 
 <div class="absolute flex w-full h-full antialiased">
   <Sidebar />
