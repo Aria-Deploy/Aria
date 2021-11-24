@@ -1,14 +1,13 @@
 <script>
   import Modal from "svelte-simple-modal";
-  import { slide } from 'svelte/transition'
 </script>
 
 <Modal>
-  <div
-    class="z-10 absolute flex justify-center h-screen w-screen bg-black bg-opacity-60"
-  >
-    <div class="p-4 w-7/12 m-auto bg-white">
+  <div class="z-10 absolute h-screen w-screen bg-black bg-opacity-60">
+  <div class="flex h-3/5 w-screen">
+    <div class="p-4 m-auto bg-white">
       <slot />
     </div>
   </div>
+</div>
 </Modal>
