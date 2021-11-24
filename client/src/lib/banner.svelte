@@ -1,9 +1,6 @@
 <script>
-  import NewStackForm from '$lib/new_stack_form.svelte'
-  import { showCreateCanaryForm} from '../stores'
-
+  import { showCreateCanaryForm } from '../stores'
 </script>
-
 
 <div class="bg-blue-50 flex flex-row px-9 py-10 shadow">
   <div class="flex-grow">
