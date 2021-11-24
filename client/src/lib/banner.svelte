@@ -2,6 +2,7 @@
   import { showCreateCanaryForm } from '../stores'
 </script>
 
+
 <div class="bg-blue-50 flex flex-row px-9 py-10 shadow">
   <div class="flex-grow">
     <div class="text-left">
