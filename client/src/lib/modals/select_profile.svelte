@@ -1,5 +1,5 @@
 <script>
-  import Modal from "$lib/new_modal.svelte";
+  import Modal from "$lib/modal.svelte";
   import { selectProfile } from "$lib/actions";
   import { getUserProfiles } from "$lib/api_interface";
   import { selectedAwsProfile } from "../../stores";

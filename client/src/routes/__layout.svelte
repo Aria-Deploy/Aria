@@ -2,7 +2,7 @@
   import "../styles/tailwind-output.css";
   import Sidebar from "$lib/sidebar/sidebar.svelte";
   import SelectProfileForm from "$lib/modals/select_profile.svelte";
-  import NewStackForm from "$lib/new_stack_form.svelte";
+  import NewStackForm from "$lib/create_form/create_form.svelte";
   import { showCreateCanaryForm } from "../stores";
 </script>
 
