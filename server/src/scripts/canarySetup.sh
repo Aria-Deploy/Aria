@@ -45,11 +45,11 @@ systemctl start node_exporter
 systemctl enable node_exporter
 
 # setup demo app
-yum install -y httpd
-systemctl start httpd
-systemctl enable httpd
-echo "<style> body {background-color: gold;} </style>" > /var/www/html/index.html
-echo "<h1>Hello World from $(hostname -f) CANARY instance 1</h1>" >> /var/www/html/index.html
+# yum install -y httpd
+# systemctl start httpd
+# systemctl enable httpd
+# echo "<style> body {background-color: gold;} </style>" > /var/www/html/index.html
+# echo "<h1>Hello World from $(hostname -f) CANARY instance 1</h1>" >> /var/www/html/index.html
 
 
 
@@ -65,3 +65,12 @@ echo "<h1>Hello World from $(hostname -f) CANARY instance 1</h1>" >> /var/www/ht
 # find /usr/share/nginx/html -type f -exec chmod 0664 {} \;
 # 
 # echo "<h1>Canary</h1>" > /usr/share/nginx/html/index.html
+
+# create a docker image from the tarball
+docker load -i /home/ec2-user/canary.tar
+
+# run the docker image
+# docker run -d -p 80:80 canary
+
+# run docker-compose
+docker-compose -f /home/ec2-user/docker-compose.yml up -d
