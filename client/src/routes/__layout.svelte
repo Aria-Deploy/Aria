@@ -1,15 +1,11 @@
 <script>
   import "../styles/tailwind-output.css";
+  import { fly } from "svelte/transition";
   import Sidebar from "$lib/sidebar/sidebar.svelte";
-  import SelectProfileForm from "$lib/modals/select_profile.svelte";
-  import NewStackForm from "$lib/create_form/create_form.svelte";
-  import { showCreateCanaryForm } from "../stores";
+  import SelectProfileForm from "$lib/sidebar/select_profile.svelte";
 </script>
 
 <SelectProfileForm />
-{#if $showCreateCanaryForm === true}
-  <NewStackForm />
-{/if}
 
 <div class="absolute flex w-full h-full antialiased">
   <Sidebar />

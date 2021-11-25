@@ -1,5 +1,5 @@
 <script>
-  import StackInfoDisplay from "$lib/stack_info_display.svelte";
+  import StackInfoDisplay from "$lib/deployments/stack_info_display.svelte";
   export let stackInfo;
   let { config } = stackInfo;
 
