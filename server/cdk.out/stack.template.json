@@ -3,7 +3,7 @@
     "appsg42805CE6": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
-        "GroupDescription": "aria-canary-Ingre-alb8A-1CSEOURDQPV00/app-sg",
+        "GroupDescription": "aria-canary-Ingre-alb8A-1SJRROI1HDLUO/app-sg",
         "SecurityGroupEgress": [
           {
             "CidrIp": "0.0.0.0/0",
@@ -34,7 +34,7 @@
             "ToPort": 80
           }
         ],
-        "VpcId": "vpc-0a94824440a024b99"
+        "VpcId": "vpc-0ef75a8ea892b7fa7"
       }
     },
     "asgBaselineInstanceRoleBAFF0850": {
@@ -65,7 +65,105 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "aria-canary-Ingre-alb8A-1CSEOURDQPV00/asgBaseline"
+            "Value": "aria-canary-Ingre-alb8A-1SJRROI1HDLUO/asgBaseline"
+          }
+        ]
+      }
+    },
+    "asgBaselineInstanceRoleDefaultPolicyD58F3F8B": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "AssetParameters26270f87e4fba3388d4696223702390563a99b004ab38f55dba9f8cec53621c2S3Bucket396A38A3"
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "AssetParameters26270f87e4fba3388d4696223702390563a99b004ab38f55dba9f8cec53621c2S3Bucket396A38A3"
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "AssetParametersd305dd11fd7f4cefbe4a1b6f8810fdc286483193cf7ef403efe1a4e5dda5846eS3Bucket7C54371C"
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "AssetParametersd305dd11fd7f4cefbe4a1b6f8810fdc286483193cf7ef403efe1a4e5dda5846eS3Bucket7C54371C"
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "asgBaselineInstanceRoleDefaultPolicyD58F3F8B",
+        "Roles": [
+          {
+            "Ref": "asgBaselineInstanceRoleBAFF0850"
           }
         ]
       }
@@ -98,13 +196,83 @@
               "GroupId"
             ]
           },
-          "sg-03e7d4084783c07dd"
+          "sg-0f787672eb36fd73b"
         ],
         "UserData": {
-          "Fn::Base64": "#!/bin/bash\n#!/bin/bash\n\n# system update\nyum update -y\n\n# install git\nyum install git\n\n# docker installation\namazon-linux-extras install docker\nservice docker start\nsystemctl enable docker\nusermod -a -G docker $USER\n\n# docker-compose installation\ncurl -L \"https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose\nchmod +x /usr/local/bin/docker-compose\nln -s /usr/local/bin/docker-compose /usr/bin/docker-compose\n\n# download node_exporter\nuseradd -m -s /bin/bash prometheus\n\ncurl -L -O https://github.com/prometheus/node_exporter/releases/download/v1.2.2/node_exporter-1.2.2.linux-amd64.tar.gz\n\ntar -xzvf node_exporter-1.2.2.linux-amd64.tar.gz\nmv node_exporter-1.2.2.linux-amd64 /home/prometheus/node_exporter\nrm node_exporter-1.2.2.linux-amd64.tar.gz\nchown -R prometheus:prometheus /home/prometheus/node_exporter\n\n# Add node_exporter as systemd service\ntee -a /etc/systemd/system/node_exporter.service << END\n[Unit]\nDescription=Node Exporter\nWants=network-online.target\nAfter=network-online.target\n[Service]\nUser=prometheus\nExecStart=/home/prometheus/node_exporter/node_exporter\n[Install]\nWantedBy=default.target\nEND\n\nsystemctl daemon-reload\nsystemctl start node_exporter\nsystemctl enable node_exporter\n\n# setup demo app\nyum install -y httpd\nsystemctl start httpd\nsystemctl enable httpd\necho \"<style> body {background-color: lightblue;} </style>\" > /var/www/html/index.html\necho \"<h1>Hello World from $(hostname -f) and STABLE instance 1</h1>\" >> /var/www/html/index.html\n\n\n\n# yum update -y\n# sudo su\n# \n# amazon-linux-extras install -y nginx1\n# systemctl start nginx\n# systemctl enable nginx\n# \n# chmod 2775 /usr/share/nginx/html\n# find /usr/share/nginx/html -type d -exec chmod 2775 {} \\;\n# find /usr/share/nginx/html -type f -exec chmod 0664 {} \\;\n# \n# echo \"<h1>Baseline</h1>\" > /usr/share/nginx/html/index.html\n"
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash\nmkdir -p $(dirname '/home/ec2-user/baseline.tar')\naws s3 cp 's3://",
+                {
+                  "Ref": "AssetParameters26270f87e4fba3388d4696223702390563a99b004ab38f55dba9f8cec53621c2S3Bucket396A38A3"
+                },
+                "/",
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameters26270f87e4fba3388d4696223702390563a99b004ab38f55dba9f8cec53621c2S3VersionKey7D380BEA"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameters26270f87e4fba3388d4696223702390563a99b004ab38f55dba9f8cec53621c2S3VersionKey7D380BEA"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "' '/home/ec2-user/baseline.tar'\nmkdir -p $(dirname '/home/ec2-user/docker-compose.yml')\naws s3 cp 's3://",
+                {
+                  "Ref": "AssetParametersd305dd11fd7f4cefbe4a1b6f8810fdc286483193cf7ef403efe1a4e5dda5846eS3Bucket7C54371C"
+                },
+                "/",
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersd305dd11fd7f4cefbe4a1b6f8810fdc286483193cf7ef403efe1a4e5dda5846eS3VersionKeyE364AF36"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersd305dd11fd7f4cefbe4a1b6f8810fdc286483193cf7ef403efe1a4e5dda5846eS3VersionKeyE364AF36"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "' '/home/ec2-user/docker-compose.yml'\n#!/bin/bash\n\n# system update\nyum update -y\n\n# install git\nyum install git\n\n# docker installation\namazon-linux-extras install docker\nservice docker start\nsystemctl enable docker\nusermod -a -G docker $USER\n\n# docker-compose installation\ncurl -L \"https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose\nchmod +x /usr/local/bin/docker-compose\nln -s /usr/local/bin/docker-compose /usr/bin/docker-compose\n\n# download node_exporter\nuseradd -m -s /bin/bash prometheus\n\ncurl -L -O https://github.com/prometheus/node_exporter/releases/download/v1.2.2/node_exporter-1.2.2.linux-amd64.tar.gz\n\ntar -xzvf node_exporter-1.2.2.linux-amd64.tar.gz\nmv node_exporter-1.2.2.linux-amd64 /home/prometheus/node_exporter\nrm node_exporter-1.2.2.linux-amd64.tar.gz\nchown -R prometheus:prometheus /home/prometheus/node_exporter\n\n# Add node_exporter as systemd service\ntee -a /etc/systemd/system/node_exporter.service << END\n[Unit]\nDescription=Node Exporter\nWants=network-online.target\nAfter=network-online.target\n[Service]\nUser=prometheus\nExecStart=/home/prometheus/node_exporter/node_exporter\n[Install]\nWantedBy=default.target\nEND\n\nsystemctl daemon-reload\nsystemctl start node_exporter\nsystemctl enable node_exporter\n\n# setup demo app\n# yum install -y httpd\n# systemctl start httpd\n# systemctl enable httpd\n# echo \"<style> body {background-color: lightblue;} </style>\" > /var/www/html/index.html\n# echo \"<h1>Hello World from $(hostname -f) BASELINE instance 1</h1>\" >> /var/www/html/index.html\n\n\n\n# yum update -y\n# sudo su\n# \n# amazon-linux-extras install -y nginx1\n# systemctl start nginx\n# systemctl enable nginx\n# \n# chmod 2775 /usr/share/nginx/html\n# find /usr/share/nginx/html -type d -exec chmod 2775 {} \\;\n# find /usr/share/nginx/html -type f -exec chmod 0664 {} \\;\n# \n# echo \"<h1>Baseline</h1>\" > /usr/share/nginx/html/index.html\n\n\n# create a docker image from the tarball\ndocker load -i /home/ec2-user/baseline.tar\n\n# run the docker image\n# docker run -d -p 80:80 baseline\n\n# run docker-compose\ndocker-compose -f /home/ec2-user/docker-compose.yml up -d"
+              ]
+            ]
+          }
         }
       },
       "DependsOn": [
+        "asgBaselineInstanceRoleDefaultPolicyD58F3F8B",
         "asgBaselineInstanceRoleBAFF0850"
       ]
     },
@@ -120,7 +288,7 @@
           {
             "Key": "Name",
             "PropagateAtLaunch": true,
-            "Value": "aria-canary-Ingre-alb8A-1CSEOURDQPV00/asgBaseline"
+            "Value": "aria-canary-Ingre-alb8A-1SJRROI1HDLUO/asgBaseline"
           }
         ],
         "TargetGroupARNs": [
@@ -129,9 +297,9 @@
           }
         ],
         "VPCZoneIdentifier": [
-          "subnet-0abd62938ee4d7970",
-          "subnet-07da976d9dd49915c",
-          "subnet-027a6dddbdbfc85cf"
+          "subnet-0c88e6f912746e242",
+          "subnet-00ed54e41b21a46b3",
+          "subnet-0487736044cbe1137"
         ]
       },
       "UpdatePolicy": {
@@ -168,7 +336,105 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "aria-canary-Ingre-alb8A-1CSEOURDQPV00/asgCanary"
+            "Value": "aria-canary-Ingre-alb8A-1SJRROI1HDLUO/asgCanary"
+          }
+        ]
+      }
+    },
+    "asgCanaryInstanceRoleDefaultPolicyAAE1B8D1": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "AssetParameters280f0b4501b2352d4d1d9769fc170daab1ff57c887a2aa9d9648d581a3c6cfa0S3Bucket52BD0A7C"
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "AssetParameters280f0b4501b2352d4d1d9769fc170daab1ff57c887a2aa9d9648d581a3c6cfa0S3Bucket52BD0A7C"
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "AssetParametersb848cedcf10dade5a4187c8572aca9b881cc70c83943ea31e0dc909496bacbbfS3Bucket49ADD16F"
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "AssetParametersb848cedcf10dade5a4187c8572aca9b881cc70c83943ea31e0dc909496bacbbfS3Bucket49ADD16F"
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "asgCanaryInstanceRoleDefaultPolicyAAE1B8D1",
+        "Roles": [
+          {
+            "Ref": "asgCanaryInstanceRoleA9725CA5"
           }
         ]
       }
@@ -201,13 +467,83 @@
               "GroupId"
             ]
           },
-          "sg-03e7d4084783c07dd"
+          "sg-0f787672eb36fd73b"
         ],
         "UserData": {
-          "Fn::Base64": "#!/bin/bash\n#!/bin/bash\n\n# system update\nyum update -y\n\n# install git\nyum install git\n\n# docker installation\namazon-linux-extras install docker\nservice docker start\nsystemctl enable docker\nusermod -a -G docker $USER\n\n# docker-compose installation\ncurl -L \"https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose\nchmod +x /usr/local/bin/docker-compose\nln -s /usr/local/bin/docker-compose /usr/bin/docker-compose\n\n# download node_exporter\nuseradd -m -s /bin/bash prometheus\n\ncurl -L -O https://github.com/prometheus/node_exporter/releases/download/v1.2.2/node_exporter-1.2.2.linux-amd64.tar.gz\n\ntar -xzvf node_exporter-1.2.2.linux-amd64.tar.gz\nmv node_exporter-1.2.2.linux-amd64 /home/prometheus/node_exporter\nrm node_exporter-1.2.2.linux-amd64.tar.gz\nchown -R prometheus:prometheus /home/prometheus/node_exporter\n\n# Add node_exporter as systemd service\ntee -a /etc/systemd/system/node_exporter.service << END\n[Unit]\nDescription=Node Exporter\nWants=network-online.target\nAfter=network-online.target\n[Service]\nUser=prometheus\nExecStart=/home/prometheus/node_exporter/node_exporter\n[Install]\nWantedBy=default.target\nEND\n\nsystemctl daemon-reload\nsystemctl start node_exporter\nsystemctl enable node_exporter\n\n# setup demo app\nyum install -y httpd\nsystemctl start httpd\nsystemctl enable httpd\necho \"<style> body {background-color: lightblue;} </style>\" > /var/www/html/index.html\necho \"<h1>Hello World from $(hostname -f) and STABLE instance 1</h1>\" >> /var/www/html/index.html\n\n\n\n# yum update -y\n# sudo su\n# \n# amazon-linux-extras install -y nginx1\n# systemctl start nginx\n# systemctl enable nginx\n# \n# chmod 2775 /usr/share/nginx/html\n# find /usr/share/nginx/html -type d -exec chmod 2775 {} \\;\n# find /usr/share/nginx/html -type f -exec chmod 0664 {} \\;\n# \n# echo \"<h1>Canary</h1>\" > /usr/share/nginx/html/index.html\n"
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash\nmkdir -p $(dirname '/home/ec2-user/canary.tar')\naws s3 cp 's3://",
+                {
+                  "Ref": "AssetParameters280f0b4501b2352d4d1d9769fc170daab1ff57c887a2aa9d9648d581a3c6cfa0S3Bucket52BD0A7C"
+                },
+                "/",
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameters280f0b4501b2352d4d1d9769fc170daab1ff57c887a2aa9d9648d581a3c6cfa0S3VersionKey5F81486B"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameters280f0b4501b2352d4d1d9769fc170daab1ff57c887a2aa9d9648d581a3c6cfa0S3VersionKey5F81486B"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "' '/home/ec2-user/canary.tar'\nmkdir -p $(dirname '/home/ec2-user/docker-compose.yml')\naws s3 cp 's3://",
+                {
+                  "Ref": "AssetParametersb848cedcf10dade5a4187c8572aca9b881cc70c83943ea31e0dc909496bacbbfS3Bucket49ADD16F"
+                },
+                "/",
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersb848cedcf10dade5a4187c8572aca9b881cc70c83943ea31e0dc909496bacbbfS3VersionKey205059BF"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersb848cedcf10dade5a4187c8572aca9b881cc70c83943ea31e0dc909496bacbbfS3VersionKey205059BF"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "' '/home/ec2-user/docker-compose.yml'\n#!/bin/bash\n\n# system update\nyum update -y\n\n# install git\nyum install git\n\n# docker installation\namazon-linux-extras install docker\nservice docker start\nsystemctl enable docker\nusermod -a -G docker $USER\n\n# docker-compose installation\ncurl -L \"https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose\nchmod +x /usr/local/bin/docker-compose\nln -s /usr/local/bin/docker-compose /usr/bin/docker-compose\n\n# download node_exporter\nuseradd -m -s /bin/bash prometheus\n\ncurl -L -O https://github.com/prometheus/node_exporter/releases/download/v1.2.2/node_exporter-1.2.2.linux-amd64.tar.gz\n\ntar -xzvf node_exporter-1.2.2.linux-amd64.tar.gz\nmv node_exporter-1.2.2.linux-amd64 /home/prometheus/node_exporter\nrm node_exporter-1.2.2.linux-amd64.tar.gz\nchown -R prometheus:prometheus /home/prometheus/node_exporter\n\n# Add node_exporter as systemd service\ntee -a /etc/systemd/system/node_exporter.service << END\n[Unit]\nDescription=Node Exporter\nWants=network-online.target\nAfter=network-online.target\n[Service]\nUser=prometheus\nExecStart=/home/prometheus/node_exporter/node_exporter\n[Install]\nWantedBy=default.target\nEND\n\nsystemctl daemon-reload\nsystemctl start node_exporter\nsystemctl enable node_exporter\n\n# setup demo app\n# yum install -y httpd\n# systemctl start httpd\n# systemctl enable httpd\n# echo \"<style> body {background-color: gold;} </style>\" > /var/www/html/index.html\n# echo \"<h1>Hello World from $(hostname -f) CANARY instance 1</h1>\" >> /var/www/html/index.html\n\n\n\n# yum update -y\n# sudo su\n# \n# amazon-linux-extras install -y nginx1\n# systemctl start nginx\n# systemctl enable nginx\n# \n# chmod 2775 /usr/share/nginx/html\n# find /usr/share/nginx/html -type d -exec chmod 2775 {} \\;\n# find /usr/share/nginx/html -type f -exec chmod 0664 {} \\;\n# \n# echo \"<h1>Canary</h1>\" > /usr/share/nginx/html/index.html\n\n# create a docker image from the tarball\ndocker load -i /home/ec2-user/canary.tar\n\n# run the docker image\n# docker run -d -p 80:80 canary\n\n# run docker-compose\ndocker-compose -f /home/ec2-user/docker-compose.yml up -d"
+              ]
+            ]
+          }
         }
       },
       "DependsOn": [
+        "asgCanaryInstanceRoleDefaultPolicyAAE1B8D1",
         "asgCanaryInstanceRoleA9725CA5"
       ]
     },
@@ -223,7 +559,7 @@
           {
             "Key": "Name",
             "PropagateAtLaunch": true,
-            "Value": "aria-canary-Ingre-alb8A-1CSEOURDQPV00/asgCanary"
+            "Value": "aria-canary-Ingre-alb8A-1SJRROI1HDLUO/asgCanary"
           }
         ],
         "TargetGroupARNs": [
@@ -232,9 +568,9 @@
           }
         ],
         "VPCZoneIdentifier": [
-          "subnet-0abd62938ee4d7970",
-          "subnet-07da976d9dd49915c",
-          "subnet-027a6dddbdbfc85cf"
+          "subnet-0c88e6f912746e242",
+          "subnet-00ed54e41b21a46b3",
+          "subnet-0487736044cbe1137"
         ]
       },
       "UpdatePolicy": {
@@ -255,7 +591,7 @@
           }
         ],
         "TargetType": "instance",
-        "VpcId": "vpc-0a94824440a024b99"
+        "VpcId": "vpc-0ef75a8ea892b7fa7"
       }
     },
     "CANARYTARGET8CC1BC3F": {
@@ -270,13 +606,13 @@
           }
         ],
         "TargetType": "instance",
-        "VpcId": "vpc-0a94824440a024b99"
+        "VpcId": "vpc-0ef75a8ea892b7fa7"
       }
     },
     "monitorsg419B1E56": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
-        "GroupDescription": "aria-canary-Ingre-alb8A-1CSEOURDQPV00/monitor-sg",
+        "GroupDescription": "aria-canary-Ingre-alb8A-1SJRROI1HDLUO/monitor-sg",
         "SecurityGroupEgress": [
           {
             "CidrIp": "0.0.0.0/0",
@@ -321,7 +657,7 @@
             "ToPort": 22
           }
         ],
-        "VpcId": "vpc-0a94824440a024b99"
+        "VpcId": "vpc-0ef75a8ea892b7fa7"
       }
     },
     "monitorInstanceRole4CE258F3": {
@@ -352,7 +688,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "aria-canary-Ingre-alb8A-1CSEOURDQPV00/monitor"
+            "Value": "aria-canary-Ingre-alb8A-1SJRROI1HDLUO/monitor"
           }
         ]
       }
@@ -370,7 +706,7 @@
     "monitor360B0AD7": {
       "Type": "AWS::EC2::Instance",
       "Properties": {
-        "AvailabilityZone": "us-west-2c",
+        "AvailabilityZone": "us-west-2a",
         "IamInstanceProfile": {
           "Ref": "monitorInstanceProfile6E9B6855"
         },
@@ -387,11 +723,11 @@
             ]
           }
         ],
-        "SubnetId": "subnet-0abd62938ee4d7970",
+        "SubnetId": "subnet-0c88e6f912746e242",
         "Tags": [
           {
             "Key": "Name",
-            "Value": "aria-canary-Ingre-alb8A-1CSEOURDQPV00/monitor"
+            "Value": "aria-canary-Ingre-alb8A-1SJRROI1HDLUO/monitor"
           }
         ],
         "UserData": {
@@ -404,6 +740,54 @@
     }
   },
   "Parameters": {
+    "AssetParameters280f0b4501b2352d4d1d9769fc170daab1ff57c887a2aa9d9648d581a3c6cfa0S3Bucket52BD0A7C": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"280f0b4501b2352d4d1d9769fc170daab1ff57c887a2aa9d9648d581a3c6cfa0\""
+    },
+    "AssetParameters280f0b4501b2352d4d1d9769fc170daab1ff57c887a2aa9d9648d581a3c6cfa0S3VersionKey5F81486B": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"280f0b4501b2352d4d1d9769fc170daab1ff57c887a2aa9d9648d581a3c6cfa0\""
+    },
+    "AssetParameters280f0b4501b2352d4d1d9769fc170daab1ff57c887a2aa9d9648d581a3c6cfa0ArtifactHashE4534E49": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"280f0b4501b2352d4d1d9769fc170daab1ff57c887a2aa9d9648d581a3c6cfa0\""
+    },
+    "AssetParametersb848cedcf10dade5a4187c8572aca9b881cc70c83943ea31e0dc909496bacbbfS3Bucket49ADD16F": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"b848cedcf10dade5a4187c8572aca9b881cc70c83943ea31e0dc909496bacbbf\""
+    },
+    "AssetParametersb848cedcf10dade5a4187c8572aca9b881cc70c83943ea31e0dc909496bacbbfS3VersionKey205059BF": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"b848cedcf10dade5a4187c8572aca9b881cc70c83943ea31e0dc909496bacbbf\""
+    },
+    "AssetParametersb848cedcf10dade5a4187c8572aca9b881cc70c83943ea31e0dc909496bacbbfArtifactHash5AC115EA": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"b848cedcf10dade5a4187c8572aca9b881cc70c83943ea31e0dc909496bacbbf\""
+    },
+    "AssetParameters26270f87e4fba3388d4696223702390563a99b004ab38f55dba9f8cec53621c2S3Bucket396A38A3": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"26270f87e4fba3388d4696223702390563a99b004ab38f55dba9f8cec53621c2\""
+    },
+    "AssetParameters26270f87e4fba3388d4696223702390563a99b004ab38f55dba9f8cec53621c2S3VersionKey7D380BEA": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"26270f87e4fba3388d4696223702390563a99b004ab38f55dba9f8cec53621c2\""
+    },
+    "AssetParameters26270f87e4fba3388d4696223702390563a99b004ab38f55dba9f8cec53621c2ArtifactHash17F0F16D": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"26270f87e4fba3388d4696223702390563a99b004ab38f55dba9f8cec53621c2\""
+    },
+    "AssetParametersd305dd11fd7f4cefbe4a1b6f8810fdc286483193cf7ef403efe1a4e5dda5846eS3Bucket7C54371C": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"d305dd11fd7f4cefbe4a1b6f8810fdc286483193cf7ef403efe1a4e5dda5846e\""
+    },
+    "AssetParametersd305dd11fd7f4cefbe4a1b6f8810fdc286483193cf7ef403efe1a4e5dda5846eS3VersionKeyE364AF36": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"d305dd11fd7f4cefbe4a1b6f8810fdc286483193cf7ef403efe1a4e5dda5846e\""
+    },
+    "AssetParametersd305dd11fd7f4cefbe4a1b6f8810fdc286483193cf7ef403efe1a4e5dda5846eArtifactHashF96C491F": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"d305dd11fd7f4cefbe4a1b6f8810fdc286483193cf7ef403efe1a4e5dda5846e\""
+    },
     "SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter": {
       "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
       "Default": "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
@@ -414,7 +798,7 @@
       "Value": "true"
     },
     "ariaconfig": {
-      "Value": "{\"profileName\":\"default\",\"stackName\":\"Ingress Service 404 Error Fix\",\"stackDescription\":\"Test Stack Canary Deployment Description\",\"vpcId\":\"vpc-0a94824440a024b99\",\"selectedAlbName\":\"Ingre-alb8A-1CSEOURDQPV00\",\"selectedAlbArn\":\"arn:aws:elasticloadbalancing:us-west-2:750078097588:loadbalancer/app/Ingre-alb8A-1CSEOURDQPV00/a399243c6f93c4d4\",\"selectedListenerArn\":\"arn:aws:elasticloadbalancing:us-west-2:750078097588:listener/app/Ingre-alb8A-1CSEOURDQPV00/a399243c6f93c4d4/68534d65637e309e\",\"selectedPort\":80,\"keyPair\":\"ec2-key-pair\",\"securityGroupIds\":[{\"groupId\":\"sg-03e7d4084783c07dd\"}],\"newRuleConfig\":{\"Actions\":[{\"Type\":\"forward\",\"ForwardConfig\":{\"TargetGroupStickinessConfig\":{\"Enabled\":false},\"TargetGroups\":[{\"TargetGroupArn\":\"arn:aws:elasticloadbalancing:us-west-2:750078097588:targetgroup/Ingre-albLi-1J6WOXZFA66MX/26e25e5029b0fd87\",\"Weight\":50},{\"TargetGroupArn\":\"Insert Canary Target ARN\",\"Weight\":50}]}}],\"Conditions\":[{\"Field\":\"http-request-method\",\"HttpRequestMethodConfig\":{\"Values\":[\"GET\"]}}],\"ListenerArn\":\"arn:aws:elasticloadbalancing:us-west-2:750078097588:listener/app/Ingre-alb8A-1CSEOURDQPV00/a399243c6f93c4d4/68534d65637e309e\",\"Priority\":1,\"Tags\":[{\"Key\":\"isAriaCanaryRule\",\"Value\":\"Ingre-alb8A-1CSEOURDQPV00\"}]},\"vpcConfig\":{\"vpcId\":\"vpc-0a94824440a024b99\",\"availabilityZones\":[\"us-west-2c\",\"us-west-2b\",\"us-west-2a\"],\"publicSubnetIds\":[\"subnet-0abd62938ee4d7970\",\"subnet-07da976d9dd49915c\",\"subnet-027a6dddbdbfc85cf\"],\"privateSubnetIds\":[\"subnet-0f459b8cc64c84b40\",\"subnet-0d1cacaff25be1d37\",\"subnet-0bd6127391aced506\"]}}"
+      "Value": "{\"profileName\":\"default\",\"keyPair\":\"ec2-key-pair\",\"canaryImgPath\":\"canary.tar\",\"baselineImgPath\":\"baseline.tar\",\"canaryComposePath\":\"docker-compose-canary.yml\",\"baselineComposePath\":\"docker-compose-baseline.yml\",\"stackName\":\"Test Stack Canary Deployment\",\"stackDescription\":\"Test Stack Canary Deployment\",\"selectedAlbName\":\"Ingre-alb8A-1SJRROI1HDLUO\",\"selectedAlbArn\":\"arn:aws:elasticloadbalancing:us-west-2:750078097588:loadbalancer/app/Ingre-alb8A-1SJRROI1HDLUO/60d7128bd10eb5e2\",\"selectedListenerArn\":\"arn:aws:elasticloadbalancing:us-west-2:750078097588:listener/app/Ingre-alb8A-1SJRROI1HDLUO/60d7128bd10eb5e2/edbb02ab8bdb8793\",\"selectedPort\":80,\"TargetGroupArn\":\"arn:aws:elasticloadbalancing:us-west-2:750078097588:targetgroup/Ingre-albLi-LF1U24QRRWBL/155f6131d7abc971\",\"vpcId\":\"vpc-0ef75a8ea892b7fa7\",\"securityGroupIds\":[{\"groupId\":\"sg-0f787672eb36fd73b\"}],\"conditions\":[{\"Field\":\"http-request-method\",\"HttpRequestMethodConfig\":{\"Values\":[\"GET\"]}}],\"newRuleConfig\":{\"Actions\":[{\"Type\":\"forward\",\"ForwardConfig\":{\"TargetGroupStickinessConfig\":{\"Enabled\":false},\"TargetGroups\":[{\"TargetGroupArn\":\"arn:aws:elasticloadbalancing:us-west-2:750078097588:targetgroup/Ingre-albLi-LF1U24QRRWBL/155f6131d7abc971\",\"Weight\":50},{\"TargetGroupArn\":\"Insert Canary Target ARN\",\"Weight\":50}]}}],\"Conditions\":[{\"Field\":\"http-request-method\",\"HttpRequestMethodConfig\":{\"Values\":[\"GET\"]}}],\"ListenerArn\":\"arn:aws:elasticloadbalancing:us-west-2:750078097588:listener/app/Ingre-alb8A-1SJRROI1HDLUO/60d7128bd10eb5e2/edbb02ab8bdb8793\",\"Priority\":1,\"Tags\":[{\"Key\":\"isAriaCanaryRule\",\"Value\":\"Ingre-alb8A-1SJRROI1HDLUO\"}]},\"vpcConfig\":{\"vpcId\":\"vpc-0ef75a8ea892b7fa7\",\"availabilityZones\":[\"us-west-2a\",\"us-west-2b\",\"us-west-2c\"],\"publicSubnetIds\":[\"subnet-0c88e6f912746e242\",\"subnet-00ed54e41b21a46b3\",\"subnet-0487736044cbe1137\"],\"privateSubnetIds\":[\"subnet-09ba2d929b66f6cd3\",\"subnet-0ee1d402af4bb8b04\",\"subnet-031a29c6898df550a\"]}}"
     },
     "BaselineTargetGroupArn": {
       "Value": {

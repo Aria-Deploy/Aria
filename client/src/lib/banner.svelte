@@ -1,6 +1,6 @@
 <script>
-  import { showCreateCanaryForm } from "../stores";
-  export let title, description;
+  export let title,
+    description = undefined;
 </script>
 
 <div class="bg-blue-50 flex flex-row items-center h-1/6 px-9 py-8 shadow">

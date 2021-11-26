@@ -1,6 +1,5 @@
 <script>
   import "../styles/tailwind-output.css";
-  import { fly } from "svelte/transition";
   import Sidebar from "$lib/sidebar/sidebar.svelte";
   import SelectProfileForm from "$lib/sidebar/select_profile.svelte";
 </script>

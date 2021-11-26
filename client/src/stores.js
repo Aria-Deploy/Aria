@@ -1,8 +1,6 @@
 import { browser } from "$app/env";
 import { writable } from "svelte/store";
 
-export const showCreateCanaryForm = writable(false);
-
 export const selectedAwsProfile = writable('');
 export const resourceData = writable([]);
 export const existingStackInfo = writable([]);

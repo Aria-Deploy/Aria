@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { resourceData, existingStackInfo } from '../stores';
 
 const apiRoute = `http://localhost:5000/api`;
 
@@ -10,24 +11,13 @@ export async function getUserProfiles() {
 export async function getResourceData(selectedProfile) {
   const apiURI = `${apiRoute}/resources-data/${selectedProfile}`;
   const response = await axios(apiURI);
-  return response.data;
+  resourceData.set(response.data.profileResources);
+  existingStackInfo.set(response.data.existingStackInfo);
 }
 
-export async function getResourcesData(event) {
-  selectedProfile.set($userProfiles[event.target.value]);
-  const apiURI = `${apiRoute}/resources-data/${$selectedProfile}`;
-  const response = await axios(apiURI);
-  const profileResourceDataRes = response.data;
-  profileResourceData.set(response.data.profileResources);
-  profileStacks.set(response.data.existingStackInfo);
-  console.log(profileResourceDataRes);
-}
-
-export async function deployCanary() {
+export async function deployCanary(stackConfig) {
   const apiURI = `${apiRoute}/deploy-canary`;
-  const securityGroupIds = selectedInstance.SecurityGroups.map((sg) => ({
-    groupId: sg.GroupId
-  }));
+
   const newRuleConfig = {
     Actions: [
       {
@@ -38,7 +28,7 @@ export async function deployCanary() {
           },
           TargetGroups: [
             {
-              TargetGroupArn: selectedTarget.TargetGroupArn,
+              TargetGroupArn: stackConfig.TargetGroupArn,
               Weight: 50
             },
             {
@@ -49,27 +39,16 @@ export async function deployCanary() {
         }
       }
     ],
-    Conditions: [
-      {
-        Field: 'http-request-method',
-        HttpRequestMethodConfig: {
-          Values: ['GET']
-        }
-      }
-    ],
-    ListenerArn: selectedListener.ListenerArn,
+    Conditions: stackConfig.conditions,
+    ListenerArn: stackConfig.selectedListenerArn,
     Priority: 1,
-    Tags: [{ Key: 'isAriaCanaryRule', Value: selectedAlb.LoadBalancerName }]
+    Tags: [{ Key: 'isAriaCanaryRule', Value: stackConfig.selectedAlbName }]
   };
+
   const response = await axios.put(apiURI, {
-    profileName,
-    vpcId: selectedInstance.VpcId,
-    selectedAlbName: selectedAlb.LoadBalancerName,
-    selectedListenerArn: selectedListener.ListenerArn,
-    securityGroupIds,
+    ...stackConfig,
     newRuleConfig
   });
-  console.log(response.data)
   return response.data
 }
 
