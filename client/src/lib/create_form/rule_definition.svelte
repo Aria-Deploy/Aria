@@ -43,16 +43,55 @@
     return acc;
   }, 0);
 
-  // Conditions: [
-  //   {
-  //     Field: 'http-request-method',
-  //     HttpRequestMethodConfig: {
-  //       Values: ['GET']
-  //     }
-  //   }
-  // ],
+  let isStickySession = false;
+  $: setStackConfig("isStickySesssion", isStickySession);
+
+  let priority;
+  $: setStackConfig("priority", priority);
+
+  let weight;
+  $: setStackConfig("weight", weight);
 </script>
 
+<div class={format.rowClass}>
+  <div class="flex flex-col">
+    <label for="stackName" class={format.labelClass}>Sticky Sessions</label>
+    <input
+      type="checkbox"
+      id="stackName"
+      class={format.fieldClass}
+      bind:checked={isStickySession}
+    />
+  </div>
+  <div class="flex flex-col">
+    <label for="stackName" class={format.labelClass}>
+      Analysis Traffic Weight
+    </label>
+    <input
+      type="number"
+      id="stackName"
+      class={format.fieldClass}
+      bind:value={weight}
+      placeholder="0-20"
+      min="0"
+      max="20"
+      required
+    />
+  </div>
+  <div class="flex flex-col">
+    <label for="stackName" class={format.labelClass}>Rule Priority</label>
+    <input
+      type="number"
+      id="stackName"
+      class={format.fieldClass}
+      bind:value={priority}
+      placeholder="0-999"
+      min="0"
+      max="999"
+      required
+    />
+  </div>
+</div>
 <div class="flex flex-col mt-7">
   {#if totalValues < 5}
     <div>

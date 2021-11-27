@@ -24,16 +24,20 @@ export async function deployCanary(stackConfig) {
         Type: 'forward',
         ForwardConfig: {
           TargetGroupStickinessConfig: {
-            Enabled: false
+            Enabled: stackConfig.isStickySession
           },
           TargetGroups: [
             {
               TargetGroupArn: stackConfig.TargetGroupArn,
-              Weight: 50
+              Weight: 200 - (2 * stackConfig.weight)
             },
             {
               TargetGroupArn: 'Insert Canary Target ARN',
-              Weight: 50
+              Weight: stackConfig.weight
+            },
+            {
+              TargetGroupArn: 'Insert Baseline Target ARN',
+              Weight: stackConfig.weight
             }
           ]
         }
@@ -41,7 +45,7 @@ export async function deployCanary(stackConfig) {
     ],
     Conditions: stackConfig.conditions,
     ListenerArn: stackConfig.selectedListenerArn,
-    Priority: 1,
+    Priority: stackConfig.priority,
     Tags: [{ Key: 'isAriaCanaryRule', Value: stackConfig.selectedAlbName }]
   };
 
