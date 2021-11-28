@@ -6,13 +6,24 @@
 
   const addCondition = () => (conditions = [...conditions, {}]);
 
+  const validationRegex = {
+    "source-ip": "^([0-9]{1,3}\.){3}[0-9]{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))?$",
+    "host-header":
+      "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]).)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9])$",
+    "http-request-method": "^[A-Z]+$",
+    "path-pattern": "^/[/.a-zA-Z0-9-]+$",
+    "http-header": "^[w-]+$",
+  };
+
   const conditionDisplay = [
-    { display: "Path", type: "path-pattern", regex: "" },
-    { display: "Reqeust Method", type: "http-request-method", regex: "" },
-    { display: "Host Header", type: "host-header", regex: "" },
-    { display: "HTTP Header", type: "http-header", regex: "" },
-    { display: "Query String", type: "query-string", regex: "" },
-    { display: "Source IP", type: "source-ip", regex: "" },
+    { display: "Path", type: "path-pattern" },
+    {
+      display: "Reqeust Method",
+      type: "http-request-method",
+    },
+    { display: "Host Header", type: "host-header" },
+    { display: "HTTP Header", type: "http-header" },
+    { display: "Source IP", type: "source-ip" },
   ];
 
   const conditionTypes = {
@@ -184,6 +195,8 @@
                 conditionTypes[condition["Field"]],
                 idx
               )}
+              pattern={validationRegex[condition["Field"]]}
+              required
             />
           {/each}
           <div class="flex flex-col">

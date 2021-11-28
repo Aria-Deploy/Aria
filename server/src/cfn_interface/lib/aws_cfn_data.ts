@@ -56,7 +56,7 @@ export async function clientsInit(profileName: string) {
     // @ts-ignore
     _elvb2Client = new ElasticLoadBalancingV2Client(config);
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
 }
 
@@ -183,6 +183,7 @@ export async function fetchStacksInfo() {
     const stacksInfoCmd = new DescribeStacksCommand({});
     const stacksInfoRes = await _cfnClient.send(stacksInfoCmd);
     const stacksInfo = stacksInfoRes.Stacks!.filter((stack) => {
+      if (!stack.Outputs) return false;
       return stack.Outputs!.some(({ OutputKey }) => OutputKey === "ariacanary");
     });
 
