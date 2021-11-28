@@ -1,10 +1,19 @@
 <script>
-  import { resourceData } from "../../stores";
+  import { resourceData, existingStackInfo } from "../../stores";
   export let format, setStackConfig;
+
+  const resourceDataCopy = JSON.parse(JSON.stringify($resourceData));
+  const nonCanaryLoadBalancers = resourceDataCopy.filter((alb) => {
+    return $existingStackInfo.every((canaryStack) => {
+      if (!canaryStack.config) return true;
+      if (canaryStack.config.selectedAlbArn !== alb.LoadBalancerArn)
+        return true;
+    });
+  });
 
   let selectedAlb;
   function selectAlb(event) {
-    selectedAlb = JSON.parse(JSON.stringify($resourceData[event.target.value]));
+    selectedAlb = nonCanaryLoadBalancers[event.target.value];
     setStackConfig("selectedAlbName", selectedAlb.LoadBalancerName);
     setStackConfig("selectedAlbArn", selectedAlb.LoadBalancerArn);
   }
@@ -19,7 +28,7 @@
   let selectedTarget;
   function selectTargetGroup(event) {
     selectedTarget = { ...selectedAlb.Targets[event.target.value] };
-    setStackConfig('TargetGroupArn', selectedTarget.TargetGroupArn)
+    setStackConfig("TargetGroupArn", selectedTarget.TargetGroupArn);
   }
 
   let selectedInstance;
@@ -45,13 +54,13 @@
       class={format.fieldClass}
       id="load-balancer"
       on:change={selectAlb}
-      disabled={!$resourceData.length}
+      disabled={!nonCanaryLoadBalancers.length}
       required
     >
       <option value="" selected disabled hidden>Select ALB</option>
-      {#if $resourceData && $resourceData.length}
+      {#if nonCanaryLoadBalancers && nonCanaryLoadBalancers.length}
         <optgroup label="Load Balancer ID">
-          {#each $resourceData as alb, idx}
+          {#each nonCanaryLoadBalancers as alb, idx}
             <option value={`${idx}`}>{alb.LoadBalancerName}</option>
           {/each}
         </optgroup>

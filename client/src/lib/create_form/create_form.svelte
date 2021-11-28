@@ -6,10 +6,7 @@
   import { onMount } from "svelte";
   import { getResourceData, deployCanary } from "$lib/api_interface";
 
-  onMount(async () => {
-    const data = await getResourceData($selectedAwsProfile);
-    resourceData.set(data.profileResources);
-  });
+  onMount(async () => await getResourceData($selectedAwsProfile));
 
   const rowClass = "flex flex-row gap-3 mt-8";
   const labelClass =
