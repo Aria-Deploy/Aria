@@ -7,11 +7,11 @@
   const addCondition = () => (conditions = [...conditions, {}]);
 
   const validationRegex = {
-    "source-ip": "^([0-9]{1,3}\.){3}[0-9]{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))?$",
+    "source-ip": "^([0-9]{1,3}.){3}[0-9]{1,3}(/([0-9]|[1-2][0-9]|3[0-2]))?$",
     "host-header":
       "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]).)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9])$",
     "http-request-method": "^[A-Z]+$",
-    "path-pattern": "^/[/.a-zA-Z0-9-]+$",
+    "path-pattern": "^/[/.a-zA-Z0-9-]*$",
     "http-header": "^[w-]+$",
   };
 

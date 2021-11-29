@@ -45,6 +45,9 @@
 
   let keyPair;
   $: setStackConfig("keyPair", keyPair);
+
+  let healthCheckPath;
+  $: setStackConfig("healthCheckPath", healthCheckPath);
 </script>
 
 <div class={format.rowClass}>
@@ -129,6 +132,16 @@
       bind:value={keyPair}
       disabled={!selectedInstance}
       placeholder="Provide AWS KeyPair"
+      required
+    />
+  </div>
+  <div>
+    <label class={format.labelClass} for="instance">Canary HealthCheck</label>
+    <input
+      class={format.fieldClass}
+      bind:value={healthCheckPath}
+      disabled={!keyPair}
+      placeholder="Provide Path"
       required
     />
   </div>
