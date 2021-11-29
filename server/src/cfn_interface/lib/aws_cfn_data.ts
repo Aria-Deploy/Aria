@@ -56,7 +56,7 @@ export async function clientsInit(profileName: string) {
     // @ts-ignore
     _elvb2Client = new ElasticLoadBalancingV2Client(config);
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
 }
 
@@ -68,12 +68,6 @@ export async function getVpcsInfo() {
 
 // TODO define vpcs type
 export async function getLoadBalancerInfo() {
-  const getSecurityGroupsRulesCmd = new DescribeSecurityGroupRulesCommand({});
-  const getSecurityGroupsRulesRes = await _ec2Client.send(
-    getSecurityGroupsRulesCmd
-  );
-  const securityGroupsRulesInfo = getSecurityGroupsRulesRes.SecurityGroupRules;
-
   const getInstancesCmd = new DescribeInstancesCommand({});
   const getInstRes = await _ec2Client.send(getInstancesCmd);
 
@@ -189,6 +183,7 @@ export async function fetchStacksInfo() {
     const stacksInfoCmd = new DescribeStacksCommand({});
     const stacksInfoRes = await _cfnClient.send(stacksInfoCmd);
     const stacksInfo = stacksInfoRes.Stacks!.filter((stack) => {
+      if (!stack.Outputs) return false;
       return stack.Outputs!.some(({ OutputKey }) => OutputKey === "ariacanary");
     });
 
@@ -205,7 +200,7 @@ export async function fetchStacksInfo() {
 
         stackInfo.config = JSON.parse(stackInfo.outputs.ariaconfig);
         stackInfo.config = {
-          ...stackInfo.config, 
+          ...stackInfo.config,
           awsStackName: stack.StackName,
           stackArn: stack.StackId,
           stackStatus: stack.StackStatus,
@@ -257,19 +252,18 @@ export async function setAzPubPrivSubnets(vpcId: string) {
     const subnetsResponse = await _ec2Client.send(subnetsCmd);
 
     const subnetsObj: any = {};
-    subnetsResponse.Subnets!.forEach(subnet => {
+    subnetsResponse.Subnets!.forEach((subnet) => {
       const zone = subnet.AvailabilityZone!;
       if (subnet.VpcId !== vpcConfig.vpcId) return;
-      subnetsObj[zone] = subnetsObj[zone] || {}; 
+      subnetsObj[zone] = subnetsObj[zone] || {};
 
       subnet.Tags?.some((tag) => {
         if (!["Private", "Public"].includes(tag.Value!)) return false;
-        if (tag.Value === "Public")
-          subnetsObj[zone].Public = subnet.SubnetId!;
+        if (tag.Value === "Public") subnetsObj[zone].Public = subnet.SubnetId!;
         if (tag.Value === "Private")
           subnetsObj[zone].Private = subnet.SubnetId!;
         return true;
-      }); 
+      });
     });
 
     for (const az in subnetsObj) {

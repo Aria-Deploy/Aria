@@ -19,8 +19,3 @@ function createLocalStorage(localStorageName, localStorageValue) {
     localStorage.setItem(localStorageName, JSON.stringify(value));
   });
 }
-
-function resetState() {
-  selectedAwsProfile.set()
-}
-

@@ -4,4 +4,6 @@ node_modules
 /package
 .vscode
 dist
+*.zip
+*.yml
 *.tar

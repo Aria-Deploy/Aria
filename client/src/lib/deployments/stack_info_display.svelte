@@ -1,5 +1,7 @@
 <script>
-  import { destroyCanaryStack } from "$lib/api_interface";
+  import { destroyCanaryStack, getResourceData } from "$lib/api_interface";
+  import { selectedAwsProfile } from "../../stores";
+
   export let stackInfo;
   let { config, canaryRule, outputs } = stackInfo;
 
@@ -29,7 +31,7 @@
       stackArn: config.stackArn,
       canaryRuleArn: canaryRule.RuleArn,
     });
-    console.log(destroyCanaryRes);
+    await getResourceData($selectedAwsProfile);
   }
 </script>
 

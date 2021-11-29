@@ -4,9 +4,9 @@
 </script>
 
 <div
-  class="fixed flex flex-col bg-regal-blue items-center h-full w-48 p-5 text-blue-100"
+  class="fixed flex flex-col bg-regal-blue items-center h-full w-48 py-2 px-5 text-blue-100"
 >
-  <img class="w-9/12 h-auto pb-10 pt-6" src="duck.png" alt="" />
+  <img class="w-9/12 h-auto pb-6 pt-6" src="duck.png" alt="" />
   <div class="space-y-2">
     <MenuItem title={"Deployments"} route={"/"}>
       <path

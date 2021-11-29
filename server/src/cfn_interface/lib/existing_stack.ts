@@ -6,7 +6,6 @@ import * as fs from "fs";
 import { SdkProvider } from "aws-cdk/lib/api/aws-auth";
 import { CloudFormationDeployments } from "aws-cdk/lib/api/cloudformation-deployments";
 import { VpcAttributes } from "@aws-cdk/aws-ec2";
-import { CloudFormation } from "aws-sdk";
 
 export class ExistingStack extends cdk.Stack {
   private stackArtifact: cxapi.CloudFormationStackArtifact;
@@ -25,9 +24,7 @@ export class ExistingStack extends cdk.Stack {
   }
 
   async createNewCfnDeploy(): Promise<CloudFormationDeployments> {
-    // USER-INPUT: Optional Profile Name or Default
     const sdkProvider = await SdkProvider.withAwsCliCompatibleDefaults({
-      // profile: 'your ~/.aws/config profile name here',
       profile: this.profileName,
     });
 
