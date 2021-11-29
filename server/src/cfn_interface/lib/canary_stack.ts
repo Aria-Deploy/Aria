@@ -227,23 +227,16 @@ export class CanaryStack extends ExistingStack {
       },
     });
 
-    /*
-    // @ts-ignore
-    const {awsProfilesInfo} = props;
-    console.log('profile ', awsProfilesInfo);
-
-    // @ts-ignore
-    const {region} = awsProfilesInfo.configFile.default;
-    // @ts-ignore
-    const accessKey = awsProfilesInfo.credentialsFile.default.aws_access_key_id;
-    // @ts-ignore
-    const secretKey = awsProfilesInfo.credentialsFile.default.aws_secret_access_key;
-    */
+    const region = stackConfig.credentials.region;
+    const accessKey = stackConfig.credentials.credentials.aws_access_key_id;
+    const secretKey = stackConfig.credentials.credentials.aws_secret_access_key;
 
     const monitorSetupScript = readFileSync(
       "./src/scripts/monitorSetup.sh",
       "utf8"
-    );
+    ).replace('MY_REGION', region)
+    .replace('MY_ACCESS_KEY', accessKey)
+    .replace('MY_SECRET_KEY', secretKey);
 
     monitorInstance.addUserData(monitorSetupScript);
 
