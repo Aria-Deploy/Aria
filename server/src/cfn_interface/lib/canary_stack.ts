@@ -227,6 +227,39 @@ export class CanaryStack extends ExistingStack {
       },
     });
 
+    // pass configuration and setup files to monitor
+    const monitorComposeAsset = new Asset(this, 'MonitorComposeAsset', {
+      path: "./src/scripts/monitor-docker-compose",
+    });
+    const monitorKayentaAsset = new Asset(this, 'MonitorKayentaAsset', {
+      path: "./src/scripts/monitor-kayenta",
+    });
+    // const monitorPrometheusAsset = new Asset(this, 'MonitorPrometheusAsset', {
+    //   path: "./src/scripts/monitor-prometheus",
+    // });
+
+    monitorComposeAsset.grantRead(monitorInstance.grantPrincipal);
+    monitorKayentaAsset.grantRead(monitorInstance.grantPrincipal);
+    // monitorPrometheusAsset.grantRead(monitorInstance.grantPrincipal);
+    
+    monitorInstance.userData.addS3DownloadCommand({
+      bucket: monitorComposeAsset.bucket,
+      bucketKey: monitorComposeAsset.s3ObjectKey,
+      localFile: "/home/ec2-user/docker-compose.yml",
+    });
+
+    monitorInstance.userData.addS3DownloadCommand({
+      bucket: monitorKayentaAsset.bucket,
+      bucketKey: monitorKayentaAsset.s3ObjectKey,
+      localFile: "/home/ec2-user/kayenta.yml",
+    });
+
+    // monitorInstance.userData.addS3DownloadCommand({
+    //   bucket: monitorPrometheusAsset.bucket,
+    //   bucketKey: monitorPrometheusAsset.s3ObjectKey,
+    //   localFile: "/home/ec2-user/prometheus.yml",
+    // });
+
     const region = stackConfig.credentials.region;
     const accessKey = stackConfig.credentials.credentials.aws_access_key_id;
     const secretKey = stackConfig.credentials.credentials.aws_secret_access_key;
@@ -234,9 +267,9 @@ export class CanaryStack extends ExistingStack {
     const monitorSetupScript = readFileSync(
       "./src/scripts/monitorSetup.sh",
       "utf8"
-    ).replace('MY_REGION', region)
-    .replace('MY_ACCESS_KEY', accessKey)
-    .replace('MY_SECRET_KEY', secretKey);
+    ).replace(/MY_REGION/g, region)
+    .replace(/MY_ACCESS_KEY/g, accessKey)
+    .replace(/MY_SECRET_KEY/g, secretKey);
 
     monitorInstance.addUserData(monitorSetupScript);
 
