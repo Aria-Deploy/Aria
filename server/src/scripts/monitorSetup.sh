@@ -37,6 +37,7 @@ scrape_configs:
       - access_key: MY_ACCESS_KEY 
         secret_key: MY_SECRET_KEY
         port: 9100
+  NEW_SCRAPE_CONFIGS
 END
 
 # labelling examples
@@ -65,10 +66,10 @@ cd /home/ec2-user
 
 # THESE FILES NEED TO BE PLACED ELSEWHERE
 # download docker-compose.yml for all traffic monitor/analysis apps
-wget 'https://raw.githubusercontent.com/caleblayneheath/my-aria/main/configs/docker-compose.yml' -O docker-compose.yml
+# wget 'https://raw.githubusercontent.com/caleblayneheath/my-aria/main/configs/docker-compose.yml' -O docker-compose.yml
 
 # download kayenta.yml for kayenta configuration
-wget 'https://raw.githubusercontent.com/caleblayneheath/my-aria/main/configs/kayenta.yml' -O kayenta.yml
+# wget 'https://raw.githubusercontent.com/caleblayneheath/my-aria/main/configs/kayenta.yml' -O kayenta.yml
 
 # change ownership of all files in home directory to ec2-user
 chown -R ec2-user:ec2-user .

@@ -264,13 +264,40 @@ export class CanaryStack extends ExistingStack {
     const accessKey = stackConfig.credentials.credentials.aws_access_key_id;
     const secretKey = stackConfig.credentials.credentials.aws_secret_access_key;
 
-    const monitorSetupScript = readFileSync(
+    const scrapeConfigTemplate = 
+      `- job_name: 'EXPORTER_JOBNAME'
+        relabel_configs:
+        - source_labels: [__meta_ec2_tag_Name]
+          target_label: instance
+        ec2_sd_configs:
+          - access_key: MY_ACCESS_KEY 
+            secret_key: MY_SECRET_KEY
+            port: EXPORTER_PORT`;
+
+    let monitorSetupScript = readFileSync(
       "./src/scripts/monitorSetup.sh",
       "utf8"
-    ).replace(/MY_REGION/g, region)
+    )
+    
+    stackConfig.exporters = [{jobName: 'exporter', port: '8800'}];
+    
+    let newScrapeConfigs = '';
+    // @ts-ignore
+    stackConfig.exporters.forEach(exporter => {
+      const { jobName, port } = exporter;
+      let exporterConfig = scrapeConfigTemplate
+        .replace(/EXPORTER_JOBNAME/, jobName)
+        .replace(/EXPORTER_PORT/, port);
+      newScrapeConfigs = newScrapeConfigs.concat(exporterConfig);
+    });
+    
+    monitorSetupScript = monitorSetupScript
+    .replace(/NEW_SCRAPE_CONFIGS/, newScrapeConfigs)
+    .replace(/MY_REGION/g, region)
     .replace(/MY_ACCESS_KEY/g, accessKey)
     .replace(/MY_SECRET_KEY/g, secretKey);
 
+    console.log(monitorSetupScript);
     monitorInstance.addUserData(monitorSetupScript);
 
     new cdk.CfnOutput(this, "ariacanary", {
