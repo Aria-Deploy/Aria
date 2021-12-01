@@ -6,14 +6,14 @@ import {
   DescribeVpcsCommand,
   DescribeSubnetsCommand,
   DescribeInstancesCommand,
-  DescribeSecurityGroupRulesCommand,
+  DescribeInstanceStatusCommand,
 } from "@aws-sdk/client-ec2";
 
 import {
   CloudFormationClient,
   GetTemplateCommand,
   DescribeStacksCommand,
-  Output,
+  DescribeStackInstanceCommand,
 } from "@aws-sdk/client-cloudformation";
 
 import { STSClient, GetCallerIdentityCommand } from "@aws-sdk/client-sts";
@@ -56,7 +56,7 @@ export async function clientsInit(profileName: string) {
     // @ts-ignore
     _elvb2Client = new ElasticLoadBalancingV2Client(config);
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 }
 
@@ -182,15 +182,17 @@ export async function fetchStacksInfo() {
   try {
     const stacksInfoCmd = new DescribeStacksCommand({});
     const stacksInfoRes = await _cfnClient.send(stacksInfoCmd);
-    const stacksInfo = stacksInfoRes.Stacks!.filter((stack) => {
-      if (!stack.Outputs) return false;
-      return stack.Outputs!.some(({ OutputKey }) => OutputKey === "ariacanary");
-    });
+
+    // const stacksInfo = stacksInfoRes.Stacks!.filter((stack) => {
+    //   if (!stack.Outputs) return false;
+    //   return stack.Outputs!.some(({ OutputKey }) => OutputKey === "ariacanary");
+    // });
 
     const formattedStacks = await Promise.all(
-      stacksInfo.map(async (stack) => {
+      stacksInfoRes.Stacks!.map(async (stack) => {
         let stackInfo: any = {};
-        stackInfo.outputs = stack.Outputs!.reduce(
+
+        stackInfo.outputs = (stack.Outputs! || []).reduce(
           (acc: any, { OutputKey, OutputValue }) => {
             acc[`${OutputKey}`] = OutputValue;
             return acc;
@@ -198,7 +200,9 @@ export async function fetchStacksInfo() {
           {}
         );
 
-        stackInfo.config = JSON.parse(stackInfo.outputs.ariaconfig);
+        if (stackInfo.outputs.ariaconfig)
+          stackInfo.config = JSON.parse(stackInfo.outputs.ariaconfig);
+        else stackInfo.config = {};
         stackInfo.config = {
           ...stackInfo.config,
           awsStackName: stack.StackName,
@@ -206,6 +210,9 @@ export async function fetchStacksInfo() {
           stackStatus: stack.StackStatus,
           statckStatusReason: stack.StackStatusReason,
         };
+
+        console.log(stackInfo.outputs.ariacanary);
+        if (!stackInfo.outputs.ariacanary) return stackInfo;
 
         const allRulesCmd = new DescribeRulesCommand({
           ListenerArn: stackInfo.config.selectedListenerArn,
@@ -303,4 +310,17 @@ export async function deleteListenerRule(RuleArn: any) {
   const deleteRuleCmd = new DeleteRuleCommand({ RuleArn });
   const deleteRuleResult = await _elvb2Client.send(deleteRuleCmd);
   return deleteRuleResult;
+}
+
+export async function getInstanceStatus(InstanceIds: string[]) {
+  try {
+    const instancesStatusCmd = new DescribeInstanceStatusCommand({
+      InstanceIds,
+    });
+    const instancesStatus = await _ec2Client.send(instancesStatusCmd);
+    return instancesStatus;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
 }

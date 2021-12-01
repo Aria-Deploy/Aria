@@ -227,19 +227,6 @@ export class CanaryStack extends ExistingStack {
       },
     });
 
-    /*
-    // @ts-ignore
-    const {awsProfilesInfo} = props;
-    console.log('profile ', awsProfilesInfo);
-
-    // @ts-ignore
-    const {region} = awsProfilesInfo.configFile.default;
-    // @ts-ignore
-    const accessKey = awsProfilesInfo.credentialsFile.default.aws_access_key_id;
-    // @ts-ignore
-    const secretKey = awsProfilesInfo.credentialsFile.default.aws_secret_access_key;
-    */
-
     const monitorSetupScript = readFileSync(
       "./src/scripts/monitorSetup.sh",
       "utf8"
@@ -266,6 +253,10 @@ export class CanaryStack extends ExistingStack {
     new cdk.CfnOutput(this, "prometheusDNS", {
       value: `http://${monitorInstance.instancePublicDnsName}:9090`,
     });
+
+    new cdk.CfnOutput(this, "monitorId",{
+      value: monitorInstance.instanceId
+    })
 
     new cdk.CfnOutput(this, "grafanaDNS", {
       value: `http://${monitorInstance.instancePublicDnsName}:3000`,

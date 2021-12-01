@@ -34,10 +34,10 @@ router.put("/deploy-canary", async (req, res) => {
       app,
       `aria-canary-${stackConfig.selectedAlbName}`,
       stackConfig,
-      stackConfig.env
+      { env: stackConfig.env }
     );
 
-    const deployResult = await canaryStack.deploy();
+    let deployResult = await canaryStack.deploy();
     const targetGroups =
       stackConfig.newRuleConfig.Actions[0].ForwardConfig.TargetGroups;
 
@@ -56,7 +56,12 @@ router.put("/deploy-canary", async (req, res) => {
       stackConfig.newRuleConfig
     );
 
-    console.log(deployResult);
+    console.log(createRuleResponse);
+
+    if (createRuleResponse.$metadata.httpStatusCode !== 200) 
+    // @ts-ignore
+      deployResult = await canaryStack.destroy();
+
     const deployResponse = {
       ...deployResult,
       stackArtifact: [],
@@ -94,6 +99,16 @@ router.put("/destroy-canary", async (req, res) => {
     });
     const destroyResult = await existingCanaryInfra.destroy();
     res.json(destroyResult);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.post("/status", async (req, res) => {
+  try {
+    const instanceIds = req.body.instanceIds;
+    const instancesStatus = await awsCfn.getInstanceStatus(instanceIds);
+    res.json(instancesStatus);
   } catch (error) {
     console.log(error);
   }

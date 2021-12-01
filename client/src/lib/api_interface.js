@@ -65,3 +65,9 @@ export async function destroyCanaryStack(stackInfo) {
   });
   return response.data;
 }
+
+export async function getStackStatus(instanceIds) {
+  const response = await axios.post(`${apiRoute}/status`, { instanceIds });
+  console.log(response.data);
+  return response.data;
+}
