@@ -33,7 +33,7 @@ export class CanaryStack extends ExistingStack {
         );
       }
     );
-
+    
     // 👇 create security group for application ec2 instances
     const appSG = new ec2.SecurityGroup(this, "app-sg", {
       vpc,
@@ -55,8 +55,24 @@ export class CanaryStack extends ExistingStack {
     appSG.addIngressRule(
       ec2.Peer.anyIpv4(),
       ec2.Port.tcp(80),
-      "allow all http acess"
+      "allow all http access"
     );
+
+    //
+    // TEMP STACKCONFIG EXPORTERS FOR TESTING
+    //
+    stackConfig.exporters = [{jobName: 'exporter', port: 8800}];
+    stackConfig.exporters = stackConfig.exporters ? stackConfig.exporters : new Array();
+    
+    // @ts-ignore
+    stackConfig.exporters.forEach(exporter => {
+      const { jobName, port } = exporter;
+      appSG.addIngressRule(
+        ec2.Peer.anyIpv4(),
+        ec2.Port.tcp(port),
+        'allow all ' + jobName + ' exporter access'
+      );
+    });
 
     // define configuration for app-base-and-canary asg ec2 instances,
     const appInstance = {
@@ -109,18 +125,17 @@ export class CanaryStack extends ExistingStack {
     );
 
     baselineImageAsset.grantRead(asgBaseline.grantPrincipal);
+    baselineComposeAsset.grantRead(asgBaseline.grantPrincipal);
     asgBaseline.userData.addS3DownloadCommand({
       bucket: baselineImageAsset.bucket,
       bucketKey: baselineImageAsset.s3ObjectKey,
       localFile: "/home/ec2-user/baseline.tar",
     });
-    baselineComposeAsset.grantRead(asgBaseline.grantPrincipal);
     asgBaseline.userData.addS3DownloadCommand({
       bucket: baselineComposeAsset.bucket,
       bucketKey: baselineComposeAsset.s3ObjectKey,
       localFile: "/home/ec2-user/docker-compose.yml",
     });
-
     asgBaseline.addUserData(baselineAppSetup);
 
     const asgCanary = new autoscaling.AutoScalingGroup(
@@ -135,7 +150,7 @@ export class CanaryStack extends ExistingStack {
       bucket: canaryImageAsset.bucket,
       bucketKey: canaryImageAsset.s3ObjectKey,
       localFile: "/home/ec2-user/canary.tar",
-    });
+    });    
     asgCanary.userData.addS3DownloadCommand({
       bucket: canaryComposeAsset.bucket,
       bucketKey: canaryComposeAsset.s3ObjectKey,
@@ -254,32 +269,23 @@ export class CanaryStack extends ExistingStack {
       localFile: "/home/ec2-user/kayenta.yml",
     });
 
-    // monitorInstance.userData.addS3DownloadCommand({
-    //   bucket: monitorPrometheusAsset.bucket,
-    //   bucketKey: monitorPrometheusAsset.s3ObjectKey,
-    //   localFile: "/home/ec2-user/prometheus.yml",
-    // });
-
-    const region = stackConfig.credentials.region;
     const accessKey = stackConfig.credentials.credentials.aws_access_key_id;
     const secretKey = stackConfig.credentials.credentials.aws_secret_access_key;
 
     const scrapeConfigTemplate = 
-      `- job_name: 'EXPORTER_JOBNAME'
-        relabel_configs:
-        - source_labels: [__meta_ec2_tag_Name]
-          target_label: instance
-        ec2_sd_configs:
-          - access_key: MY_ACCESS_KEY 
-            secret_key: MY_SECRET_KEY
-            port: EXPORTER_PORT`;
+`  - job_name: 'EXPORTER_JOBNAME'
+    relabel_configs:
+    - source_labels: [__meta_ec2_tag_Name]
+      target_label: instance
+    ec2_sd_configs:
+      - access_key: MY_ACCESS_KEY 
+        secret_key: MY_SECRET_KEY
+        port: EXPORTER_PORT`;
 
     let monitorSetupScript = readFileSync(
       "./src/scripts/monitorSetup.sh",
       "utf8"
-    )
-    
-    stackConfig.exporters = [{jobName: 'exporter', port: '8800'}];
+    );
     
     let newScrapeConfigs = '';
     // @ts-ignore
@@ -292,8 +298,7 @@ export class CanaryStack extends ExistingStack {
     });
     
     monitorSetupScript = monitorSetupScript
-    .replace(/NEW_SCRAPE_CONFIGS/, newScrapeConfigs)
-    .replace(/MY_REGION/g, region)
+    .replace(/NEW_SCRAPE_CONFIGS/g, newScrapeConfigs)
     .replace(/MY_ACCESS_KEY/g, accessKey)
     .replace(/MY_SECRET_KEY/g, secretKey);
 
