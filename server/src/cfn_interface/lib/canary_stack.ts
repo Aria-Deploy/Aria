@@ -61,8 +61,8 @@ export class CanaryStack extends ExistingStack {
     //
     // TEMP STACKCONFIG EXPORTERS FOR TESTING
     //
-    stackConfig.exporters = [{jobName: 'exporter', port: 8800}];
-    stackConfig.exporters = stackConfig.exporters ? stackConfig.exporters : new Array();
+    //stackConfig.exporters = [{jobName: 'exporter', port: 8800}];
+    //stackConfig.exporters = stackConfig.exporters ? stackConfig.exporters : new Array();
     
     // @ts-ignore
     stackConfig.exporters.forEach(exporter => {
@@ -272,6 +272,9 @@ export class CanaryStack extends ExistingStack {
     const accessKey = stackConfig.credentials.credentials.aws_access_key_id;
     const secretKey = stackConfig.credentials.credentials.aws_secret_access_key;
 
+    // careful altering position of this assignment,
+    // indentation is VERY important for use in monitorSetup.sh 
+    // to create prometheus.yml
     const scrapeConfigTemplate = 
 `  - job_name: 'EXPORTER_JOBNAME'
     relabel_configs:
@@ -301,8 +304,10 @@ export class CanaryStack extends ExistingStack {
     .replace(/NEW_SCRAPE_CONFIGS/g, newScrapeConfigs)
     .replace(/MY_ACCESS_KEY/g, accessKey)
     .replace(/MY_SECRET_KEY/g, secretKey);
+    
+    // set credentials object to empty object to prevent keys from leaking into stack.template.json
+    stackConfig.credentials = {};
 
-    console.log(monitorSetupScript);
     monitorInstance.addUserData(monitorSetupScript);
 
     new cdk.CfnOutput(this, "ariacanary", {

@@ -17,9 +17,12 @@ curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compo
 chmod +x /usr/local/bin/docker-compose
 ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 
-# create/download prometheus config file
+# create prometheus config file
 
 # new_scrape_configs is replaced with additional scrape configs for further exporters
+
+# link that describes different filters
+# https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html
 tee -a /home/ec2-user/prometheus.yml << END
 global:
   scrape_interval: 1s
@@ -36,27 +39,6 @@ scrape_configs:
         port: 9100
 NEW_SCRAPE_CONFIGS
 END
-
-# labelling examples
-# scrape_configs:
-#   - job_name: 'node'
-#     relabel_configs:
-#     - source_labels: [__meta_ec2_tag_Name]
-#       target_label: instance
-#     ec2_sd_configs:
-#       - region: us-east-1
-#         access_key: 
-#         secret_key: 
-#         port: 9100
-#         filters:
-#           - name: tag:Name
-#             values:
-#               - canary-instance
-#               - baseline-instance
-
-
-# link that describes different filters
-# https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html
 
 # move to home directory so config files land there
 cd /home/ec2-user
