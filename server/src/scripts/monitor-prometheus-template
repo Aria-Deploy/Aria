@@ -1,3 +1,6 @@
+# link that describes different filters
+# https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html
+
 global:
   scrape_interval: 1s
   evaluation_interval: 1s

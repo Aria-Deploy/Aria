@@ -4,7 +4,7 @@ import * as elbv2 from "@aws-cdk/aws-elasticloadbalancingv2";
 import * as cdk from "@aws-cdk/core";
 import * as s3 from "@aws-cdk/aws-s3";
 import { Asset } from "@aws-cdk/aws-s3-assets";
-import { readFileSync } from "fs";
+import { appendFileSync, copyFileSync, readFileSync, writeFileSync, unlinkSync } from "fs";
 import { ExistingStack } from "./existing_stack";
 import { SecurityGroup } from "@aws-cdk/aws-ec2";
 
@@ -58,12 +58,7 @@ export class CanaryStack extends ExistingStack {
       "allow all http access"
     );
 
-    //
-    // TEMP STACKCONFIG EXPORTERS FOR TESTING
-    //
-    //stackConfig.exporters = [{jobName: 'exporter', port: 8800}];
-    //stackConfig.exporters = stackConfig.exporters ? stackConfig.exporters : new Array();
-    
+    stackConfig.exporters = stackConfig.exporters ? stackConfig.exporters : new Array();
     // @ts-ignore
     stackConfig.exporters.forEach(exporter => {
       const { jobName, port } = exporter;
@@ -249,14 +244,10 @@ export class CanaryStack extends ExistingStack {
     const monitorKayentaAsset = new Asset(this, 'MonitorKayentaAsset', {
       path: "./src/scripts/monitor-kayenta",
     });
-    // const monitorPrometheusAsset = new Asset(this, 'MonitorPrometheusAsset', {
-    //   path: "./src/scripts/monitor-prometheus",
-    // });
 
     monitorComposeAsset.grantRead(monitorInstance.grantPrincipal);
     monitorKayentaAsset.grantRead(monitorInstance.grantPrincipal);
-    // monitorPrometheusAsset.grantRead(monitorInstance.grantPrincipal);
-    
+
     monitorInstance.userData.addS3DownloadCommand({
       bucket: monitorComposeAsset.bucket,
       bucketKey: monitorComposeAsset.s3ObjectKey,
@@ -268,15 +259,15 @@ export class CanaryStack extends ExistingStack {
       bucketKey: monitorKayentaAsset.s3ObjectKey,
       localFile: "/home/ec2-user/kayenta.yml",
     });
-
-    const accessKey = stackConfig.credentials.credentials.aws_access_key_id;
-    const secretKey = stackConfig.credentials.credentials.aws_secret_access_key;
+  
+    const tmpPrometheusConfigPath = "./src/scripts/monitor-prometheus-tmp";
+    // copyFileSync("./src/scripts/monitor-prometheus-template", tmpPrometheusConfigPath);
+    let tmpPrometheusConfigContents = readFileSync("./src/scripts/monitor-prometheus-template", "utf8");
 
     // careful altering position of this assignment,
-    // indentation is VERY important for use in monitorSetup.sh 
-    // to create prometheus.yml
-    const scrapeConfigTemplate = 
-`  - job_name: 'EXPORTER_JOBNAME'
+    // indentation is VERY important to create prometheus.yml
+    const scrapeConfigTemplate = `
+  - job_name: 'EXPORTER_JOBNAME'
     relabel_configs:
     - source_labels: [__meta_ec2_tag_Name]
       target_label: instance
@@ -285,29 +276,49 @@ export class CanaryStack extends ExistingStack {
         secret_key: MY_SECRET_KEY
         port: EXPORTER_PORT`;
 
-    let monitorSetupScript = readFileSync(
-      "./src/scripts/monitorSetup.sh",
-      "utf8"
-    );
-    
-    let newScrapeConfigs = '';
     // @ts-ignore
     stackConfig.exporters.forEach(exporter => {
       const { jobName, port } = exporter;
-      let exporterConfig = scrapeConfigTemplate
+      let scrapeConfig = scrapeConfigTemplate
         .replace(/EXPORTER_JOBNAME/, jobName)
-        .replace(/EXPORTER_PORT/, port);
-      newScrapeConfigs = newScrapeConfigs.concat(exporterConfig);
+        .replace(/EXPORTER_PORT/, port)     
+      tmpPrometheusConfigContents = tmpPrometheusConfigContents.concat(scrapeConfig);
     });
     
-    monitorSetupScript = monitorSetupScript
-    .replace(/NEW_SCRAPE_CONFIGS/g, newScrapeConfigs)
-    .replace(/MY_ACCESS_KEY/g, accessKey)
-    .replace(/MY_SECRET_KEY/g, secretKey);
+    const accessKey = stackConfig.credentials.credentials.aws_access_key_id;
+    const secretKey = stackConfig.credentials.credentials.aws_secret_access_key;
+    tmpPrometheusConfigContents = tmpPrometheusConfigContents
+      .replace(/MY_ACCESS_KEY/g, accessKey)
+      .replace(/MY_SECRET_KEY/g, secretKey);
+
+    writeFileSync(tmpPrometheusConfigPath, tmpPrometheusConfigContents);
     
     // set credentials object to empty object to prevent keys from leaking into stack.template.json
     stackConfig.credentials = {};
 
+    const monitorPrometheusAsset = new Asset(this, 'MonitorPrometheusAsset', {
+      path: tmpPrometheusConfigPath,
+    });
+    monitorPrometheusAsset.grantRead(monitorInstance.grantPrincipal);
+    
+    monitorInstance.userData.addS3DownloadCommand({
+      bucket: monitorPrometheusAsset.bucket,
+      bucketKey: monitorPrometheusAsset.s3ObjectKey,
+      localFile: "/home/ec2-user/prometheus.yml",
+    });
+    
+    // remove temporary file for monitor-prometheus configuration    
+    try {
+      unlinkSync("./src/scripts/monitor-prometheus-tmp");
+      //file removed
+    } catch(err) {
+      console.error(err);
+    }
+
+    let monitorSetupScript = readFileSync(
+      "./src/scripts/monitorSetup.sh",
+      "utf8"
+    );
     monitorInstance.addUserData(monitorSetupScript);
 
     new cdk.CfnOutput(this, "ariacanary", {
