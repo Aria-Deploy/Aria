@@ -28,6 +28,7 @@ import {
   DescribeTagsCommand,
   DeleteRuleCommand,
   Rule,
+  TargetHealthDescription,
 } from "@aws-sdk/client-elastic-load-balancing-v2";
 import { Vpc } from "@aws-cdk/aws-ec2";
 import { ConfigurationServicePlaceholders } from "aws-sdk/lib/config_service_placeholders";
@@ -319,6 +320,19 @@ export async function getInstanceStatus(InstanceIds: string[]) {
     });
     const instancesStatus = await _ec2Client.send(instancesStatusCmd);
     return instancesStatus;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
+export async function getTargetGroupHealth(TargetGroupArn: string) {
+  try {
+    const targetGroupHealthCmd = new DescribeTargetHealthCommand({
+      TargetGroupArn,
+    });
+    const targetGroupHealth = await _elvb2Client.send(targetGroupHealthCmd);
+    return targetGroupHealth;
   } catch (error) {
     console.log(error);
     return error;

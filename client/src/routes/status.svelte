@@ -1,7 +1,7 @@
 <script>
-  import { fade, slide, fly } from "svelte/transition";
+  import { fade } from "svelte/transition";
   import { existingStackInfo, resourceData } from "../stores";
-  import { getStackStatus } from "$lib/api_interface";
+  import { getStackStatus, getTargetHealth } from "$lib/api_interface";
   import Banner from "$lib/banner.svelte";
 
   async function getResourceStatus() {
@@ -50,13 +50,26 @@
         return stack;
       })
     );
-    console.log(resourcesStatus);
-    return resourcesStatus;
+
+    const resourcesStatusHealth = await Promise.all(
+      resourcesStatus.map(async (stack) => {
+        const baseline = await getTargetHealth(stack.baseline.targetArn);
+        stack.baseline.targetHealth = baseline.TargetHealthDescriptions;
+        const canary = await getTargetHealth(stack.canary.targetArn);
+        stack.canary.targetHealth = canary.TargetHealthDescriptions;
+        return stack;
+      })
+    );
+
+    console.log(resourcesStatusHealth);
+    return resourcesStatusHealth;
   }
   let stackResources = getResourceStatus();
+  const description =
+    "Review the status and event logs of Aria deployed resources";
 </script>
 
-<Banner title={"Review Canary Status"} />
+<Banner title={"Review Canary Status"} {description} />
 <div class="flex flex-col p-4">
   <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
     <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -68,12 +81,6 @@
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
               <tr>
-                <th
-                  scope="col"
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Canary Name
-                </th>
                 <th
                   scope="col"
                   class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -99,24 +106,34 @@
                   Target Health
                 </th>
                 <th scope="col" class="relative px-6 py-3">
-                  <span class="sr-only">Edit</span>
+                  <span class="sr-only">Event Logs</span>
                 </th>
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
               {#each statuses as stackStatus}
+                <tr>
+                  <td>
+                    <div
+                      class="px-6 py-3 text-sm font-medium text-gray-900"
+                    >
+                      {stackStatus.stackName}
+                    </div>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                    <div
+                      class="px-6 py-3 text-sm font-medium text-gray-900"
+                    >
+                      {stackStatus.stackStatus}
+                    </div>
+                  </td>
+                </tr>
+                {#if stackStatus.stackStatus === 'CREATE_COMPLETE'}
                 {#each Object.entries(stackStatus) as [key, value]}
                   {#if key !== "stackName" && key !== "stackStatus"}
                     <tr>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="flex items-center">
-                          <div class="ml-4">
-                            <div class="text-sm font-medium text-gray-900">
-                              {stackStatus.stackName}
-                            </div>
-                          </div>
-                        </div>
-                      </td>
                       <td class="px-6 py-4 whitespace-nowrap">
                         <div class="text-sm text-gray-900">
                           {key[0].toUpperCase() + key.substring(1)}
@@ -142,7 +159,11 @@
                       <td
                         class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
                       >
-                        {value.status.InstanceStatus.Status}
+                        {#if key == "monitor"}
+                          {"N/A"}
+                        {:else}
+                          {value.targetHealth[0].TargetHealth.State}
+                        {/if}
                       </td>
                       <td
                         class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
@@ -150,14 +171,14 @@
                         <a
                           href="/"
                           class="text-indigo-600 hover:text-indigo-900"
-                          >View Logs</a
+                          >Event Logs</a
                         >
                       </td>
                     </tr>
                   {/if}
                 {/each}
+              {/if}
               {/each}
-              <!-- More people... -->
             </tbody>
           </table>
         </div>

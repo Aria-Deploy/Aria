@@ -3,7 +3,13 @@
   import Banner from "$lib/banner.svelte";
   import { existingStackInfo } from "../stores";
 
-  let description = "Create, manage, and destroy Aria canary deployments";
+  let selectedCard;
+  const setSelectedCard = (idx) => () => {
+    if (selectedCard === idx) selectedCard = undefined;
+    else selectedCard = idx;
+  };
+
+  let description = "Create, access, and destroy Aria canary deployments";
 </script>
 
 <Banner title={"Canary Deployments"} {description}>
@@ -14,9 +20,14 @@
   </button>
 </Banner>
 <div class="pr-5">
-  {#each $existingStackInfo as stack}
-    {#if stack.outputs.ariacanary && stack.config.stackStatus === "CREATE_COMPLETE"}
-      <CanaryStackCard stackInfo={stack} />
+  {#each $existingStackInfo as stackInfo, idx}
+    {#if stackInfo.outputs.ariacanary && stackInfo.config.stackStatus === "CREATE_COMPLETE"}
+      <CanaryStackCard
+        {stackInfo}
+        {selectedCard}
+        setSelectedCard={setSelectedCard(idx)}
+        id={idx}
+      />
     {/if}
   {/each}
 </div>

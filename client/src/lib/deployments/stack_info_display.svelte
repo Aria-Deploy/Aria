@@ -35,8 +35,8 @@
   }
 </script>
 
-<form class="w-full mt-3">
-  <div class="flex -mx-3">
+<form class="w-full">
+  <div class="flex -mx-3 pt-3">
     {#each stackInfoFieldsRow1 as infoObj}
       <div class="flex-grow w-full px-3 mb-3">
         <label

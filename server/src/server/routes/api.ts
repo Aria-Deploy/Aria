@@ -58,8 +58,8 @@ router.put("/deploy-canary", async (req, res) => {
 
     console.log(createRuleResponse);
 
-    if (createRuleResponse.$metadata.httpStatusCode !== 200) 
-    // @ts-ignore
+    if (createRuleResponse.$metadata.httpStatusCode !== 200)
+      // @ts-ignore
       deployResult = await canaryStack.destroy();
 
     const deployResponse = {
@@ -111,6 +111,17 @@ router.post("/status", async (req, res) => {
     res.json(instancesStatus);
   } catch (error) {
     console.log(error);
+  }
+});
+
+router.post("/health", async (req, res) => {
+  try {
+    const TargetGroupArn = req.body.TargetGroupArn;
+    const healthStatus = await awsCfn.getTargetGroupHealth(TargetGroupArn);
+    res.json(healthStatus);
+  } catch (error) {
+    console.log(error);
+    res.send(error);
   }
 });
 
