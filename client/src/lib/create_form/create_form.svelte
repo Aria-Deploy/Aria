@@ -1,7 +1,9 @@
 <script>
   import InfraSelection from "$lib/create_form/infra_selection.svelte";
   import RuleDefinition from "$lib/create_form/rule_definition.svelte";
+  import ExporterDefinition from "./exporter_definition.svelte";
   import AppImages from "$lib/create_form/app_images.svelte";
+
   import { selectedAwsProfile, resourceData } from "../../stores";
   import { onMount } from "svelte";
   import { getResourceData, deployCanary } from "$lib/api_interface";
@@ -58,6 +60,7 @@
   </div>
   <InfraSelection {format} {setStackConfig} />
   <RuleDefinition {format} {setStackConfig} />
+  <ExporterDefinition {format} {setStackConfig} />
   <AppImages {format} {setStackConfig} />
   <input
     type="submit"

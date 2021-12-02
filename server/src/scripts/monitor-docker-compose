@@ -1,0 +1,37 @@
+version: "3.7"
+services:
+  kayenta:
+    image: caleblayneheath/kayenta_aria
+    ports:
+      - 8090:8090
+    environment:
+      - services.redis.baseUrl=redis://redis:6379
+      - redis.connection=redis://redis:6379
+    volumes:
+      - /home/ec2-user/kayenta.yml:/opt/kayenta/config/kayenta.yml
+    depends_on:
+      - redis
+
+  prometheus:
+    image: prom/prometheus:v2.31.1
+    ports:
+      - 9090:9090
+    volumes:
+      - /home/ec2-user/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  referee:
+    image: caleblayneheath/referee_aria
+    environment:
+      - KAYENTA_BASE_URL=kayenta:8090
+    ports:
+      - 3001:3001
+  
+  grafana:
+    image: grafana/grafana:8.2.4
+    ports:
+      - 3000:3000
+
+  redis:
+    image: redis:6.2.6
+    ports:
+      - 6379:6379

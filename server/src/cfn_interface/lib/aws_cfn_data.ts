@@ -44,6 +44,10 @@ let _env: { account: string; region: string };
 export const getEnv = () => _env;
 const _resetAccCredenetials = () => (_accountsCredentials = {});
 
+export function getProfileCredentials(profileName: string) {
+  return _accountsCredentials[profileName];
+}
+
 export async function clientsInit(profileName: string) {
   try {
     const config = JSON.stringify(_accountsCredentials[profileName]);
@@ -148,6 +152,7 @@ export async function getLoadBalancerInfo() {
   return activeAlbs;
 }
 
+// this function doesn't appear to be used, remove?
 export async function fetchAccountInfo(profileName: string) {
   const accountIdCmd = new GetCallerIdentityCommand({});
   const response = await _stsClient.send(accountIdCmd);

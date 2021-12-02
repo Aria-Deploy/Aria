@@ -18,7 +18,7 @@
   const conditionDisplay = [
     { display: "Path", type: "path-pattern" },
     {
-      display: "Reqeust Method",
+      display: "Request Method",
       type: "http-request-method",
     },
     { display: "Host Header", type: "host-header" },
