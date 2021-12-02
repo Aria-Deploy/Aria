@@ -1,0 +1,111 @@
+server:
+  port: 8090
+
+redis:
+  connection: ${services.redis.baseUrl:redis://localhost:6379}
+
+kayenta:
+  aws:
+    enabled: false
+#    accounts:
+#      - name:
+#        bucket:
+#        rootFolder: kayenta
+#        You can set credentials that you supply explicitly (see: AwsManagedAccount.ExplicitAwsCredentials)
+#        explicitCredentials:
+#          accessKey: explicitAccessKey
+#          secretKey: explicitSecretKey
+#          sessionToken: explicitSessionToken (optional)
+#        supportedTypes:
+#          - OBJECT_STORE
+#          - CONFIGURATION_STORE
+
+  prometheus:
+    enabled: true
+    metadataCachingIntervalMS: 60000
+    accounts:
+      - name: my-prometheus-account
+        endpoint.baseUrl: http://prometheus:9090 
+        supportedTypes:
+          - METRICS_STORE
+
+  gcs:
+    enabled: false
+
+  blobs:
+    enabled: false
+
+  s3:
+    enabled: false
+
+  stackdriver:
+    enabled: false
+#    metadataCachingIntervalMS: 60000
+
+  memory:
+    enabled: true
+    accounts:
+      - name: in-memory-store
+        supportedTypes:
+          - OBJECT_STORE
+          - CONFIGURATION_STORE
+
+  configbin:
+    enabled: false
+
+  remoteJudge:
+    enabled: false
+#    endpoint:
+#      baseUrl: http://remotejudge.example.com/path/to/service
+
+# Enable the SCAPE endpoint that has the same user experience that the Canary StageExecution in Deck/Orca has.
+  standaloneCanaryAnalysis:
+    enabled: true
+
+# Retry configuration for metrics fetching from metrics storage (see: MetricsRetryConfigurationProperties)
+  metrics:
+    retry:
+      series: SERVER_ERROR
+      statuses: REQUEST_TIMEOUT, TOO_MANY_REQUESTS
+      attempts: 10
+      backoffPeriodMultiplierMs: 1000
+
+  # Set the serialization options for springboot.jackson
+  serialization:
+    writeDatesAsTimestamps: false
+    writeDurationsAsTimestamps: false
+
+management.endpoints.web.exposure.include: '*'
+management.endpoint.health.show-details: always
+
+keiko:
+  queue:
+    redis:
+      queueName: kayenta.keiko.queue
+      deadLetterQueueName: kayenta.keiko.queue.deadLetters
+
+spectator:
+  applicationName: ${spring.application.name}
+  webEndpoint:
+    enabled: true
+
+swagger:
+  enabled: true
+  title: Kayenta API
+  description:
+  contact:
+  patterns:
+    - /admin.*
+    - /canary.*
+    - /canaryConfig.*
+    - /canaryJudgeResult.*
+    - /credentials.*
+    - /fetch.*
+    - /health
+    - /judges.*
+    - /metadata.*
+    - /metricSetList.*
+    - /metricSetPairList.*
+    - /metricServices.*
+    - /pipeline.*
+    - /standalone.*

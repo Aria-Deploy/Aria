@@ -4,7 +4,7 @@ import * as elbv2 from "@aws-cdk/aws-elasticloadbalancingv2";
 import * as cdk from "@aws-cdk/core";
 import * as s3 from "@aws-cdk/aws-s3";
 import { Asset } from "@aws-cdk/aws-s3-assets";
-import { readFileSync } from "fs";
+import { appendFileSync, copyFileSync, readFileSync, writeFileSync, unlinkSync } from "fs";
 import { ExistingStack } from "./existing_stack";
 import { SecurityGroup } from "@aws-cdk/aws-ec2";
 
@@ -33,7 +33,7 @@ export class CanaryStack extends ExistingStack {
         );
       }
     );
-
+    
     // 👇 create security group for application ec2 instances
     const appSG = new ec2.SecurityGroup(this, "app-sg", {
       vpc,
@@ -55,8 +55,19 @@ export class CanaryStack extends ExistingStack {
     appSG.addIngressRule(
       ec2.Peer.anyIpv4(),
       ec2.Port.tcp(80),
-      "allow all http acess"
+      "allow all http access"
     );
+
+    stackConfig.exporters = stackConfig.exporters ? stackConfig.exporters : new Array();
+    // @ts-ignore
+    stackConfig.exporters.forEach(exporter => {
+      const { jobName, port } = exporter;
+      appSG.addIngressRule(
+        ec2.Peer.anyIpv4(),
+        ec2.Port.tcp(port),
+        'allow all ' + jobName + ' exporter access'
+      );
+    });
 
     // define configuration for app-base-and-canary asg ec2 instances,
     const appInstance = {
@@ -109,18 +120,17 @@ export class CanaryStack extends ExistingStack {
     );
 
     baselineImageAsset.grantRead(asgBaseline.grantPrincipal);
+    baselineComposeAsset.grantRead(asgBaseline.grantPrincipal);
     asgBaseline.userData.addS3DownloadCommand({
       bucket: baselineImageAsset.bucket,
       bucketKey: baselineImageAsset.s3ObjectKey,
       localFile: "/home/ec2-user/baseline.tar",
     });
-    baselineComposeAsset.grantRead(asgBaseline.grantPrincipal);
     asgBaseline.userData.addS3DownloadCommand({
       bucket: baselineComposeAsset.bucket,
       bucketKey: baselineComposeAsset.s3ObjectKey,
       localFile: "/home/ec2-user/docker-compose.yml",
     });
-
     asgBaseline.addUserData(baselineAppSetup);
 
     const asgCanary = new autoscaling.AutoScalingGroup(
@@ -135,7 +145,7 @@ export class CanaryStack extends ExistingStack {
       bucket: canaryImageAsset.bucket,
       bucketKey: canaryImageAsset.s3ObjectKey,
       localFile: "/home/ec2-user/canary.tar",
-    });
+    });    
     asgCanary.userData.addS3DownloadCommand({
       bucket: canaryComposeAsset.bucket,
       bucketKey: canaryComposeAsset.s3ObjectKey,
@@ -227,11 +237,88 @@ export class CanaryStack extends ExistingStack {
       },
     });
 
+    // pass configuration and setup files to monitor
+    const monitorComposeAsset = new Asset(this, 'MonitorComposeAsset', {
+      path: "./src/scripts/monitor-docker-compose",
+    });
+    const monitorKayentaAsset = new Asset(this, 'MonitorKayentaAsset', {
+      path: "./src/scripts/monitor-kayenta",
+    });
+
+    monitorComposeAsset.grantRead(monitorInstance.grantPrincipal);
+    monitorKayentaAsset.grantRead(monitorInstance.grantPrincipal);
+
+    monitorInstance.userData.addS3DownloadCommand({
+      bucket: monitorComposeAsset.bucket,
+      bucketKey: monitorComposeAsset.s3ObjectKey,
+      localFile: "/home/ec2-user/docker-compose.yml",
+    });
+
+    monitorInstance.userData.addS3DownloadCommand({
+      bucket: monitorKayentaAsset.bucket,
+      bucketKey: monitorKayentaAsset.s3ObjectKey,
+      localFile: "/home/ec2-user/kayenta.yml",
+    });
+  
+    const tmpPrometheusConfigPath = "./src/scripts/monitor-prometheus-tmp";
+    // copyFileSync("./src/scripts/monitor-prometheus-template", tmpPrometheusConfigPath);
+    let tmpPrometheusConfigContents = readFileSync("./src/scripts/monitor-prometheus-template", "utf8");
+
+    // careful altering position of this assignment,
+    // indentation is VERY important to create prometheus.yml
+    const scrapeConfigTemplate = `
+  - job_name: 'EXPORTER_JOBNAME'
+    relabel_configs:
+    - source_labels: [__meta_ec2_tag_Name]
+      target_label: instance
+    ec2_sd_configs:
+      - access_key: MY_ACCESS_KEY 
+        secret_key: MY_SECRET_KEY
+        port: EXPORTER_PORT`;
+
+    // @ts-ignore
+    stackConfig.exporters.forEach(exporter => {
+      const { jobName, port } = exporter;
+      let scrapeConfig = scrapeConfigTemplate
+        .replace(/EXPORTER_JOBNAME/, jobName)
+        .replace(/EXPORTER_PORT/, port)     
+      tmpPrometheusConfigContents = tmpPrometheusConfigContents.concat(scrapeConfig);
+    });
+    
+    const accessKey = stackConfig.credentials.credentials.aws_access_key_id;
+    const secretKey = stackConfig.credentials.credentials.aws_secret_access_key;
+    tmpPrometheusConfigContents = tmpPrometheusConfigContents
+      .replace(/MY_ACCESS_KEY/g, accessKey)
+      .replace(/MY_SECRET_KEY/g, secretKey);
+
+    writeFileSync(tmpPrometheusConfigPath, tmpPrometheusConfigContents);
+    
+    // set credentials object to empty object to prevent keys from leaking into stack.template.json
+    stackConfig.credentials = {};
+
+    const monitorPrometheusAsset = new Asset(this, 'MonitorPrometheusAsset', {
+      path: tmpPrometheusConfigPath,
+    });
+    monitorPrometheusAsset.grantRead(monitorInstance.grantPrincipal);
+    
+    monitorInstance.userData.addS3DownloadCommand({
+      bucket: monitorPrometheusAsset.bucket,
+      bucketKey: monitorPrometheusAsset.s3ObjectKey,
+      localFile: "/home/ec2-user/prometheus.yml",
+    });
+    
+    // remove temporary file for monitor-prometheus configuration    
+    try {
+      unlinkSync("./src/scripts/monitor-prometheus-tmp");
+      //file removed
+    } catch(err) {
+      console.error(err);
+    }
+
     const monitorSetupScript = readFileSync(
       "./src/scripts/monitorSetup.sh",
       "utf8"
     );
-
     monitorInstance.addUserData(monitorSetupScript);
 
     new cdk.CfnOutput(this, "ariacanary", {

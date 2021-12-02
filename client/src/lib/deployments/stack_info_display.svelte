@@ -19,7 +19,7 @@
 
   const monitoringLinks = [
     { text: "Grafana", link: outputs.grafanaDNS },
-    { text: "Refree", link: outputs.refereeDNS },
+    { text: "Referee", link: outputs.refereeDNS },
     { text: "Prometheus", link: outputs.prometheusDNS },
     { text: "Kayenta API", link: outputs.kayentaDNS },
   ];

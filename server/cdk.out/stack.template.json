@@ -93,7 +93,7 @@
                       },
                       ":s3:::",
                       {
-                        "Ref": "AssetParameters26270f87e4fba3388d4696223702390563a99b004ab38f55dba9f8cec53621c2S3Bucket396A38A3"
+                        "Ref": "AssetParameters2aa80583ed93ef1be14c733ae8744802cd720971df63aa15d8a6f9f6dc54a93aS3Bucket16AD8F73"
                       }
                     ]
                   ]
@@ -108,7 +108,7 @@
                       },
                       ":s3:::",
                       {
-                        "Ref": "AssetParameters26270f87e4fba3388d4696223702390563a99b004ab38f55dba9f8cec53621c2S3Bucket396A38A3"
+                        "Ref": "AssetParameters2aa80583ed93ef1be14c733ae8744802cd720971df63aa15d8a6f9f6dc54a93aS3Bucket16AD8F73"
                       },
                       "/*"
                     ]
@@ -134,7 +134,7 @@
                       },
                       ":s3:::",
                       {
-                        "Ref": "AssetParametersd305dd11fd7f4cefbe4a1b6f8810fdc286483193cf7ef403efe1a4e5dda5846eS3Bucket7C54371C"
+                        "Ref": "AssetParameters4e4460923ad43c43266352c77e9f346197ad96488f8f9961e1824a5b1d84be56S3Bucket1196C49F"
                       }
                     ]
                   ]
@@ -149,7 +149,7 @@
                       },
                       ":s3:::",
                       {
-                        "Ref": "AssetParametersd305dd11fd7f4cefbe4a1b6f8810fdc286483193cf7ef403efe1a4e5dda5846eS3Bucket7C54371C"
+                        "Ref": "AssetParameters4e4460923ad43c43266352c77e9f346197ad96488f8f9961e1824a5b1d84be56S3Bucket1196C49F"
                       },
                       "/*"
                     ]
@@ -205,7 +205,7 @@
               [
                 "#!/bin/bash\nmkdir -p $(dirname '/home/ec2-user/baseline.tar')\naws s3 cp 's3://",
                 {
-                  "Ref": "AssetParameters26270f87e4fba3388d4696223702390563a99b004ab38f55dba9f8cec53621c2S3Bucket396A38A3"
+                  "Ref": "AssetParameters2aa80583ed93ef1be14c733ae8744802cd720971df63aa15d8a6f9f6dc54a93aS3Bucket16AD8F73"
                 },
                 "/",
                 {
@@ -215,7 +215,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters26270f87e4fba3388d4696223702390563a99b004ab38f55dba9f8cec53621c2S3VersionKey7D380BEA"
+                          "Ref": "AssetParameters2aa80583ed93ef1be14c733ae8744802cd720971df63aa15d8a6f9f6dc54a93aS3VersionKey266AAF62"
                         }
                       ]
                     }
@@ -228,7 +228,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters26270f87e4fba3388d4696223702390563a99b004ab38f55dba9f8cec53621c2S3VersionKey7D380BEA"
+                          "Ref": "AssetParameters2aa80583ed93ef1be14c733ae8744802cd720971df63aa15d8a6f9f6dc54a93aS3VersionKey266AAF62"
                         }
                       ]
                     }
@@ -236,7 +236,7 @@
                 },
                 "' '/home/ec2-user/baseline.tar'\nmkdir -p $(dirname '/home/ec2-user/docker-compose.yml')\naws s3 cp 's3://",
                 {
-                  "Ref": "AssetParametersd305dd11fd7f4cefbe4a1b6f8810fdc286483193cf7ef403efe1a4e5dda5846eS3Bucket7C54371C"
+                  "Ref": "AssetParameters4e4460923ad43c43266352c77e9f346197ad96488f8f9961e1824a5b1d84be56S3Bucket1196C49F"
                 },
                 "/",
                 {
@@ -246,7 +246,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParametersd305dd11fd7f4cefbe4a1b6f8810fdc286483193cf7ef403efe1a4e5dda5846eS3VersionKeyE364AF36"
+                          "Ref": "AssetParameters4e4460923ad43c43266352c77e9f346197ad96488f8f9961e1824a5b1d84be56S3VersionKeyC9EBF549"
                         }
                       ]
                     }
@@ -259,7 +259,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParametersd305dd11fd7f4cefbe4a1b6f8810fdc286483193cf7ef403efe1a4e5dda5846eS3VersionKeyE364AF36"
+                          "Ref": "AssetParameters4e4460923ad43c43266352c77e9f346197ad96488f8f9961e1824a5b1d84be56S3VersionKeyC9EBF549"
                         }
                       ]
                     }
@@ -364,7 +364,7 @@
                       },
                       ":s3:::",
                       {
-                        "Ref": "AssetParameters280f0b4501b2352d4d1d9769fc170daab1ff57c887a2aa9d9648d581a3c6cfa0S3Bucket52BD0A7C"
+                        "Ref": "AssetParameters2aa80583ed93ef1be14c733ae8744802cd720971df63aa15d8a6f9f6dc54a93aS3Bucket16AD8F73"
                       }
                     ]
                   ]
@@ -379,7 +379,7 @@
                       },
                       ":s3:::",
                       {
-                        "Ref": "AssetParameters280f0b4501b2352d4d1d9769fc170daab1ff57c887a2aa9d9648d581a3c6cfa0S3Bucket52BD0A7C"
+                        "Ref": "AssetParameters2aa80583ed93ef1be14c733ae8744802cd720971df63aa15d8a6f9f6dc54a93aS3Bucket16AD8F73"
                       },
                       "/*"
                     ]
@@ -405,7 +405,7 @@
                       },
                       ":s3:::",
                       {
-                        "Ref": "AssetParametersb848cedcf10dade5a4187c8572aca9b881cc70c83943ea31e0dc909496bacbbfS3Bucket49ADD16F"
+                        "Ref": "AssetParameters4e4460923ad43c43266352c77e9f346197ad96488f8f9961e1824a5b1d84be56S3Bucket1196C49F"
                       }
                     ]
                   ]
@@ -420,7 +420,7 @@
                       },
                       ":s3:::",
                       {
-                        "Ref": "AssetParametersb848cedcf10dade5a4187c8572aca9b881cc70c83943ea31e0dc909496bacbbfS3Bucket49ADD16F"
+                        "Ref": "AssetParameters4e4460923ad43c43266352c77e9f346197ad96488f8f9961e1824a5b1d84be56S3Bucket1196C49F"
                       },
                       "/*"
                     ]
@@ -476,7 +476,7 @@
               [
                 "#!/bin/bash\nmkdir -p $(dirname '/home/ec2-user/canary.tar')\naws s3 cp 's3://",
                 {
-                  "Ref": "AssetParameters280f0b4501b2352d4d1d9769fc170daab1ff57c887a2aa9d9648d581a3c6cfa0S3Bucket52BD0A7C"
+                  "Ref": "AssetParameters2aa80583ed93ef1be14c733ae8744802cd720971df63aa15d8a6f9f6dc54a93aS3Bucket16AD8F73"
                 },
                 "/",
                 {
@@ -486,7 +486,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters280f0b4501b2352d4d1d9769fc170daab1ff57c887a2aa9d9648d581a3c6cfa0S3VersionKey5F81486B"
+                          "Ref": "AssetParameters2aa80583ed93ef1be14c733ae8744802cd720971df63aa15d8a6f9f6dc54a93aS3VersionKey266AAF62"
                         }
                       ]
                     }
@@ -499,7 +499,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters280f0b4501b2352d4d1d9769fc170daab1ff57c887a2aa9d9648d581a3c6cfa0S3VersionKey5F81486B"
+                          "Ref": "AssetParameters2aa80583ed93ef1be14c733ae8744802cd720971df63aa15d8a6f9f6dc54a93aS3VersionKey266AAF62"
                         }
                       ]
                     }
@@ -507,7 +507,7 @@
                 },
                 "' '/home/ec2-user/canary.tar'\nmkdir -p $(dirname '/home/ec2-user/docker-compose.yml')\naws s3 cp 's3://",
                 {
-                  "Ref": "AssetParametersb848cedcf10dade5a4187c8572aca9b881cc70c83943ea31e0dc909496bacbbfS3Bucket49ADD16F"
+                  "Ref": "AssetParameters4e4460923ad43c43266352c77e9f346197ad96488f8f9961e1824a5b1d84be56S3Bucket1196C49F"
                 },
                 "/",
                 {
@@ -517,7 +517,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParametersb848cedcf10dade5a4187c8572aca9b881cc70c83943ea31e0dc909496bacbbfS3VersionKey205059BF"
+                          "Ref": "AssetParameters4e4460923ad43c43266352c77e9f346197ad96488f8f9961e1824a5b1d84be56S3VersionKeyC9EBF549"
                         }
                       ]
                     }
@@ -530,7 +530,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParametersb848cedcf10dade5a4187c8572aca9b881cc70c83943ea31e0dc909496bacbbfS3VersionKey205059BF"
+                          "Ref": "AssetParameters4e4460923ad43c43266352c77e9f346197ad96488f8f9961e1824a5b1d84be56S3VersionKeyC9EBF549"
                         }
                       ]
                     }
@@ -733,7 +733,7 @@
           }
         ],
         "UserData": {
-          "Fn::Base64": "#!/bin/bash\n#!/bin/bash\n\n# update\nyum update -y\n\n# install git\nyum install git\n\n# docker installation\namazon-linux-extras install docker\nservice docker start\nsystemctl enable docker\nusermod -a -G docker ec2-user\n\n# docker-compose installation\ncurl -L \"https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose\nchmod +x /usr/local/bin/docker-compose\nln -s /usr/local/bin/docker-compose /usr/bin/docker-compose\n\n# create/download prometheus config file\n# this placeholder file needs its access and secret keys replaced\n# it looks currently only for node_exporter\n\n# YOU NEED TO CREATE A AWS USER AND PUT ITS ACCESS_KEY AND SECRET_KEY HERE\n# GIVE THIS USER THE FOLLOWING PERMISSION: AmazonEC2ReadOnlyAccess\ntee -a /home/ec2-user/prometheus.yml << END\nglobal:\n  scrape_interval: 1s\n  evaluation_interval: 1s\n\nscrape_configs:\n  - job_name: 'node'\n    relabel_configs:\n    - source_labels: [__meta_ec2_tag_Name]\n      target_label: instance\n    ec2_sd_configs:\n      - access_key: MY_ACCESS_KEY \n        secret_key: MY_SECRET_KEY\n        port: 9100\nEND\n\n# labelling examples\n# scrape_configs:\n#   - job_name: 'node'\n#     relabel_configs:\n#     - source_labels: [__meta_ec2_tag_Name]\n#       target_label: instance\n#     ec2_sd_configs:\n#       - region: us-east-1\n#         access_key: \n#         secret_key: \n#         port: 9100\n#         filters:\n#           - name: tag:Name\n#             values:\n#               - canary-instance\n#               - baseline-instance\n\n\n# link that describes different filters\n# https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html\n\n# move to home directory so config files land there\ncd /home/ec2-user\n\n# THESE FILES NEED TO BE PLACED ELSEWHERE\n# download docker-compose.yml for all traffic monitor/analysis apps\nwget 'https://raw.githubusercontent.com/caleblayneheath/my-aria/main/configs/docker-compose.yml' -O docker-compose.yml\n\n# download kayenta.yml for kayenta configuration\nwget 'https://raw.githubusercontent.com/caleblayneheath/my-aria/main/configs/kayenta.yml' -O kayenta.yml\n\n# change ownership of all files in home directory to ec2-user\nchown -R ec2-user:ec2-user .\n\n# bring up containers for monitoring/analysis\ndocker-compose up\n"
+          "Fn::Base64": "#!/bin/bash\n#!/bin/bash\n\n# update\nyum update -y\n\n# install git\nyum install git\n\n# docker installation\namazon-linux-extras install docker\nservice docker start\nsystemctl enable docker\nusermod -a -G docker ec2-user\n\n# docker-compose installation\ncurl -L \"https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose\nchmod +x /usr/local/bin/docker-compose\nln -s /usr/local/bin/docker-compose /usr/bin/docker-compose\n\n# create/download prometheus config file\n# this placeholder file needs its access and secret keys replaced\n# it looks currently only for node_exporter\n\n# YOU NEED TO CREATE A AWS USER AND PUT ITS ACCESS_KEY AND SECRET_KEY HERE\n# GIVE THIS USER THE FOLLOWING PERMISSION: AmazonEC2ReadOnlyAccess\ntee -a /home/ec2-user/prometheus.yml << END\nglobal:\n  scrape_interval: 1s\n  evaluation_interval: 1s\n\nscrape_configs:\n  - job_name: 'node'\n    relabel_configs:\n    - source_labels: [__meta_ec2_tag_Name]\n      target_label: instance\n    ec2_sd_configs:\n      - access_key:  \n        secret_key: \n        port: 9100\nEND\n\n# labelling examples\n# scrape_configs:\n#   - job_name: 'node'\n#     relabel_configs:\n#     - source_labels: [__meta_ec2_tag_Name]\n#       target_label: instance\n#     ec2_sd_configs:\n#       - region: us-east-1\n#         access_key: \n#         secret_key: \n#         port: 9100\n#         filters:\n#           - name: tag:Name\n#             values:\n#               - canary-instance\n#               - baseline-instance\n\n\n# link that describes different filters\n# https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html\n\n# move to home directory so config files land there\ncd /home/ec2-user\n\n# THESE FILES NEED TO BE PLACED ELSEWHERE\n# download docker-compose.yml for all traffic monitor/analysis apps\nwget 'https://raw.githubusercontent.com/caleblayneheath/my-aria/main/configs/docker-compose.yml' -O docker-compose.yml\n\n# download kayenta.yml for kayenta configuration\nwget 'https://raw.githubusercontent.com/caleblayneheath/my-aria/main/configs/kayenta.yml' -O kayenta.yml\n\n# change ownership of all files in home directory to ec2-user\nchown -R ec2-user:ec2-user .\n\n# bring up containers for monitoring/analysis\ndocker-compose up\n"
         }
       },
       "DependsOn": [
@@ -742,53 +742,29 @@
     }
   },
   "Parameters": {
-    "AssetParameters280f0b4501b2352d4d1d9769fc170daab1ff57c887a2aa9d9648d581a3c6cfa0S3Bucket52BD0A7C": {
+    "AssetParameters2aa80583ed93ef1be14c733ae8744802cd720971df63aa15d8a6f9f6dc54a93aS3Bucket16AD8F73": {
       "Type": "String",
-      "Description": "S3 bucket for asset \"280f0b4501b2352d4d1d9769fc170daab1ff57c887a2aa9d9648d581a3c6cfa0\""
+      "Description": "S3 bucket for asset \"2aa80583ed93ef1be14c733ae8744802cd720971df63aa15d8a6f9f6dc54a93a\""
     },
-    "AssetParameters280f0b4501b2352d4d1d9769fc170daab1ff57c887a2aa9d9648d581a3c6cfa0S3VersionKey5F81486B": {
+    "AssetParameters2aa80583ed93ef1be14c733ae8744802cd720971df63aa15d8a6f9f6dc54a93aS3VersionKey266AAF62": {
       "Type": "String",
-      "Description": "S3 key for asset version \"280f0b4501b2352d4d1d9769fc170daab1ff57c887a2aa9d9648d581a3c6cfa0\""
+      "Description": "S3 key for asset version \"2aa80583ed93ef1be14c733ae8744802cd720971df63aa15d8a6f9f6dc54a93a\""
     },
-    "AssetParameters280f0b4501b2352d4d1d9769fc170daab1ff57c887a2aa9d9648d581a3c6cfa0ArtifactHashE4534E49": {
+    "AssetParameters2aa80583ed93ef1be14c733ae8744802cd720971df63aa15d8a6f9f6dc54a93aArtifactHash9152198E": {
       "Type": "String",
-      "Description": "Artifact hash for asset \"280f0b4501b2352d4d1d9769fc170daab1ff57c887a2aa9d9648d581a3c6cfa0\""
+      "Description": "Artifact hash for asset \"2aa80583ed93ef1be14c733ae8744802cd720971df63aa15d8a6f9f6dc54a93a\""
     },
-    "AssetParametersb848cedcf10dade5a4187c8572aca9b881cc70c83943ea31e0dc909496bacbbfS3Bucket49ADD16F": {
+    "AssetParameters4e4460923ad43c43266352c77e9f346197ad96488f8f9961e1824a5b1d84be56S3Bucket1196C49F": {
       "Type": "String",
-      "Description": "S3 bucket for asset \"b848cedcf10dade5a4187c8572aca9b881cc70c83943ea31e0dc909496bacbbf\""
+      "Description": "S3 bucket for asset \"4e4460923ad43c43266352c77e9f346197ad96488f8f9961e1824a5b1d84be56\""
     },
-    "AssetParametersb848cedcf10dade5a4187c8572aca9b881cc70c83943ea31e0dc909496bacbbfS3VersionKey205059BF": {
+    "AssetParameters4e4460923ad43c43266352c77e9f346197ad96488f8f9961e1824a5b1d84be56S3VersionKeyC9EBF549": {
       "Type": "String",
-      "Description": "S3 key for asset version \"b848cedcf10dade5a4187c8572aca9b881cc70c83943ea31e0dc909496bacbbf\""
+      "Description": "S3 key for asset version \"4e4460923ad43c43266352c77e9f346197ad96488f8f9961e1824a5b1d84be56\""
     },
-    "AssetParametersb848cedcf10dade5a4187c8572aca9b881cc70c83943ea31e0dc909496bacbbfArtifactHash5AC115EA": {
+    "AssetParameters4e4460923ad43c43266352c77e9f346197ad96488f8f9961e1824a5b1d84be56ArtifactHashB97AD486": {
       "Type": "String",
-      "Description": "Artifact hash for asset \"b848cedcf10dade5a4187c8572aca9b881cc70c83943ea31e0dc909496bacbbf\""
-    },
-    "AssetParameters26270f87e4fba3388d4696223702390563a99b004ab38f55dba9f8cec53621c2S3Bucket396A38A3": {
-      "Type": "String",
-      "Description": "S3 bucket for asset \"26270f87e4fba3388d4696223702390563a99b004ab38f55dba9f8cec53621c2\""
-    },
-    "AssetParameters26270f87e4fba3388d4696223702390563a99b004ab38f55dba9f8cec53621c2S3VersionKey7D380BEA": {
-      "Type": "String",
-      "Description": "S3 key for asset version \"26270f87e4fba3388d4696223702390563a99b004ab38f55dba9f8cec53621c2\""
-    },
-    "AssetParameters26270f87e4fba3388d4696223702390563a99b004ab38f55dba9f8cec53621c2ArtifactHash17F0F16D": {
-      "Type": "String",
-      "Description": "Artifact hash for asset \"26270f87e4fba3388d4696223702390563a99b004ab38f55dba9f8cec53621c2\""
-    },
-    "AssetParametersd305dd11fd7f4cefbe4a1b6f8810fdc286483193cf7ef403efe1a4e5dda5846eS3Bucket7C54371C": {
-      "Type": "String",
-      "Description": "S3 bucket for asset \"d305dd11fd7f4cefbe4a1b6f8810fdc286483193cf7ef403efe1a4e5dda5846e\""
-    },
-    "AssetParametersd305dd11fd7f4cefbe4a1b6f8810fdc286483193cf7ef403efe1a4e5dda5846eS3VersionKeyE364AF36": {
-      "Type": "String",
-      "Description": "S3 key for asset version \"d305dd11fd7f4cefbe4a1b6f8810fdc286483193cf7ef403efe1a4e5dda5846e\""
-    },
-    "AssetParametersd305dd11fd7f4cefbe4a1b6f8810fdc286483193cf7ef403efe1a4e5dda5846eArtifactHashF96C491F": {
-      "Type": "String",
-      "Description": "Artifact hash for asset \"d305dd11fd7f4cefbe4a1b6f8810fdc286483193cf7ef403efe1a4e5dda5846e\""
+      "Description": "Artifact hash for asset \"4e4460923ad43c43266352c77e9f346197ad96488f8f9961e1824a5b1d84be56\""
     },
     "SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter": {
       "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",

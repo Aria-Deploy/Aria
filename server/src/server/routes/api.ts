@@ -27,7 +27,9 @@ router.put("/deploy-canary", async (req, res) => {
   const stackConfig = req.body;
   try {
     stackConfig.vpcConfig = await awsCfn.setAzPubPrivSubnets(stackConfig.vpcId);
+    // getEnv always returns undefined
     stackConfig.env = awsCfn.getEnv();
+    stackConfig.credentials = awsCfn.getProfileCredentials(stackConfig.profileName);
 
     const app = new cdk.App();
     const canaryStack = new CanaryStack(
