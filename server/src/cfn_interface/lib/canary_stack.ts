@@ -315,7 +315,7 @@ export class CanaryStack extends ExistingStack {
       console.error(err);
     }
 
-    let monitorSetupScript = readFileSync(
+    const monitorSetupScript = readFileSync(
       "./src/scripts/monitorSetup.sh",
       "utf8"
     );
@@ -340,6 +340,10 @@ export class CanaryStack extends ExistingStack {
     new cdk.CfnOutput(this, "prometheusDNS", {
       value: `http://${monitorInstance.instancePublicDnsName}:9090`,
     });
+
+    new cdk.CfnOutput(this, "monitorId",{
+      value: monitorInstance.instanceId
+    })
 
     new cdk.CfnOutput(this, "grafanaDNS", {
       value: `http://${monitorInstance.instancePublicDnsName}:3000`,

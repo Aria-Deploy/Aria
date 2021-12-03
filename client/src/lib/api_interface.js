@@ -65,3 +65,13 @@ export async function destroyCanaryStack(stackInfo) {
   });
   return response.data;
 }
+
+export async function getStackStatus(instanceIds) {
+  const response = await axios.post(`${apiRoute}/status`, { instanceIds });
+  return response.data;
+}
+
+export async function getTargetHealth(TargetGroupArn) {
+  const response = await axios.post(`${apiRoute}/health`, { TargetGroupArn });
+  return response.data;
+}

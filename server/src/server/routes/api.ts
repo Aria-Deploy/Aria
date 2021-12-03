@@ -36,10 +36,10 @@ router.put("/deploy-canary", async (req, res) => {
       app,
       `aria-canary-${stackConfig.selectedAlbName}`,
       stackConfig,
-      stackConfig.env // this doesn't appear to be used by canaryStack, and is undefined regardless
+      { env: stackConfig.env }
     );
 
-    const deployResult = await canaryStack.deploy();
+    let deployResult = await canaryStack.deploy();
     const targetGroups =
       stackConfig.newRuleConfig.Actions[0].ForwardConfig.TargetGroups;
 
@@ -58,7 +58,12 @@ router.put("/deploy-canary", async (req, res) => {
       stackConfig.newRuleConfig
     );
 
-    console.log(deployResult);
+    console.log(createRuleResponse);
+
+    if (createRuleResponse.$metadata.httpStatusCode !== 200)
+      // @ts-ignore
+      deployResult = await canaryStack.destroy();
+
     const deployResponse = {
       ...deployResult,
       stackArtifact: [],
@@ -98,6 +103,27 @@ router.put("/destroy-canary", async (req, res) => {
     res.json(destroyResult);
   } catch (error) {
     console.log(error);
+  }
+});
+
+router.post("/status", async (req, res) => {
+  try {
+    const instanceIds = req.body.instanceIds;
+    const instancesStatus = await awsCfn.getInstanceStatus(instanceIds);
+    res.json(instancesStatus);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.post("/health", async (req, res) => {
+  try {
+    const TargetGroupArn = req.body.TargetGroupArn;
+    const healthStatus = await awsCfn.getTargetGroupHealth(TargetGroupArn);
+    res.json(healthStatus);
+  } catch (error) {
+    console.log(error);
+    res.send(error);
   }
 });
 
