@@ -854,13 +854,17 @@ video {
 	--tw-border-opacity: 1;
 	border-color: rgba(233, 86, 53, var(--tw-border-opacity));
 }
-.bg-aria-grey {
+.bg-white {
 	--tw-bg-opacity: 1;
-	background-color: rgba(249, 250, 251, var(--tw-bg-opacity));
+	background-color: rgba(255, 255, 255, var(--tw-bg-opacity));
 }
 .bg-black {
 	--tw-bg-opacity: 1;
 	background-color: rgba(0, 0, 0, var(--tw-bg-opacity));
+}
+.bg-aria-grey {
+	--tw-bg-opacity: 1;
+	background-color: rgba(249, 250, 251, var(--tw-bg-opacity));
 }
 .bg-aria-green {
 	--tw-bg-opacity: 1;
@@ -869,10 +873,6 @@ video {
 .bg-gray-50 {
 	--tw-bg-opacity: 1;
 	background-color: rgba(249, 250, 251, var(--tw-bg-opacity));
-}
-.bg-white {
-	--tw-bg-opacity: 1;
-	background-color: rgba(255, 255, 255, var(--tw-bg-opacity));
 }
 .bg-green-100 {
 	--tw-bg-opacity: 1;
@@ -902,21 +902,27 @@ video {
 	--tw-bg-opacity: 1;
 	background-color: rgba(37, 168, 176, var(--tw-bg-opacity));
 }
-.bg-aria-black {
+.bg-aria-silver {
 	--tw-bg-opacity: 1;
-	background-color: rgba(36, 35, 37, var(--tw-bg-opacity));
+	background-color: rgba(198, 198, 198, var(--tw-bg-opacity));
 }
 .bg-opacity-60 {
 	--tw-bg-opacity: 0.6;
 }
-.bg-opacity-30 {
-	--tw-bg-opacity: 0.3;
-}
 .bg-opacity-20 {
 	--tw-bg-opacity: 0.2;
 }
+.bg-opacity-30 {
+	--tw-bg-opacity: 0.3;
+}
+.bg-opacity-50 {
+	--tw-bg-opacity: 0.5;
+}
 .stroke-current {
 	stroke: currentColor;
+}
+.p-10 {
+	padding: 2.5rem;
 }
 .p-4 {
 	padding: 1rem;
@@ -932,9 +938,6 @@ video {
 }
 .p-5 {
 	padding: 1.25rem;
-}
-.p-10 {
-	padding: 2.5rem;
 }
 .px-9 {
 	padding-left: 2.25rem;
@@ -1203,27 +1206,8 @@ video {
 	--tw-bg-opacity: 1;
 	background-color: rgba(29, 78, 216, var(--tw-bg-opacity));
 }
-.hover\:bg-aria-black:hover {
-	--tw-bg-opacity: 1;
-	background-color: rgba(36, 35, 37, var(--tw-bg-opacity));
-}
 .hover\:bg-opacity-90:hover {
 	--tw-bg-opacity: 0.9;
-}
-.hover\:bg-opacity-10:hover {
-	--tw-bg-opacity: 0.1;
-}
-.hover\:bg-opacity-0:hover {
-	--tw-bg-opacity: 0;
-}
-.hover\:bg-opacity-20:hover {
-	--tw-bg-opacity: 0.2;
-}
-.hover\:bg-opacity-50:hover {
-	--tw-bg-opacity: 0.5;
-}
-.hover\:bg-opacity-40:hover {
-	--tw-bg-opacity: 0.4;
 }
 .hover\:text-indigo-900:hover {
 	--tw-text-opacity: 1;
