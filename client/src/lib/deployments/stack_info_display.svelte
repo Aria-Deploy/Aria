@@ -36,32 +36,35 @@
 </script>
 
 <form class="w-full">
-  <div class="flex -mx-3 pt-3">
-    {#each stackInfoFieldsRow1 as infoObj}
-      <div class="flex-grow w-full px-3 mb-3">
-        <label
-          class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-          for="grid-first-name"
-        >
-          {infoObj.title}
-        </label>
-        <input
-          disabled
-          class="appearance-none block w-full bg-gray-100 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-          id="grid-first-name"
-          type="text"
-          placeholder={infoObj.text}
-        />
-      </div>
-    {/each}
-  </div>
-  <fieldset class="border border-solid border-gray-200 rounded-md p-3 mt-4">
-    <legend class="text-gray-500">Deployment Analysis</legend>
+  <fieldset class="border border-solid border-aria-silver rounded-md p-3">
+    <legend class="text-gray-500 text-sm italic">Deployment Implementation</legend>
+    <div class="flex -mx-3 pt-1">
+      {#each stackInfoFieldsRow1 as infoObj}
+        <div class="flex-grow w-full px-3 mb-2">
+          <label
+            class="block uppercase tracking-wide text-aria-green text-xs font-bold text-opacity-70 mb-2"
+            for="grid-first-name"
+          >
+            {infoObj.title}
+          </label>
+          <input
+            disabled
+            class="appearance-none block w-full bg-gray-100 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+            id="grid-first-name"
+            type="text"
+            placeholder={infoObj.text}
+          />
+        </div>
+      {/each}
+    </div>
+  </fieldset>
+  <fieldset class="border border-solid border-aria-silver rounded-md p-3 mt-4">
+    <legend class="text-gray-500 text-sm italic">Canary Analysis & Monitoring</legend>
     <div class="p-1 gap-3 w-full flex flex-row justify-evenly">
       {#each monitoringLinks as linkObj}
         <div>
           <button
-            class="text-blue-600 opacity-70 text-lg border-2 shadow border-gray-200 rounded-md font-medium px-3 py-1 hover:bg-blue-200 hover:scale-101 hover:border-blue-300 hover:text-blue-900 mr-1 mb-1 ease-linear transition-all duration-150"
+            class="text-aria-teal opacity-70 text-lg border-2 shadow border-aria-silver rounded-md font-medium px-3 py-1 hover:bg-aria-teal hover:bg-opacity-90 hover:scale-101 hover:text-aria-black mr-1 mb-1 ease-linear transition-all duration-150"
             type="button"
           >
             <a
@@ -79,7 +82,7 @@
 <div class="flex flex-row-reverse mt-8">
   <div class="flex-shrink">
     <button
-      class="p-2 bg-red-400 border-2 border-red-400 font-semibold text-white rounded-md shadow-xl hover:shadow-2xl hover:bg-red-600 hover:text-red-50 hover:border-red-700 hover:scale-101 transition duration-500"
+      class="p-2 bg-aria-orange border-2 border-aria-orange opacity-80 font-semibold text-white rounded-md shadow-xl hover:shadow-2xl hover:opacity-100 hover:border-red-700 hover:scale-101 transition duration-500"
       on:click={destroyStack}
     >
       DESTROY

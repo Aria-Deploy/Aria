@@ -3,7 +3,7 @@
     "appsg42805CE6": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
-        "GroupDescription": "aria-canary-Ingre-alb8A-F48F7GKEXCI2/app-sg",
+        "GroupDescription": "aria-canary-Ingre-alb8A-HNJIN1PDLWBO/app-sg",
         "SecurityGroupEgress": [
           {
             "CidrIp": "0.0.0.0/0",
@@ -28,13 +28,13 @@
           },
           {
             "CidrIp": "0.0.0.0/0",
-            "Description": "allow all http acess",
+            "Description": "allow all http access",
             "FromPort": 80,
             "IpProtocol": "tcp",
             "ToPort": 80
           }
         ],
-        "VpcId": "vpc-0ed8e42b13b3e8fbd"
+        "VpcId": "vpc-05d1038ef0693c6b8"
       }
     },
     "asgBaselineInstanceRoleBAFF0850": {
@@ -65,7 +65,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "aria-canary-Ingre-alb8A-F48F7GKEXCI2/asgBaseline"
+            "Value": "aria-canary-Ingre-alb8A-HNJIN1PDLWBO/asgBaseline"
           }
         ]
       }
@@ -93,7 +93,7 @@
                       },
                       ":s3:::",
                       {
-                        "Ref": "AssetParameters2aa80583ed93ef1be14c733ae8744802cd720971df63aa15d8a6f9f6dc54a93aS3Bucket16AD8F73"
+                        "Ref": "AssetParameters26270f87e4fba3388d4696223702390563a99b004ab38f55dba9f8cec53621c2S3Bucket396A38A3"
                       }
                     ]
                   ]
@@ -108,7 +108,7 @@
                       },
                       ":s3:::",
                       {
-                        "Ref": "AssetParameters2aa80583ed93ef1be14c733ae8744802cd720971df63aa15d8a6f9f6dc54a93aS3Bucket16AD8F73"
+                        "Ref": "AssetParameters26270f87e4fba3388d4696223702390563a99b004ab38f55dba9f8cec53621c2S3Bucket396A38A3"
                       },
                       "/*"
                     ]
@@ -134,7 +134,7 @@
                       },
                       ":s3:::",
                       {
-                        "Ref": "AssetParameters4e4460923ad43c43266352c77e9f346197ad96488f8f9961e1824a5b1d84be56S3Bucket1196C49F"
+                        "Ref": "AssetParametersd305dd11fd7f4cefbe4a1b6f8810fdc286483193cf7ef403efe1a4e5dda5846eS3Bucket7C54371C"
                       }
                     ]
                   ]
@@ -149,7 +149,7 @@
                       },
                       ":s3:::",
                       {
-                        "Ref": "AssetParameters4e4460923ad43c43266352c77e9f346197ad96488f8f9961e1824a5b1d84be56S3Bucket1196C49F"
+                        "Ref": "AssetParametersd305dd11fd7f4cefbe4a1b6f8810fdc286483193cf7ef403efe1a4e5dda5846eS3Bucket7C54371C"
                       },
                       "/*"
                     ]
@@ -196,7 +196,7 @@
               "GroupId"
             ]
           },
-          "sg-0f94b30eb9486b0c5"
+          "sg-0c9a7ae461e53a046"
         ],
         "UserData": {
           "Fn::Base64": {
@@ -205,7 +205,7 @@
               [
                 "#!/bin/bash\nmkdir -p $(dirname '/home/ec2-user/baseline.tar')\naws s3 cp 's3://",
                 {
-                  "Ref": "AssetParameters2aa80583ed93ef1be14c733ae8744802cd720971df63aa15d8a6f9f6dc54a93aS3Bucket16AD8F73"
+                  "Ref": "AssetParameters26270f87e4fba3388d4696223702390563a99b004ab38f55dba9f8cec53621c2S3Bucket396A38A3"
                 },
                 "/",
                 {
@@ -215,7 +215,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters2aa80583ed93ef1be14c733ae8744802cd720971df63aa15d8a6f9f6dc54a93aS3VersionKey266AAF62"
+                          "Ref": "AssetParameters26270f87e4fba3388d4696223702390563a99b004ab38f55dba9f8cec53621c2S3VersionKey7D380BEA"
                         }
                       ]
                     }
@@ -228,7 +228,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters2aa80583ed93ef1be14c733ae8744802cd720971df63aa15d8a6f9f6dc54a93aS3VersionKey266AAF62"
+                          "Ref": "AssetParameters26270f87e4fba3388d4696223702390563a99b004ab38f55dba9f8cec53621c2S3VersionKey7D380BEA"
                         }
                       ]
                     }
@@ -236,7 +236,7 @@
                 },
                 "' '/home/ec2-user/baseline.tar'\nmkdir -p $(dirname '/home/ec2-user/docker-compose.yml')\naws s3 cp 's3://",
                 {
-                  "Ref": "AssetParameters4e4460923ad43c43266352c77e9f346197ad96488f8f9961e1824a5b1d84be56S3Bucket1196C49F"
+                  "Ref": "AssetParametersd305dd11fd7f4cefbe4a1b6f8810fdc286483193cf7ef403efe1a4e5dda5846eS3Bucket7C54371C"
                 },
                 "/",
                 {
@@ -246,7 +246,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters4e4460923ad43c43266352c77e9f346197ad96488f8f9961e1824a5b1d84be56S3VersionKeyC9EBF549"
+                          "Ref": "AssetParametersd305dd11fd7f4cefbe4a1b6f8810fdc286483193cf7ef403efe1a4e5dda5846eS3VersionKeyE364AF36"
                         }
                       ]
                     }
@@ -259,7 +259,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters4e4460923ad43c43266352c77e9f346197ad96488f8f9961e1824a5b1d84be56S3VersionKeyC9EBF549"
+                          "Ref": "AssetParametersd305dd11fd7f4cefbe4a1b6f8810fdc286483193cf7ef403efe1a4e5dda5846eS3VersionKeyE364AF36"
                         }
                       ]
                     }
@@ -288,7 +288,7 @@
           {
             "Key": "Name",
             "PropagateAtLaunch": true,
-            "Value": "aria-canary-Ingre-alb8A-F48F7GKEXCI2/asgBaseline"
+            "Value": "aria-canary-Ingre-alb8A-HNJIN1PDLWBO/asgBaseline"
           }
         ],
         "TargetGroupARNs": [
@@ -297,9 +297,9 @@
           }
         ],
         "VPCZoneIdentifier": [
-          "subnet-005fdc0a23403193c",
-          "subnet-01219c68244e1def1",
-          "subnet-0bfb3d049d5c5fe15"
+          "subnet-073b1672f24c6e5c8",
+          "subnet-0bfe5b21d401730fa",
+          "subnet-0bbea1584070b30f1"
         ]
       },
       "UpdatePolicy": {
@@ -336,7 +336,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "aria-canary-Ingre-alb8A-F48F7GKEXCI2/asgCanary"
+            "Value": "aria-canary-Ingre-alb8A-HNJIN1PDLWBO/asgCanary"
           }
         ]
       }
@@ -364,7 +364,7 @@
                       },
                       ":s3:::",
                       {
-                        "Ref": "AssetParameters2aa80583ed93ef1be14c733ae8744802cd720971df63aa15d8a6f9f6dc54a93aS3Bucket16AD8F73"
+                        "Ref": "AssetParameters280f0b4501b2352d4d1d9769fc170daab1ff57c887a2aa9d9648d581a3c6cfa0S3Bucket52BD0A7C"
                       }
                     ]
                   ]
@@ -379,7 +379,7 @@
                       },
                       ":s3:::",
                       {
-                        "Ref": "AssetParameters2aa80583ed93ef1be14c733ae8744802cd720971df63aa15d8a6f9f6dc54a93aS3Bucket16AD8F73"
+                        "Ref": "AssetParameters280f0b4501b2352d4d1d9769fc170daab1ff57c887a2aa9d9648d581a3c6cfa0S3Bucket52BD0A7C"
                       },
                       "/*"
                     ]
@@ -405,7 +405,7 @@
                       },
                       ":s3:::",
                       {
-                        "Ref": "AssetParameters4e4460923ad43c43266352c77e9f346197ad96488f8f9961e1824a5b1d84be56S3Bucket1196C49F"
+                        "Ref": "AssetParametersb848cedcf10dade5a4187c8572aca9b881cc70c83943ea31e0dc909496bacbbfS3Bucket49ADD16F"
                       }
                     ]
                   ]
@@ -420,7 +420,7 @@
                       },
                       ":s3:::",
                       {
-                        "Ref": "AssetParameters4e4460923ad43c43266352c77e9f346197ad96488f8f9961e1824a5b1d84be56S3Bucket1196C49F"
+                        "Ref": "AssetParametersb848cedcf10dade5a4187c8572aca9b881cc70c83943ea31e0dc909496bacbbfS3Bucket49ADD16F"
                       },
                       "/*"
                     ]
@@ -467,7 +467,7 @@
               "GroupId"
             ]
           },
-          "sg-0f94b30eb9486b0c5"
+          "sg-0c9a7ae461e53a046"
         ],
         "UserData": {
           "Fn::Base64": {
@@ -476,7 +476,7 @@
               [
                 "#!/bin/bash\nmkdir -p $(dirname '/home/ec2-user/canary.tar')\naws s3 cp 's3://",
                 {
-                  "Ref": "AssetParameters2aa80583ed93ef1be14c733ae8744802cd720971df63aa15d8a6f9f6dc54a93aS3Bucket16AD8F73"
+                  "Ref": "AssetParameters280f0b4501b2352d4d1d9769fc170daab1ff57c887a2aa9d9648d581a3c6cfa0S3Bucket52BD0A7C"
                 },
                 "/",
                 {
@@ -486,7 +486,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters2aa80583ed93ef1be14c733ae8744802cd720971df63aa15d8a6f9f6dc54a93aS3VersionKey266AAF62"
+                          "Ref": "AssetParameters280f0b4501b2352d4d1d9769fc170daab1ff57c887a2aa9d9648d581a3c6cfa0S3VersionKey5F81486B"
                         }
                       ]
                     }
@@ -499,7 +499,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters2aa80583ed93ef1be14c733ae8744802cd720971df63aa15d8a6f9f6dc54a93aS3VersionKey266AAF62"
+                          "Ref": "AssetParameters280f0b4501b2352d4d1d9769fc170daab1ff57c887a2aa9d9648d581a3c6cfa0S3VersionKey5F81486B"
                         }
                       ]
                     }
@@ -507,7 +507,7 @@
                 },
                 "' '/home/ec2-user/canary.tar'\nmkdir -p $(dirname '/home/ec2-user/docker-compose.yml')\naws s3 cp 's3://",
                 {
-                  "Ref": "AssetParameters4e4460923ad43c43266352c77e9f346197ad96488f8f9961e1824a5b1d84be56S3Bucket1196C49F"
+                  "Ref": "AssetParametersb848cedcf10dade5a4187c8572aca9b881cc70c83943ea31e0dc909496bacbbfS3Bucket49ADD16F"
                 },
                 "/",
                 {
@@ -517,7 +517,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters4e4460923ad43c43266352c77e9f346197ad96488f8f9961e1824a5b1d84be56S3VersionKeyC9EBF549"
+                          "Ref": "AssetParametersb848cedcf10dade5a4187c8572aca9b881cc70c83943ea31e0dc909496bacbbfS3VersionKey205059BF"
                         }
                       ]
                     }
@@ -530,7 +530,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters4e4460923ad43c43266352c77e9f346197ad96488f8f9961e1824a5b1d84be56S3VersionKeyC9EBF549"
+                          "Ref": "AssetParametersb848cedcf10dade5a4187c8572aca9b881cc70c83943ea31e0dc909496bacbbfS3VersionKey205059BF"
                         }
                       ]
                     }
@@ -559,7 +559,7 @@
           {
             "Key": "Name",
             "PropagateAtLaunch": true,
-            "Value": "aria-canary-Ingre-alb8A-F48F7GKEXCI2/asgCanary"
+            "Value": "aria-canary-Ingre-alb8A-HNJIN1PDLWBO/asgCanary"
           }
         ],
         "TargetGroupARNs": [
@@ -568,9 +568,9 @@
           }
         ],
         "VPCZoneIdentifier": [
-          "subnet-005fdc0a23403193c",
-          "subnet-01219c68244e1def1",
-          "subnet-0bfb3d049d5c5fe15"
+          "subnet-073b1672f24c6e5c8",
+          "subnet-0bfe5b21d401730fa",
+          "subnet-0bbea1584070b30f1"
         ]
       },
       "UpdatePolicy": {
@@ -592,7 +592,7 @@
           }
         ],
         "TargetType": "instance",
-        "VpcId": "vpc-0ed8e42b13b3e8fbd"
+        "VpcId": "vpc-05d1038ef0693c6b8"
       }
     },
     "CANARYTARGET8CC1BC3F": {
@@ -608,13 +608,13 @@
           }
         ],
         "TargetType": "instance",
-        "VpcId": "vpc-0ed8e42b13b3e8fbd"
+        "VpcId": "vpc-05d1038ef0693c6b8"
       }
     },
     "monitorsg419B1E56": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
-        "GroupDescription": "aria-canary-Ingre-alb8A-F48F7GKEXCI2/monitor-sg",
+        "GroupDescription": "aria-canary-Ingre-alb8A-HNJIN1PDLWBO/monitor-sg",
         "SecurityGroupEgress": [
           {
             "CidrIp": "0.0.0.0/0",
@@ -659,7 +659,7 @@
             "ToPort": 22
           }
         ],
-        "VpcId": "vpc-0ed8e42b13b3e8fbd"
+        "VpcId": "vpc-05d1038ef0693c6b8"
       }
     },
     "monitorInstanceRole4CE258F3": {
@@ -690,7 +690,146 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "aria-canary-Ingre-alb8A-F48F7GKEXCI2/monitor"
+            "Value": "aria-canary-Ingre-alb8A-HNJIN1PDLWBO/monitor"
+          }
+        ]
+      }
+    },
+    "monitorInstanceRoleDefaultPolicy83E23CC0": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "AssetParameterse5ac1a0005d79cf7ac907b87d4f0c26b95c46554fbf9c3a7d54b7c8273a76017S3Bucket6E4F1D97"
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "AssetParameterse5ac1a0005d79cf7ac907b87d4f0c26b95c46554fbf9c3a7d54b7c8273a76017S3Bucket6E4F1D97"
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "AssetParametersc09279741911c3f98f889d3aafc8dc0ac8ab07f38f6060e8b20f882de007a1f1S3Bucket80012A2A"
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "AssetParametersc09279741911c3f98f889d3aafc8dc0ac8ab07f38f6060e8b20f882de007a1f1S3Bucket80012A2A"
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "AssetParameters72ee5086766f1dced3b2d279bb06b46c3aa9b8e7391764f0b6569fe6cb643bf2S3Bucket23BBFD6D"
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "AssetParameters72ee5086766f1dced3b2d279bb06b46c3aa9b8e7391764f0b6569fe6cb643bf2S3Bucket23BBFD6D"
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "monitorInstanceRoleDefaultPolicy83E23CC0",
+        "Roles": [
+          {
+            "Ref": "monitorInstanceRole4CE258F3"
           }
         ]
       }
@@ -725,46 +864,207 @@
             ]
           }
         ],
-        "SubnetId": "subnet-005fdc0a23403193c",
+        "SubnetId": "subnet-073b1672f24c6e5c8",
         "Tags": [
           {
             "Key": "Name",
-            "Value": "aria-canary-Ingre-alb8A-F48F7GKEXCI2/monitor"
+            "Value": "aria-canary-Ingre-alb8A-HNJIN1PDLWBO/monitor"
           }
         ],
         "UserData": {
-          "Fn::Base64": "#!/bin/bash\n#!/bin/bash\n\n# update\nyum update -y\n\n# install git\nyum install git\n\n# docker installation\namazon-linux-extras install docker\nservice docker start\nsystemctl enable docker\nusermod -a -G docker ec2-user\n\n# docker-compose installation\ncurl -L \"https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose\nchmod +x /usr/local/bin/docker-compose\nln -s /usr/local/bin/docker-compose /usr/bin/docker-compose\n\n# create/download prometheus config file\n# this placeholder file needs its access and secret keys replaced\n# it looks currently only for node_exporter\n\n# YOU NEED TO CREATE A AWS USER AND PUT ITS ACCESS_KEY AND SECRET_KEY HERE\n# GIVE THIS USER THE FOLLOWING PERMISSION: AmazonEC2ReadOnlyAccess\ntee -a /home/ec2-user/prometheus.yml << END\nglobal:\n  scrape_interval: 1s\n  evaluation_interval: 1s\n\nscrape_configs:\n  - job_name: 'node'\n    relabel_configs:\n    - source_labels: [__meta_ec2_tag_Name]\n      target_label: instance\n    ec2_sd_configs:\n      - access_key:  \n        secret_key: \n        port: 9100\nEND\n\n# labelling examples\n# scrape_configs:\n#   - job_name: 'node'\n#     relabel_configs:\n#     - source_labels: [__meta_ec2_tag_Name]\n#       target_label: instance\n#     ec2_sd_configs:\n#       - region: us-east-1\n#         access_key: \n#         secret_key: \n#         port: 9100\n#         filters:\n#           - name: tag:Name\n#             values:\n#               - canary-instance\n#               - baseline-instance\n\n\n# link that describes different filters\n# https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html\n\n# move to home directory so config files land there\ncd /home/ec2-user\n\n# THESE FILES NEED TO BE PLACED ELSEWHERE\n# download docker-compose.yml for all traffic monitor/analysis apps\nwget 'https://raw.githubusercontent.com/caleblayneheath/my-aria/main/configs/docker-compose.yml' -O docker-compose.yml\n\n# download kayenta.yml for kayenta configuration\nwget 'https://raw.githubusercontent.com/caleblayneheath/my-aria/main/configs/kayenta.yml' -O kayenta.yml\n\n# change ownership of all files in home directory to ec2-user\nchown -R ec2-user:ec2-user .\n\n# bring up containers for monitoring/analysis\ndocker-compose up\n"
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash\nmkdir -p $(dirname '/home/ec2-user/docker-compose.yml')\naws s3 cp 's3://",
+                {
+                  "Ref": "AssetParameterse5ac1a0005d79cf7ac907b87d4f0c26b95c46554fbf9c3a7d54b7c8273a76017S3Bucket6E4F1D97"
+                },
+                "/",
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameterse5ac1a0005d79cf7ac907b87d4f0c26b95c46554fbf9c3a7d54b7c8273a76017S3VersionKeyA709E6C5"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameterse5ac1a0005d79cf7ac907b87d4f0c26b95c46554fbf9c3a7d54b7c8273a76017S3VersionKeyA709E6C5"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "' '/home/ec2-user/docker-compose.yml'\nmkdir -p $(dirname '/home/ec2-user/kayenta.yml')\naws s3 cp 's3://",
+                {
+                  "Ref": "AssetParametersc09279741911c3f98f889d3aafc8dc0ac8ab07f38f6060e8b20f882de007a1f1S3Bucket80012A2A"
+                },
+                "/",
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersc09279741911c3f98f889d3aafc8dc0ac8ab07f38f6060e8b20f882de007a1f1S3VersionKey250699AA"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersc09279741911c3f98f889d3aafc8dc0ac8ab07f38f6060e8b20f882de007a1f1S3VersionKey250699AA"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "' '/home/ec2-user/kayenta.yml'\nmkdir -p $(dirname '/home/ec2-user/prometheus.yml')\naws s3 cp 's3://",
+                {
+                  "Ref": "AssetParameters72ee5086766f1dced3b2d279bb06b46c3aa9b8e7391764f0b6569fe6cb643bf2S3Bucket23BBFD6D"
+                },
+                "/",
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameters72ee5086766f1dced3b2d279bb06b46c3aa9b8e7391764f0b6569fe6cb643bf2S3VersionKey4DFCFC74"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameters72ee5086766f1dced3b2d279bb06b46c3aa9b8e7391764f0b6569fe6cb643bf2S3VersionKey4DFCFC74"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "' '/home/ec2-user/prometheus.yml'\n#!/bin/bash\n\n# update\nyum update -y\n\n# install git\nyum install git\n\n# docker installation\namazon-linux-extras install docker\nservice docker start\nsystemctl enable docker\nusermod -a -G docker ec2-user\n\n# docker-compose installation\ncurl -L \"https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose\nchmod +x /usr/local/bin/docker-compose\nln -s /usr/local/bin/docker-compose /usr/bin/docker-compose\n\n# move to home directory so config files land there\ncd /home/ec2-user\n\n# change ownership of all files in home directory to ec2-user\nchown -R ec2-user:ec2-user .\n\n# bring up containers for monitoring/analysis\ndocker-compose up\n"
+              ]
+            ]
+          }
         }
       },
       "DependsOn": [
+        "monitorInstanceRoleDefaultPolicy83E23CC0",
         "monitorInstanceRole4CE258F3"
       ]
     }
   },
   "Parameters": {
-    "AssetParameters2aa80583ed93ef1be14c733ae8744802cd720971df63aa15d8a6f9f6dc54a93aS3Bucket16AD8F73": {
+    "AssetParameters280f0b4501b2352d4d1d9769fc170daab1ff57c887a2aa9d9648d581a3c6cfa0S3Bucket52BD0A7C": {
       "Type": "String",
-      "Description": "S3 bucket for asset \"2aa80583ed93ef1be14c733ae8744802cd720971df63aa15d8a6f9f6dc54a93a\""
+      "Description": "S3 bucket for asset \"280f0b4501b2352d4d1d9769fc170daab1ff57c887a2aa9d9648d581a3c6cfa0\""
     },
-    "AssetParameters2aa80583ed93ef1be14c733ae8744802cd720971df63aa15d8a6f9f6dc54a93aS3VersionKey266AAF62": {
+    "AssetParameters280f0b4501b2352d4d1d9769fc170daab1ff57c887a2aa9d9648d581a3c6cfa0S3VersionKey5F81486B": {
       "Type": "String",
-      "Description": "S3 key for asset version \"2aa80583ed93ef1be14c733ae8744802cd720971df63aa15d8a6f9f6dc54a93a\""
+      "Description": "S3 key for asset version \"280f0b4501b2352d4d1d9769fc170daab1ff57c887a2aa9d9648d581a3c6cfa0\""
     },
-    "AssetParameters2aa80583ed93ef1be14c733ae8744802cd720971df63aa15d8a6f9f6dc54a93aArtifactHash9152198E": {
+    "AssetParameters280f0b4501b2352d4d1d9769fc170daab1ff57c887a2aa9d9648d581a3c6cfa0ArtifactHashE4534E49": {
       "Type": "String",
-      "Description": "Artifact hash for asset \"2aa80583ed93ef1be14c733ae8744802cd720971df63aa15d8a6f9f6dc54a93a\""
+      "Description": "Artifact hash for asset \"280f0b4501b2352d4d1d9769fc170daab1ff57c887a2aa9d9648d581a3c6cfa0\""
     },
-    "AssetParameters4e4460923ad43c43266352c77e9f346197ad96488f8f9961e1824a5b1d84be56S3Bucket1196C49F": {
+    "AssetParametersb848cedcf10dade5a4187c8572aca9b881cc70c83943ea31e0dc909496bacbbfS3Bucket49ADD16F": {
       "Type": "String",
-      "Description": "S3 bucket for asset \"4e4460923ad43c43266352c77e9f346197ad96488f8f9961e1824a5b1d84be56\""
+      "Description": "S3 bucket for asset \"b848cedcf10dade5a4187c8572aca9b881cc70c83943ea31e0dc909496bacbbf\""
     },
-    "AssetParameters4e4460923ad43c43266352c77e9f346197ad96488f8f9961e1824a5b1d84be56S3VersionKeyC9EBF549": {
+    "AssetParametersb848cedcf10dade5a4187c8572aca9b881cc70c83943ea31e0dc909496bacbbfS3VersionKey205059BF": {
       "Type": "String",
-      "Description": "S3 key for asset version \"4e4460923ad43c43266352c77e9f346197ad96488f8f9961e1824a5b1d84be56\""
+      "Description": "S3 key for asset version \"b848cedcf10dade5a4187c8572aca9b881cc70c83943ea31e0dc909496bacbbf\""
     },
-    "AssetParameters4e4460923ad43c43266352c77e9f346197ad96488f8f9961e1824a5b1d84be56ArtifactHashB97AD486": {
+    "AssetParametersb848cedcf10dade5a4187c8572aca9b881cc70c83943ea31e0dc909496bacbbfArtifactHash5AC115EA": {
       "Type": "String",
-      "Description": "Artifact hash for asset \"4e4460923ad43c43266352c77e9f346197ad96488f8f9961e1824a5b1d84be56\""
+      "Description": "Artifact hash for asset \"b848cedcf10dade5a4187c8572aca9b881cc70c83943ea31e0dc909496bacbbf\""
+    },
+    "AssetParameters26270f87e4fba3388d4696223702390563a99b004ab38f55dba9f8cec53621c2S3Bucket396A38A3": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"26270f87e4fba3388d4696223702390563a99b004ab38f55dba9f8cec53621c2\""
+    },
+    "AssetParameters26270f87e4fba3388d4696223702390563a99b004ab38f55dba9f8cec53621c2S3VersionKey7D380BEA": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"26270f87e4fba3388d4696223702390563a99b004ab38f55dba9f8cec53621c2\""
+    },
+    "AssetParameters26270f87e4fba3388d4696223702390563a99b004ab38f55dba9f8cec53621c2ArtifactHash17F0F16D": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"26270f87e4fba3388d4696223702390563a99b004ab38f55dba9f8cec53621c2\""
+    },
+    "AssetParametersd305dd11fd7f4cefbe4a1b6f8810fdc286483193cf7ef403efe1a4e5dda5846eS3Bucket7C54371C": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"d305dd11fd7f4cefbe4a1b6f8810fdc286483193cf7ef403efe1a4e5dda5846e\""
+    },
+    "AssetParametersd305dd11fd7f4cefbe4a1b6f8810fdc286483193cf7ef403efe1a4e5dda5846eS3VersionKeyE364AF36": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"d305dd11fd7f4cefbe4a1b6f8810fdc286483193cf7ef403efe1a4e5dda5846e\""
+    },
+    "AssetParametersd305dd11fd7f4cefbe4a1b6f8810fdc286483193cf7ef403efe1a4e5dda5846eArtifactHashF96C491F": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"d305dd11fd7f4cefbe4a1b6f8810fdc286483193cf7ef403efe1a4e5dda5846e\""
+    },
+    "AssetParameterse5ac1a0005d79cf7ac907b87d4f0c26b95c46554fbf9c3a7d54b7c8273a76017S3Bucket6E4F1D97": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"e5ac1a0005d79cf7ac907b87d4f0c26b95c46554fbf9c3a7d54b7c8273a76017\""
+    },
+    "AssetParameterse5ac1a0005d79cf7ac907b87d4f0c26b95c46554fbf9c3a7d54b7c8273a76017S3VersionKeyA709E6C5": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"e5ac1a0005d79cf7ac907b87d4f0c26b95c46554fbf9c3a7d54b7c8273a76017\""
+    },
+    "AssetParameterse5ac1a0005d79cf7ac907b87d4f0c26b95c46554fbf9c3a7d54b7c8273a76017ArtifactHashC70C78AD": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"e5ac1a0005d79cf7ac907b87d4f0c26b95c46554fbf9c3a7d54b7c8273a76017\""
+    },
+    "AssetParametersc09279741911c3f98f889d3aafc8dc0ac8ab07f38f6060e8b20f882de007a1f1S3Bucket80012A2A": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"c09279741911c3f98f889d3aafc8dc0ac8ab07f38f6060e8b20f882de007a1f1\""
+    },
+    "AssetParametersc09279741911c3f98f889d3aafc8dc0ac8ab07f38f6060e8b20f882de007a1f1S3VersionKey250699AA": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"c09279741911c3f98f889d3aafc8dc0ac8ab07f38f6060e8b20f882de007a1f1\""
+    },
+    "AssetParametersc09279741911c3f98f889d3aafc8dc0ac8ab07f38f6060e8b20f882de007a1f1ArtifactHash5A1AB47A": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"c09279741911c3f98f889d3aafc8dc0ac8ab07f38f6060e8b20f882de007a1f1\""
+    },
+    "AssetParameters72ee5086766f1dced3b2d279bb06b46c3aa9b8e7391764f0b6569fe6cb643bf2S3Bucket23BBFD6D": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"72ee5086766f1dced3b2d279bb06b46c3aa9b8e7391764f0b6569fe6cb643bf2\""
+    },
+    "AssetParameters72ee5086766f1dced3b2d279bb06b46c3aa9b8e7391764f0b6569fe6cb643bf2S3VersionKey4DFCFC74": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"72ee5086766f1dced3b2d279bb06b46c3aa9b8e7391764f0b6569fe6cb643bf2\""
+    },
+    "AssetParameters72ee5086766f1dced3b2d279bb06b46c3aa9b8e7391764f0b6569fe6cb643bf2ArtifactHash91C155AE": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"72ee5086766f1dced3b2d279bb06b46c3aa9b8e7391764f0b6569fe6cb643bf2\""
     },
     "SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter": {
       "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
@@ -776,7 +1076,7 @@
       "Value": "true"
     },
     "ariaconfig": {
-      "Value": "{\"profileName\":\"staging\",\"keyPair\":\"ec2-key-pair\",\"healthCheckPath\":\"/\",\"isStickySesssion\":false,\"priority\":1,\"weight\":2,\"canaryImgPath\":\"canary.tar\",\"baselineImgPath\":\"baseline.tar\",\"canaryComposePath\":\"docker-compose-canary.yml\",\"baselineComposePath\":\"docker-compose-baseline.yml\",\"stackName\":\"Test Stack Canary Deployment\",\"stackDescription\":\"Test Stack Canary Deployment\",\"selectedAlbName\":\"Ingre-alb8A-F48F7GKEXCI2\",\"selectedAlbArn\":\"arn:aws:elasticloadbalancing:us-west-2:750078097588:loadbalancer/app/Ingre-alb8A-F48F7GKEXCI2/c88c5a3b0f00ae71\",\"selectedListenerArn\":\"arn:aws:elasticloadbalancing:us-west-2:750078097588:listener/app/Ingre-alb8A-F48F7GKEXCI2/c88c5a3b0f00ae71/d9b5dc4c00eda41a\",\"selectedPort\":80,\"TargetGroupArn\":\"arn:aws:elasticloadbalancing:us-west-2:750078097588:targetgroup/Ingre-albLi-1A5PGGZKT8D12/40a2ecdb2c68f0e2\",\"vpcId\":\"vpc-0ed8e42b13b3e8fbd\",\"securityGroupIds\":[{\"groupId\":\"sg-0f94b30eb9486b0c5\"}],\"conditions\":[{\"Field\":\"path-pattern\",\"PathPatternConfig\":{\"Values\":[\"/\"]}}],\"newRuleConfig\":{\"Actions\":[{\"Type\":\"forward\",\"ForwardConfig\":{\"TargetGroupStickinessConfig\":{},\"TargetGroups\":[{\"TargetGroupArn\":\"arn:aws:elasticloadbalancing:us-west-2:750078097588:targetgroup/Ingre-albLi-1A5PGGZKT8D12/40a2ecdb2c68f0e2\",\"Weight\":196},{\"TargetGroupArn\":\"Insert Canary Target ARN\",\"Weight\":2},{\"TargetGroupArn\":\"Insert Baseline Target ARN\",\"Weight\":2}]}}],\"Conditions\":[{\"Field\":\"path-pattern\",\"PathPatternConfig\":{\"Values\":[\"/\"]}}],\"ListenerArn\":\"arn:aws:elasticloadbalancing:us-west-2:750078097588:listener/app/Ingre-alb8A-F48F7GKEXCI2/c88c5a3b0f00ae71/d9b5dc4c00eda41a\",\"Priority\":1,\"Tags\":[{\"Key\":\"isAriaCanaryRule\",\"Value\":\"Ingre-alb8A-F48F7GKEXCI2\"}]},\"vpcConfig\":{\"vpcId\":\"vpc-0ed8e42b13b3e8fbd\",\"availabilityZones\":[\"us-west-2b\",\"us-west-2a\",\"us-west-2c\"],\"publicSubnetIds\":[\"subnet-005fdc0a23403193c\",\"subnet-01219c68244e1def1\",\"subnet-0bfb3d049d5c5fe15\"],\"privateSubnetIds\":[\"subnet-0efadaf6232e9e241\",\"subnet-0d66055e50ee6b57c\",\"subnet-02dad7dd61035b0f0\"]}}"
+      "Value": "{\"profileName\":\"default\",\"keyPair\":\"ec2-key-pair\",\"healthCheckPath\":\"/\",\"isStickySesssion\":false,\"priority\":1,\"weight\":1,\"exporters\":[],\"canaryImgPath\":\"canary.tar\",\"baselineImgPath\":\"baseline.tar\",\"canaryComposePath\":\"docker-compose-canary.yml\",\"baselineComposePath\":\"docker-compose-baseline.yml\",\"stackName\":\"Test Stack Canary Deployment\",\"stackDescription\":\"Test Stack Canary Deployment\",\"selectedAlbName\":\"Ingre-alb8A-HNJIN1PDLWBO\",\"selectedAlbArn\":\"arn:aws:elasticloadbalancing:us-west-2:750078097588:loadbalancer/app/Ingre-alb8A-HNJIN1PDLWBO/6fd628f85d22e81a\",\"selectedListenerArn\":\"arn:aws:elasticloadbalancing:us-west-2:750078097588:listener/app/Ingre-alb8A-HNJIN1PDLWBO/6fd628f85d22e81a/2f240e25269ec1eb\",\"selectedPort\":80,\"TargetGroupArn\":\"arn:aws:elasticloadbalancing:us-west-2:750078097588:targetgroup/Ingre-albLi-1JJDZCSY4FQUB/7c9ecc8ea58ed461\",\"vpcId\":\"vpc-05d1038ef0693c6b8\",\"securityGroupIds\":[{\"groupId\":\"sg-0c9a7ae461e53a046\"}],\"conditions\":[{\"Field\":\"path-pattern\",\"PathPatternConfig\":{\"Values\":[\"/\"]}}],\"newRuleConfig\":{\"Actions\":[{\"Type\":\"forward\",\"ForwardConfig\":{\"TargetGroupStickinessConfig\":{},\"TargetGroups\":[{\"TargetGroupArn\":\"arn:aws:elasticloadbalancing:us-west-2:750078097588:targetgroup/Ingre-albLi-1JJDZCSY4FQUB/7c9ecc8ea58ed461\",\"Weight\":198},{\"TargetGroupArn\":\"Insert Canary Target ARN\",\"Weight\":1},{\"TargetGroupArn\":\"Insert Baseline Target ARN\",\"Weight\":1}]}}],\"Conditions\":[{\"Field\":\"path-pattern\",\"PathPatternConfig\":{\"Values\":[\"/\"]}}],\"ListenerArn\":\"arn:aws:elasticloadbalancing:us-west-2:750078097588:listener/app/Ingre-alb8A-HNJIN1PDLWBO/6fd628f85d22e81a/2f240e25269ec1eb\",\"Priority\":1,\"Tags\":[{\"Key\":\"isAriaCanaryRule\",\"Value\":\"Ingre-alb8A-HNJIN1PDLWBO\"}]},\"vpcConfig\":{\"vpcId\":\"vpc-05d1038ef0693c6b8\",\"availabilityZones\":[\"us-west-2b\",\"us-west-2a\",\"us-west-2c\"],\"publicSubnetIds\":[\"subnet-073b1672f24c6e5c8\",\"subnet-0bfe5b21d401730fa\",\"subnet-0bbea1584070b30f1\"],\"privateSubnetIds\":[\"subnet-0d9ffb293284935a7\",\"subnet-03445316f9bc55c0a\",\"subnet-031c19a99e5e974c9\"]},\"credentials\":{}}"
     },
     "BaselineTargetGroupArn": {
       "Value": {

@@ -6,7 +6,7 @@
   <div
     class="z-10 absolute flex justify-center h-screen w-screen bg-black bg-opacity-60"
   >
-    <div class="p-4 m-auto bg-white">
+    <div class="font-aria-montserrat mt-56 mb-auto bg-aria-grey rounded-lg">
       <slot />
     </div>
   </div>

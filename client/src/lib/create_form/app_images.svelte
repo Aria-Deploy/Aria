@@ -11,7 +11,7 @@
   $: setStackConfig("baselineComposePath", baselineComposePath.substr(12));
 </script>
 
-<fieldset class="border border-solid border-gray-200 rounded-md p-3 mt-4">
+<fieldset class="border border-solid border-silver rounded-md p-3 mt-4">
   <legend class="text-gray-500">Service Images</legend>
   <div class="flex flex-row gap-3">
     <div class="flex flex-col">

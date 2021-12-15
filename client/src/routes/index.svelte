@@ -14,9 +14,9 @@
 
 <Banner title={"Canary Deployments"} {description}>
   <button
-    class="py-2 px-4 bg-blue-600 text-white rounded-md shadow-xl hover:shadow-2xl hover:bg-blue-700 transition duration-500"
+    class="py-2 px-4 bg-aria-green text-aria-grey font-semibold rounded-md shadow-xl hover:shadow-3xl hover:bg-aria-teal transition duration-500"
   >
-    <a href="/create">Create New</a>
+    <a href="/create">CREATE NEW</a>
   </button>
 </Banner>
 <div class="pr-5">

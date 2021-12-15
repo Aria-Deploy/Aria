@@ -29,6 +29,9 @@
     console.log(deployResult);
     await getResourceData($selectedAwsProfile);
   }
+
+  // let arrowsRotation = "-rotate-180";
+  // $: arrowsRotation = selectedCard === id ? "-rotate-90" : "-rotate-180";
 </script>
 
 <div class="flex flex-row bg-blue-50" />
