@@ -15,7 +15,7 @@
   </div>
   <div class="absolute font-aria-montserrat w-full text-lg mt-36 space-y-3">
     <div class={highlight("/", $page.path)}>
-      <MenuItem title={"Deployments"} route={"/"}>
+      <MenuItem title={"Dashboard"} route={"/"}>
         <path
           stroke-linecap="round"
           stroke-linejoin="round"

@@ -1,8 +1,10 @@
 <script>
-  import { fade } from "svelte/transition";
-  export let format,
-    setStackConfig,
-    conditions = [{}];
+  import { getContext } from "svelte";
+  import { fade, slide } from "svelte/transition";
+  export let conditions = [{}];
+
+  const stackConfig = getContext("stackConfig");
+  const format = getContext("format");
 
   const addCondition = () => (conditions = [...conditions, {}]);
 
@@ -59,7 +61,7 @@
       updatedConditions[conditionIdx][key].Values[valueIdx] =
         event.target.value;
       conditions = updatedConditions;
-      setStackConfig("conditions", updatedConditions);
+      $stackConfig.conditions = updatedConditions;
     };
   }
 
@@ -80,7 +82,7 @@
         conditionDisplay = conditionDisplay;
         conditions = [{}];
       }
-      setStackConfig("conditions", conditions);
+      $stackConfig.conditions = conditions;
     };
   }
 
@@ -102,22 +104,23 @@
   });
 
   let isStickySession = false;
-  $: setStackConfig("isStickySesssion", isStickySession);
+  $: $stackConfig.isStickySesssion = isStickySession;
 
   let priority;
-  $: setStackConfig("priority", priority);
+  $: $stackConfig.priority = priority;
 
   let weight;
-  $: setStackConfig("weight", weight);
+  $: $stackConfig.weight = weight;
 </script>
 
-<div class={format.rowClass}>
+<div class={format.rowClass + " justify-around"}>
   <div class="flex flex-col">
     <label for="stackName" class={format.labelClass}>Sticky Sessions</label>
     <input
       type="checkbox"
       id="stackName"
-      class={format.fieldClass}
+      class:accent={"#000"}
+      class={format.fieldClass + ' mt-2 scale-150'}
       bind:checked={isStickySession}
     />
   </div>
@@ -150,27 +153,15 @@
     />
   </div>
 </div>
-<div class="flex flex-col mt-7">
-  {#if totalValues < 5}
-    <div>
-      <p class={format.labelClass + " pt-2 float-left"}>Conditions</p>
-      <button
-        type="button"
-        class={format.labelClass +
-          " float-right px-2 py-1 rounded-md bg-blue-100"}
-        on:click|self|preventDefault={addCondition}
-        disabled={addConditionDisabled}
-      >
-        Add Condition
-      </button>
-    </div>
-  {/if}
+<div class="flex flex-row justify-center">
+<div class="flex flex-col mt-7 w-10/12 m-x-auto">
+  <p class={format.labelClass + " pt-2 float-left"}>Conditions</p>
   <div class="flex flex-col">
     {#each conditions as condition, conditionIdx (conditionIdx)}
       <div class="flex flex-row gap-2 mb-1">
         <select
           id={conditionIdx}
-          class={format.fieldClass + " w-1/3"}
+          class={format.fieldClass + ' w-1/4'}
           transition:fade|local={{ duration: 200 }}
           on:change|preventDefault={chooseCondition}
           required
@@ -187,7 +178,7 @@
           {#each condition[conditionTypes[condition["Field"]]].Values as _, idx (condition["Field"] + idx)}
             <input
               id={condition["Field"]}
-              class={format.fieldClass + " w-1/3"}
+              class={format.fieldClass + " w-1/5"}
               placeHolder="Enter Value"
               transition:fade|local={{ duration: 200 }}
               on:change={storeValue(
@@ -199,25 +190,24 @@
               required
             />
           {/each}
-          <div class="flex flex-col">
+          <div class="flex flex-col h-3/4">
             {#if totalValues < 5}
-              <button
-                type="button"
+              <div
+                class="flex-shrink"
                 on:click={addRemoveValues(
                   "add",
                   conditionIdx,
                   conditionTypes[condition["Field"]]
-                )}>+</button
+                )}>+</div
               >
             {/if}
             {#if !(conditionIdx === 0 && condition[conditionTypes[condition.Field]].Values.length === 1)}
-              <button
-                type="button"
+              <div
                 on:click={addRemoveValues(
                   "remove",
                   conditionIdx,
                   conditionTypes[condition["Field"]]
-                )}>-</button
+                )}>-</div
               >
             {/if}
           </div>
@@ -225,4 +215,18 @@
       </div>
     {/each}
   </div>
+  {#if totalValues < 5 && !addConditionDisabled}
+    <div>
+      <button
+        type="button"
+        class={format.labelClass +
+          " px-2 py-1 mt-1 rounded-md bg-aria-teal/30"}
+        on:click|self|preventDefault={addCondition}
+        transition:slide|local={{duration:200}}
+      >
+        Add Condition
+      </button>
+    </div>
+  {/if}
+</div>
 </div>

@@ -10,11 +10,11 @@
 <div class="m-4 items-center justify-center w-full">
   <div class="containter px-4 w-full" in:fade={{ duration: 500 }}>
     <div
-      class="w-full bg-aria-grey px-10 py-4 rounded-lg shadow-md relative hover:shadow-2xl transition duration-500"
+      class="w-full bg-aria-grey px-10 py-4 rounded-lg drop-shadow-md relative hover:shadow-2xl transition duration-500"
     >
       <div class="flex flex-row">
         <div class="flex-grow">
-          <h1 class="text-3xl text-aria-green font-aria-baloo">
+          <h1 class="text-2xl font-medium text-aria-green">
             {stackInfo.config.stackName}
           </h1>
           <p class="text-gray-500 leading-6 tracking-normal">

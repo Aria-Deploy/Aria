@@ -1,18 +1,30 @@
 <script>
-  export let format, setStackConfig;
-  let canaryImgPath = "",
-    baselineImgPath = "",
-    canaryComposePath = "",
-    baselineComposePath = "";
+  import { getContext } from "svelte";
 
-  $: setStackConfig("canaryImgPath", canaryImgPath.substr(12));
-  $: setStackConfig("baselineImgPath", baselineImgPath.substr(12));
-  $: setStackConfig("canaryComposePath", canaryComposePath.substr(12));
-  $: setStackConfig("baselineComposePath", baselineComposePath.substr(12));
+  const stackConfig = getContext("stackConfig");
+  const format = getContext("format");
+
+  let canaryImgPath,
+    baselineImgPath,
+    canaryComposePath,
+    baselineComposePath;
+
+
+  $: $stackConfig.canaryImgPath = canaryImgPath?.substr(12);
+  $: $stackConfig.baselineImgPath = baselineImgPath?.substr(12);
+  $: $stackConfig.canaryComposePath = canaryComposePath?.substr(12);
+  $: $stackConfig.baselineComposePath = baselineComposePath?.substr(12);
 </script>
 
-<fieldset class="border border-solid border-silver rounded-md p-3 mt-4">
-  <legend class="text-gray-500">Service Images</legend>
+<div class="p-3 pt-6">
+  <div>
+    <label class={format.labelClass} for="instance">HealthCheck Path</label>
+    <input
+      class={format.fieldClass + " w-1/2 mb-10"}
+      bind:value={$stackConfig.healthCheckPath}
+      required
+    />
+  </div>
   <div class="flex flex-row gap-3">
     <div class="flex flex-col">
       <label for="stackName" class={format.labelClass}>Canary Image </label>
@@ -69,4 +81,4 @@
       />
     </div>
   </div>
-</fieldset>
+</div>

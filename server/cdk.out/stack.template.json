@@ -3,7 +3,7 @@
     "appsg42805CE6": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
-        "GroupDescription": "aria-canary-Ingre-alb8A-HNJIN1PDLWBO/app-sg",
+        "GroupDescription": "aria-canary-Ingre-alb8A-FCLO2ZJVWR6C/app-sg",
         "SecurityGroupEgress": [
           {
             "CidrIp": "0.0.0.0/0",
@@ -34,7 +34,7 @@
             "ToPort": 80
           }
         ],
-        "VpcId": "vpc-05d1038ef0693c6b8"
+        "VpcId": "vpc-03a574519fc5c939d"
       }
     },
     "asgBaselineInstanceRoleBAFF0850": {
@@ -65,7 +65,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "aria-canary-Ingre-alb8A-HNJIN1PDLWBO/asgBaseline"
+            "Value": "aria-canary-Ingre-alb8A-FCLO2ZJVWR6C/asgBaseline"
           }
         ]
       }
@@ -196,7 +196,7 @@
               "GroupId"
             ]
           },
-          "sg-0c9a7ae461e53a046"
+          "sg-0fb189ccce05b883a"
         ],
         "UserData": {
           "Fn::Base64": {
@@ -288,7 +288,7 @@
           {
             "Key": "Name",
             "PropagateAtLaunch": true,
-            "Value": "aria-canary-Ingre-alb8A-HNJIN1PDLWBO/asgBaseline"
+            "Value": "aria-canary-Ingre-alb8A-FCLO2ZJVWR6C/asgBaseline"
           }
         ],
         "TargetGroupARNs": [
@@ -297,9 +297,9 @@
           }
         ],
         "VPCZoneIdentifier": [
-          "subnet-073b1672f24c6e5c8",
-          "subnet-0bfe5b21d401730fa",
-          "subnet-0bbea1584070b30f1"
+          "subnet-0bdd7dbe4e75ce9ac",
+          "subnet-0f4c86ca42c638a27",
+          "subnet-04023138e72c871f4"
         ]
       },
       "UpdatePolicy": {
@@ -336,7 +336,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "aria-canary-Ingre-alb8A-HNJIN1PDLWBO/asgCanary"
+            "Value": "aria-canary-Ingre-alb8A-FCLO2ZJVWR6C/asgCanary"
           }
         ]
       }
@@ -467,7 +467,7 @@
               "GroupId"
             ]
           },
-          "sg-0c9a7ae461e53a046"
+          "sg-0fb189ccce05b883a"
         ],
         "UserData": {
           "Fn::Base64": {
@@ -559,7 +559,7 @@
           {
             "Key": "Name",
             "PropagateAtLaunch": true,
-            "Value": "aria-canary-Ingre-alb8A-HNJIN1PDLWBO/asgCanary"
+            "Value": "aria-canary-Ingre-alb8A-FCLO2ZJVWR6C/asgCanary"
           }
         ],
         "TargetGroupARNs": [
@@ -568,9 +568,9 @@
           }
         ],
         "VPCZoneIdentifier": [
-          "subnet-073b1672f24c6e5c8",
-          "subnet-0bfe5b21d401730fa",
-          "subnet-0bbea1584070b30f1"
+          "subnet-0bdd7dbe4e75ce9ac",
+          "subnet-0f4c86ca42c638a27",
+          "subnet-04023138e72c871f4"
         ]
       },
       "UpdatePolicy": {
@@ -592,7 +592,7 @@
           }
         ],
         "TargetType": "instance",
-        "VpcId": "vpc-05d1038ef0693c6b8"
+        "VpcId": "vpc-03a574519fc5c939d"
       }
     },
     "CANARYTARGET8CC1BC3F": {
@@ -608,13 +608,13 @@
           }
         ],
         "TargetType": "instance",
-        "VpcId": "vpc-05d1038ef0693c6b8"
+        "VpcId": "vpc-03a574519fc5c939d"
       }
     },
     "monitorsg419B1E56": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
-        "GroupDescription": "aria-canary-Ingre-alb8A-HNJIN1PDLWBO/monitor-sg",
+        "GroupDescription": "aria-canary-Ingre-alb8A-FCLO2ZJVWR6C/monitor-sg",
         "SecurityGroupEgress": [
           {
             "CidrIp": "0.0.0.0/0",
@@ -659,7 +659,7 @@
             "ToPort": 22
           }
         ],
-        "VpcId": "vpc-05d1038ef0693c6b8"
+        "VpcId": "vpc-03a574519fc5c939d"
       }
     },
     "monitorInstanceRole4CE258F3": {
@@ -690,7 +690,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "aria-canary-Ingre-alb8A-HNJIN1PDLWBO/monitor"
+            "Value": "aria-canary-Ingre-alb8A-FCLO2ZJVWR6C/monitor"
           }
         ]
       }
@@ -847,7 +847,7 @@
     "monitor360B0AD7": {
       "Type": "AWS::EC2::Instance",
       "Properties": {
-        "AvailabilityZone": "us-west-2b",
+        "AvailabilityZone": "us-west-2a",
         "IamInstanceProfile": {
           "Ref": "monitorInstanceProfile6E9B6855"
         },
@@ -864,11 +864,11 @@
             ]
           }
         ],
-        "SubnetId": "subnet-073b1672f24c6e5c8",
+        "SubnetId": "subnet-0bdd7dbe4e75ce9ac",
         "Tags": [
           {
             "Key": "Name",
-            "Value": "aria-canary-Ingre-alb8A-HNJIN1PDLWBO/monitor"
+            "Value": "aria-canary-Ingre-alb8A-FCLO2ZJVWR6C/monitor"
           }
         ],
         "UserData": {
@@ -1076,7 +1076,7 @@
       "Value": "true"
     },
     "ariaconfig": {
-      "Value": "{\"profileName\":\"default\",\"keyPair\":\"ec2-key-pair\",\"healthCheckPath\":\"/\",\"isStickySesssion\":false,\"priority\":1,\"weight\":1,\"exporters\":[],\"canaryImgPath\":\"canary.tar\",\"baselineImgPath\":\"baseline.tar\",\"canaryComposePath\":\"docker-compose-canary.yml\",\"baselineComposePath\":\"docker-compose-baseline.yml\",\"stackName\":\"Test Stack Canary Deployment\",\"stackDescription\":\"Test Stack Canary Deployment\",\"selectedAlbName\":\"Ingre-alb8A-HNJIN1PDLWBO\",\"selectedAlbArn\":\"arn:aws:elasticloadbalancing:us-west-2:750078097588:loadbalancer/app/Ingre-alb8A-HNJIN1PDLWBO/6fd628f85d22e81a\",\"selectedListenerArn\":\"arn:aws:elasticloadbalancing:us-west-2:750078097588:listener/app/Ingre-alb8A-HNJIN1PDLWBO/6fd628f85d22e81a/2f240e25269ec1eb\",\"selectedPort\":80,\"TargetGroupArn\":\"arn:aws:elasticloadbalancing:us-west-2:750078097588:targetgroup/Ingre-albLi-1JJDZCSY4FQUB/7c9ecc8ea58ed461\",\"vpcId\":\"vpc-05d1038ef0693c6b8\",\"securityGroupIds\":[{\"groupId\":\"sg-0c9a7ae461e53a046\"}],\"conditions\":[{\"Field\":\"path-pattern\",\"PathPatternConfig\":{\"Values\":[\"/\"]}}],\"newRuleConfig\":{\"Actions\":[{\"Type\":\"forward\",\"ForwardConfig\":{\"TargetGroupStickinessConfig\":{},\"TargetGroups\":[{\"TargetGroupArn\":\"arn:aws:elasticloadbalancing:us-west-2:750078097588:targetgroup/Ingre-albLi-1JJDZCSY4FQUB/7c9ecc8ea58ed461\",\"Weight\":198},{\"TargetGroupArn\":\"Insert Canary Target ARN\",\"Weight\":1},{\"TargetGroupArn\":\"Insert Baseline Target ARN\",\"Weight\":1}]}}],\"Conditions\":[{\"Field\":\"path-pattern\",\"PathPatternConfig\":{\"Values\":[\"/\"]}}],\"ListenerArn\":\"arn:aws:elasticloadbalancing:us-west-2:750078097588:listener/app/Ingre-alb8A-HNJIN1PDLWBO/6fd628f85d22e81a/2f240e25269ec1eb\",\"Priority\":1,\"Tags\":[{\"Key\":\"isAriaCanaryRule\",\"Value\":\"Ingre-alb8A-HNJIN1PDLWBO\"}]},\"vpcConfig\":{\"vpcId\":\"vpc-05d1038ef0693c6b8\",\"availabilityZones\":[\"us-west-2b\",\"us-west-2a\",\"us-west-2c\"],\"publicSubnetIds\":[\"subnet-073b1672f24c6e5c8\",\"subnet-0bfe5b21d401730fa\",\"subnet-0bbea1584070b30f1\"],\"privateSubnetIds\":[\"subnet-0d9ffb293284935a7\",\"subnet-03445316f9bc55c0a\",\"subnet-031c19a99e5e974c9\"]},\"credentials\":{}}"
+      "Value": "{\"profileName\":\"default\",\"stackName\":\"Test Stack Canary Deployment\",\"stackDescription\":\"Test Stack Canary Deployment\",\"keyPair\":\"ec2-key-pair\",\"selectedAlbName\":\"Ingre-alb8A-FCLO2ZJVWR6C\",\"selectedAlbArn\":\"arn:aws:elasticloadbalancing:us-west-2:750078097588:loadbalancer/app/Ingre-alb8A-FCLO2ZJVWR6C/5c0b1f50cd4bf962\",\"selectedListenerArn\":\"arn:aws:elasticloadbalancing:us-west-2:750078097588:listener/app/Ingre-alb8A-FCLO2ZJVWR6C/5c0b1f50cd4bf962/2a57f1ccae3cb145\",\"selectedPort\":80,\"TargetGroupArn\":\"arn:aws:elasticloadbalancing:us-west-2:750078097588:targetgroup/Ingre-albLi-9W3QKA9Y1H1A/8582dbca80b9ab99\",\"vpcId\":\"vpc-03a574519fc5c939d\",\"securityGroupIds\":[{\"groupId\":\"sg-0fb189ccce05b883a\"}],\"isStickySesssion\":false,\"priority\":1,\"weight\":10,\"conditions\":[{\"Field\":\"path-pattern\",\"PathPatternConfig\":{\"Values\":[\"/\"]}}],\"canaryImgPath\":\"canary.tar\",\"baselineImgPath\":\"baseline.tar\",\"canaryComposePath\":\"docker-compose-canary.yml\",\"baselineComposePath\":\"docker-compose-baseline.yml\",\"exporters\":[],\"healthCheckPath\":\"/\",\"newRuleConfig\":{\"Actions\":[{\"Type\":\"forward\",\"ForwardConfig\":{\"TargetGroupStickinessConfig\":{},\"TargetGroups\":[{\"TargetGroupArn\":\"arn:aws:elasticloadbalancing:us-west-2:750078097588:targetgroup/Ingre-albLi-9W3QKA9Y1H1A/8582dbca80b9ab99\",\"Weight\":180},{\"TargetGroupArn\":\"Insert Canary Target ARN\",\"Weight\":10},{\"TargetGroupArn\":\"Insert Baseline Target ARN\",\"Weight\":10}]}}],\"Conditions\":[{\"Field\":\"path-pattern\",\"PathPatternConfig\":{\"Values\":[\"/\"]}}],\"ListenerArn\":\"arn:aws:elasticloadbalancing:us-west-2:750078097588:listener/app/Ingre-alb8A-FCLO2ZJVWR6C/5c0b1f50cd4bf962/2a57f1ccae3cb145\",\"Priority\":1,\"Tags\":[{\"Key\":\"isAriaCanaryRule\",\"Value\":\"Ingre-alb8A-FCLO2ZJVWR6C\"}]},\"vpcConfig\":{\"vpcId\":\"vpc-03a574519fc5c939d\",\"availabilityZones\":[\"us-west-2a\",\"us-west-2b\",\"us-west-2c\"],\"publicSubnetIds\":[\"subnet-0bdd7dbe4e75ce9ac\",\"subnet-0f4c86ca42c638a27\",\"subnet-04023138e72c871f4\"],\"privateSubnetIds\":[\"subnet-0af19ef5a49999f43\",\"subnet-05abe8e5faf801f07\",\"subnet-08753d5f759998a43\"]},\"credentials\":{}}"
     },
     "BaselineTargetGroupArn": {
       "Value": {

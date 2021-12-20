@@ -6,7 +6,7 @@
 
 <SelectProfileForm />
 <div
-  class="font-aria-montserrat bg-aria-silver bg-opacity-30 absolute flex w-full h-full antialiased"
+  class="font-aria-montserrat absolute flex w-full h-full min-h-max antialiased"
 >
   <Sidebar />
   <div class="pl-48 flex-grow">
