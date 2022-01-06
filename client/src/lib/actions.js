@@ -8,4 +8,3 @@ export async function selectProfile(event) {
   await api.getResourceData(profile);
   selectedAwsProfile.set(profile);
 }
-

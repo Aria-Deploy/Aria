@@ -15,6 +15,12 @@ export async function getResourceData(selectedProfile) {
   existingStackInfo.set(response.data.existingStackInfo);
 }
 
+export async function fetchExistingStacks(selectedProfile) {
+  const apiURI = `${apiRoute}/resources-data/${selectedProfile}`;
+  const response = await axios(apiURI);
+  return response.data.existingStackInfo;
+}
+
 export async function deployCanary(stackConfig) {
   const apiURI = `${apiRoute}/deploy-canary`;
 

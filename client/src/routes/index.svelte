@@ -10,6 +10,7 @@
   };
 
   let description = "Create, access, and destroy Aria canary deployments";
+  $: $existingStackInfo = $existingStackInfo;
 </script>
 
 <Banner title={"Canary Deployments"} {description}>

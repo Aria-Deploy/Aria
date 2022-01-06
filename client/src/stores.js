@@ -4,6 +4,7 @@ import { writable } from "svelte/store";
 export const selectedAwsProfile = writable('');
 export const resourceData = writable([]);
 export const existingStackInfo = writable([]);
+export const currentDeployName = writable('');
 
 createLocalStorage("selectedAwsProfile", selectedAwsProfile);
 createLocalStorage("resourceData", resourceData);
