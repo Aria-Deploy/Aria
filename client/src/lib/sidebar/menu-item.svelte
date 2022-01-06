@@ -5,9 +5,9 @@
 
 <a
   href={route}
-  class="flex items-center space-x-3 text-indigo p-2 rounded-md font-medium focus:bg-blue-700"
+  class="flex items-center pl-4 py-2 space-x-2 text-aria-grey font-semibold"
 >
-  <span class="text-gray-400">
+  <span class="text-aria-silver">
     <svg
       class="h-5"
       xmlns="http://www.w3.org/2000/svg"

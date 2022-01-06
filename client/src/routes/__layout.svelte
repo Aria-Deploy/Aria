@@ -5,10 +5,11 @@
 </script>
 
 <SelectProfileForm />
-
-<div class="absolute flex w-full h-full antialiased">
+<div
+  class="font-aria-montserrat absolute flex w-full h-full min-h-max antialiased"
+>
   <Sidebar />
-  <div class="pl-48 flex-grow w-full h-full bg-gray-50">
+  <div class="pl-48 flex-grow">
     <slot />
   </div>
 </div>

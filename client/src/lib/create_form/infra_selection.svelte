@@ -1,6 +1,9 @@
 <script>
+  import { getContext } from "svelte";
   import { resourceData, existingStackInfo } from "../../stores";
-  export let format, setStackConfig;
+
+  const stackConfig = getContext("stackConfig");
+  const format = getContext("format");
 
   const resourceDataCopy = JSON.parse(JSON.stringify($resourceData));
   const nonCanaryLoadBalancers = resourceDataCopy.filter((alb) => {
@@ -14,47 +17,77 @@
   let selectedAlb;
   function selectAlb(event) {
     selectedAlb = nonCanaryLoadBalancers[event.target.value];
-    setStackConfig("selectedAlbName", selectedAlb.LoadBalancerName);
-    setStackConfig("selectedAlbArn", selectedAlb.LoadBalancerArn);
+    $stackConfig.selectedAlbName = selectedAlb.LoadBalancerName;
+    $stackConfig.selectedAlbArn = selectedAlb.LoadBalancerArn;
   }
 
   let selectedListener;
   function selectListener(event) {
     selectedListener = { ...selectedAlb.Listeners[event.target.value] };
-    setStackConfig("selectedListenerArn", selectedListener.ListenerArn);
-    setStackConfig("selectedPort", selectedListener.Port);
+    $stackConfig.selectedListenerArn = selectedListener.ListenerArn;
+    $stackConfig.selectedPort = selectedListener.Port;
   }
 
   let selectedTarget;
   function selectTargetGroup(event) {
     selectedTarget = { ...selectedAlb.Targets[event.target.value] };
-    setStackConfig("TargetGroupArn", selectedTarget.TargetGroupArn);
+    $stackConfig.TargetGroupArn = selectedTarget.TargetGroupArn;
   }
 
   let selectedInstance;
   function selectInstance(event) {
     selectedInstance = { ...selectedTarget.Instances[event.target.value] };
-    setStackConfig("vpcId", selectedInstance.VpcId);
-    setStackConfig(
-      "securityGroupIds",
-      selectedInstance.SecurityGroups.map((sg) => ({
+    $stackConfig.vpcId = selectedInstance.VpcId;
+    $stackConfig.securityGroupIds = selectedInstance.SecurityGroups.map(
+      (sg) => ({
         groupId: sg.GroupId,
-      }))
+      })
     );
   }
 
+  let stackName;
+  $: $stackConfig.stackName = stackName;
+
+  let stackDescription;
+  $: $stackConfig.stackDescription = stackDescription;
+
   let keyPair;
-  $: setStackConfig("keyPair", keyPair);
+  $: $stackConfig.keyPair = keyPair;
 
-  let healthCheckPath;
-  $: setStackConfig("healthCheckPath", healthCheckPath);
+  let subFormComplete;
+  function submitSubForm() {
+    subFormComplete = true;
+  }
 </script>
-
 <div class={format.rowClass}>
-  <div>
+  <div class="flex flex-col w-5/12">
+    <label for="stackName" class={format.labelClass}>Canary Stack Title</label>
+    <input
+      id="stackName"
+      class={format.fieldClass}
+      bind:value={stackName}
+      placeholder="Enter Title"
+      required
+    />
+  </div>
+  <div class="flex flex-col flex-grow">
+    <label for="stackName" class={format.labelClass}>
+      Canary Stack Description
+    </label>
+    <input
+      id="stackName"
+      class={format.fieldClass}
+      bind:value={stackDescription}
+      placeholder="Enter Description"
+      required
+    />
+  </div>
+</div>
+<div class={format.rowClass}>
+  <div class="w-1/3">
     <label class={format.labelClass} for="load-balancer"> Load Balancer </label>
     <select
-      class={format.fieldClass}
+      class={format.fieldClass + ' w-full'}
       id="load-balancer"
       on:change={selectAlb}
       disabled={!nonCanaryLoadBalancers.length}
@@ -71,7 +104,7 @@
     </select>
   </div>
   <div>
-    <label class={format.labelClass} for="listener"> Listener </label>
+    <label class={format.labelClass + ' w-1/12'} for="listener">Port</label>
     <select
       class={format.fieldClass}
       id="listener"
@@ -89,7 +122,7 @@
   </div>
 </div>
 <div class={format.rowClass}>
-  <div>
+  <div class=" w-1/3">
     <label class={format.labelClass} for="target-group"> Target Group </label>
     <select
       class={format.fieldClass}
@@ -108,7 +141,7 @@
       {/if}
     </select>
   </div>
-  <div>
+  <div class="w-1/3">
     <label class={format.labelClass} for="instance">Instance</label>
     <select
       class={format.fieldClass}
@@ -125,23 +158,13 @@
       {/if}
     </select>
   </div>
-  <div>
+  <div class="w-1/3">
     <label class={format.labelClass} for="instance">Instance KeyPair</label>
     <input
       class={format.fieldClass}
       bind:value={keyPair}
       disabled={!selectedInstance}
       placeholder="Provide AWS KeyPair"
-      required
-    />
-  </div>
-  <div>
-    <label class={format.labelClass} for="instance">Canary HealthCheck</label>
-    <input
-      class={format.fieldClass}
-      bind:value={healthCheckPath}
-      disabled={!keyPair}
-      placeholder="Provide Path"
       required
     />
   </div>
