@@ -17,7 +17,7 @@
     "http-header": "^[w-]+$",
   };
 
-  const conditionDisplay = [
+  let conditionDisplay = [
     { display: "Path", type: "path-pattern" },
     {
       display: "Request Method",
@@ -120,7 +120,7 @@
       type="checkbox"
       id="stackName"
       class:accent={"#000"}
-      class={format.fieldClass + ' mt-2 scale-150'}
+      class={format.fieldClass + " mt-2 scale-150"}
       bind:checked={isStickySession}
     />
   </div>
@@ -154,79 +154,83 @@
   </div>
 </div>
 <div class="flex flex-row justify-center">
-<div class="flex flex-col mt-7 w-10/12 m-x-auto">
-  <p class={format.labelClass + " pt-2 float-left"}>Conditions</p>
-  <div class="flex flex-col">
-    {#each conditions as condition, conditionIdx (conditionIdx)}
-      <div class="flex flex-row gap-2 mb-1">
-        <select
-          id={conditionIdx}
-          class={format.fieldClass + ' w-1/4'}
-          transition:fade|local={{ duration: 200 }}
-          on:change|preventDefault={chooseCondition}
-          required
-        >
-          <option value="" selected disabled hidden>Condition Type</option>
-          <option value="" disabled>Select Type</option>
-          {#each conditionDisplay as cond (cond.display)}
-            <option value={cond.type} disabled={conditionSelected(cond.type)}>
-              {cond.display}
-            </option>
-          {/each}
-        </select>
-        {#if condition["Field"]}
-          {#each condition[conditionTypes[condition["Field"]]].Values as _, idx (condition["Field"] + idx)}
-            <input
-              id={condition["Field"]}
-              class={format.fieldClass + " w-1/5"}
-              placeHolder="Enter Value"
-              transition:fade|local={{ duration: 200 }}
-              on:change={storeValue(
-                conditionIdx,
-                conditionTypes[condition["Field"]],
-                idx
-              )}
-              pattern={validationRegex[condition["Field"]]}
-              required
-            />
-          {/each}
-          <div class="flex flex-col h-3/4">
-            {#if totalValues < 5}
-              <div
-                class="flex-shrink"
-                on:click={addRemoveValues(
-                  "add",
+  <div class="flex flex-col mt-7 w-10/12 m-x-auto">
+    <p class={format.labelClass + " pt-2 float-left"}>Conditions</p>
+    <div class="flex flex-col">
+      {#each conditions as condition, conditionIdx (conditionIdx)}
+        <div class="flex flex-row gap-2 mb-1">
+          <select
+            id={conditionIdx}
+            class={format.fieldClass + " w-1/4"}
+            transition:fade|local={{ duration: 200 }}
+            on:change|preventDefault={chooseCondition}
+            required
+          >
+            <option value="" selected disabled hidden>Condition Type</option>
+            <option value="" disabled>Select Type</option>
+            {#each conditionDisplay as cond (cond.display)}
+              <option value={cond.type} disabled={conditionSelected(cond.type)}>
+                {cond.display}
+              </option>
+            {/each}
+          </select>
+          {#if condition["Field"]}
+            {#each condition[conditionTypes[condition["Field"]]].Values as _, idx (condition["Field"] + idx)}
+              <input
+                id={condition["Field"]}
+                class={format.fieldClass + " w-1/5"}
+                placeHolder="Enter Value"
+                transition:fade|local={{ duration: 200 }}
+                on:change={storeValue(
                   conditionIdx,
-                  conditionTypes[condition["Field"]]
-                )}>+</div
-              >
-            {/if}
-            {#if !(conditionIdx === 0 && condition[conditionTypes[condition.Field]].Values.length === 1)}
-              <div
-                on:click={addRemoveValues(
-                  "remove",
-                  conditionIdx,
-                  conditionTypes[condition["Field"]]
-                )}>-</div
-              >
-            {/if}
-          </div>
-        {/if}
-      </div>
-    {/each}
-  </div>
-  {#if totalValues < 5 && !addConditionDisabled}
-    <div>
-      <button
-        type="button"
-        class={format.labelClass +
-          " px-2 py-1 mt-1 rounded-md bg-aria-teal/30"}
-        on:click|self|preventDefault={addCondition}
-        transition:slide|local={{duration:200}}
-      >
-        Add Condition
-      </button>
+                  conditionTypes[condition["Field"]],
+                  idx
+                )}
+                pattern={validationRegex[condition["Field"]]}
+                required
+              />
+            {/each}
+            <div class="flex flex-col h-3/4">
+              {#if totalValues < 5}
+                <div
+                  class="flex-shrink"
+                  on:click={addRemoveValues(
+                    "add",
+                    conditionIdx,
+                    conditionTypes[condition["Field"]]
+                  )}
+                >
+                  +
+                </div>
+              {/if}
+              {#if !(conditionIdx === 0 && condition[conditionTypes[condition.Field]].Values.length === 1)}
+                <div
+                  on:click={addRemoveValues(
+                    "remove",
+                    conditionIdx,
+                    conditionTypes[condition["Field"]]
+                  )}
+                >
+                  -
+                </div>
+              {/if}
+            </div>
+          {/if}
+        </div>
+      {/each}
     </div>
-  {/if}
-</div>
+    {#if totalValues < 5 && !addConditionDisabled}
+      <div>
+        <button
+          type="button"
+          class={format.labelClass +
+            " px-2 py-1 mt-1 rounded-md bg-aria-teal/30"}
+          on:click|self|preventDefault={addCondition}
+          transition:slide|local={{ duration: 200 }}
+        >
+          Add Condition
+        </button>
+      </div>
+    {/if}
+  </div>
 </div>
